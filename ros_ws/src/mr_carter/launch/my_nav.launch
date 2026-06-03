@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Arguments -->
+  <arg name="model" default="$(find myslam21)/urdf/myslam21.urdf"/>
+  <arg name="map_file" default="$(find mr_carter)/maps/mr_map.yaml"/>
+  <arg name="open_rviz" default="true"/>
+  <arg name="move_forward_only" default="false"/>
+
+
+  <param name="robot_description" textfile="$(find myslam21)/urdf/myslam21.urdf" />
+
+  <node
+    name="joint_state_publisher_gui"
+    pkg="joint_state_publisher_gui"
+    type="joint_state_publisher_gui" />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+
+
+  <param name="publish_frequency" type="double" value="50.0" />
+
+
+  </node>
+
+
+  <node pkg="map_server" name="map_server" type="map_server" args="$(find mr_carter)/maps/mr_map.yaml"/>
+
+
+
+  <include file="$(find mr_carter)/launch/my_amcl.launch"/>
+<!--
+   <include file="$(find rplidar_ros)/launch/rplidar.launch" /> -->
+  <include file="$(find mr_carter)/launch/my_movebase.launch"/>
+
+  <group if="$(arg open_rviz)">
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find mr_carter)/config/turtlebot3_navigation.rviz"/>
+  </group>
+</launch>

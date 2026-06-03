@@ -1,0 +1,4 @@
+nexzino
+/workspaces/nexzino_beta/ros_ws/devel/.private/nexzino/share/nexzino/cmake/nexzinoConfig-version.cmake /workspaces/nexzino_beta/ros_ws/devel/share/nexzino/cmake/nexzinoConfig-version.cmake
+/workspaces/nexzino_beta/ros_ws/devel/.private/nexzino/share/nexzino/cmake/nexzinoConfig.cmake /workspaces/nexzino_beta/ros_ws/devel/share/nexzino/cmake/nexzinoConfig.cmake
+/workspaces/nexzino_beta/ros_ws/devel/.private/nexzino/lib/pkgconfig/nexzino.pc /workspaces/nexzino_beta/ros_ws/devel/lib/pkgconfig/nexzino.pc

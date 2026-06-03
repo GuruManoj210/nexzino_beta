@@ -1,0 +1,4 @@
+rvizweb
+/workspaces/nexzino_beta/ros_ws/devel/.private/rvizweb/share/rvizweb/cmake/rvizwebConfig.cmake /workspaces/nexzino_beta/ros_ws/devel/share/rvizweb/cmake/rvizwebConfig.cmake
+/workspaces/nexzino_beta/ros_ws/devel/.private/rvizweb/share/rvizweb/cmake/rvizwebConfig-version.cmake /workspaces/nexzino_beta/ros_ws/devel/share/rvizweb/cmake/rvizwebConfig-version.cmake
+/workspaces/nexzino_beta/ros_ws/devel/.private/rvizweb/lib/pkgconfig/rvizweb.pc /workspaces/nexzino_beta/ros_ws/devel/lib/pkgconfig/rvizweb.pc

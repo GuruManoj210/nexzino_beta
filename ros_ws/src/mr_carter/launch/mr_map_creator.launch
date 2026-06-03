@@ -1,0 +1,5 @@
+<launch>
+  <include file="$(find mr_carter)/launch/create_map.launch"/>
+  <include file="$(find mr_carter)/launch/mr_carter_rviz.launch"/>
+
+</launch>

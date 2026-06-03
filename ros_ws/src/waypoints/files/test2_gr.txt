@@ -1,0 +1,7 @@
+name: test2
+wp_list:
+   - wp1
+   - wp2
+   - wp3
+   - wp2
+---

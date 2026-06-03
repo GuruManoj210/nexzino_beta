@@ -1,0 +1,36 @@
+name: p1
+pose:
+  position:
+    x: -0.884051
+    y: 4.00855
+    z: 0
+  orientation:
+    x: 0
+    y: 0
+    z: 0.999364
+    w: 0.0356465
+---
+name: p2
+pose:
+  position:
+    x: -2.6784
+    y: 4.37227
+    z: 0
+  orientation:
+    x: 0
+    y: 0
+    z: 0.999171
+    w: -0.0407143
+---
+name: p3
+pose:
+  position:
+    x: -4.37576
+    y: 2.77191
+    z: 0
+  orientation:
+    x: 0
+    y: 0
+    z: -0.707107
+    w: 0.707107
+---

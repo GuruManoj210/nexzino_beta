@@ -1,0 +1,6 @@
+name: g1
+wp_list:
+   - p1
+   - p2
+   - p3
+---

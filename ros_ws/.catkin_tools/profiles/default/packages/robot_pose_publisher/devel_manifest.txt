@@ -1,0 +1,5 @@
+robot_pose_publisher
+/workspaces/nexzino_beta/ros_ws/devel/.private/robot_pose_publisher/share/robot_pose_publisher/cmake/robot_pose_publisherConfig.cmake /workspaces/nexzino_beta/ros_ws/devel/share/robot_pose_publisher/cmake/robot_pose_publisherConfig.cmake
+/workspaces/nexzino_beta/ros_ws/devel/.private/robot_pose_publisher/share/robot_pose_publisher/cmake/robot_pose_publisherConfig-version.cmake /workspaces/nexzino_beta/ros_ws/devel/share/robot_pose_publisher/cmake/robot_pose_publisherConfig-version.cmake
+/workspaces/nexzino_beta/ros_ws/devel/.private/robot_pose_publisher/lib/pkgconfig/robot_pose_publisher.pc /workspaces/nexzino_beta/ros_ws/devel/lib/pkgconfig/robot_pose_publisher.pc
+/workspaces/nexzino_beta/ros_ws/devel/.private/robot_pose_publisher/lib/robot_pose_publisher/robot_pose_publisher /workspaces/nexzino_beta/ros_ws/devel/lib/robot_pose_publisher/robot_pose_publisher

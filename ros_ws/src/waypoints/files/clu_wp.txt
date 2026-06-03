@@ -1,0 +1,12 @@
+name: c1
+pose:
+  position:
+    x: -6.29132
+    y: -1.92505
+    z: 0
+  orientation:
+    x: 0
+    y: 0
+    z: 0.712696
+    w: 0.701473
+---

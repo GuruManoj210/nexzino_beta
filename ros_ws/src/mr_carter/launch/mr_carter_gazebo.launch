@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<launch>
+        <!-- overwriting these args -->
+        <arg name="debug" default="false" />
+        <arg name="gui" default="true" />
+        <arg name="pause" default="false" />
+        <!-- <arg name="world" default="$(find mr_carter)/worlds/hardware_world.world" /> -->
+        <arg name="world" default="/workspaces/nexzino_beta/gazebo_models_worlds_collection/worlds/office_cpr.world" />
+
+        <arg name="urdf_file" default="$(find xacro)/xacro --inorder $(find myslam21)/urdf/mr_carter.urdf.xacro" />
+        <param name="robot_description" command="$(arg urdf_file)" />
+
+        <!-- include gazebo_ros launcher -->
+        <include file="$(find gazebo_ros)/launch/empty_world.launch">
+                <arg name="world_name" value="$(arg world)" />
+                <arg name="debug" value="$(arg debug)" />
+                <arg name="gui" value="$(arg gui)" />
+                <arg name="paused" value="$(arg pause)" />
+                <arg name="use_sim_time" value="True" />
+        </include>
+
+        <!-- Spawn a robot into Gazebo -->
+        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model mr_carter" />
+
+        <!-- for web GUI -->
+	<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
+	<node pkg="tf2_web_republisher" type="tf2_web_republisher" name="tf2_web_republisher"/>
+	<node pkg="robot_pose_publisher" type="robot_pose_publisher" name="robot_pose_publisher"/>
+
+
+</launch>

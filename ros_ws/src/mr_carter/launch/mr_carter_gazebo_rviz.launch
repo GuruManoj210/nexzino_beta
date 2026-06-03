@@ -1,0 +1,6 @@
+<launch>
+
+    <include file="$(find mr_carter)/launch/mr_carter_gazebo.launch"/>
+    <include file="$(find mr_carter)/launch/mr_carter_rviz.launch"/>
+
+</launch>

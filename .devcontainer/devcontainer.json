@@ -1,0 +1,44 @@
+{
+  "name": "nexzino_beta",
+  "build": {
+      "dockerfile": "Dockerfile"
+  },
+  "mounts": [
+      {
+          "source": "nexzino_beta-build-cache",
+          "target": "/home/developer/.cache",
+          "type": "volume"
+      },
+      {
+          "source": "/etc/localtime",
+          "target": "/etc/localtime",
+          "type": "bind"
+      },
+      {
+        "source": "/dev",
+        "target": "/dev",
+        "type": "bind"
+      }
+  ],
+  "runArgs": [
+      "--net=host",
+      "-v=/tmp/.X11-unix:/tmp/.X11-unix",
+      "--ipc=host",
+      "-e=DISPLAY=${env:DISPLAY}",
+      "-e=NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics"
+  ],
+  "privileged": true,
+  "customizations": {
+      "vscode": {
+          "extensions": [
+                "eamodio.gitlens",
+                "ms-python.python",
+                "ms-python.isort",
+                "ms-python.vscode-pylance",
+                "ms-python.black-formatter"
+          ]
+      }
+  },
+  "postCreateCommand": ". ./.devcontainer/postCreateCommand.sh",
+  "postAttachCommand": ". ./.devcontainer/postAttachCommand.sh"
+}

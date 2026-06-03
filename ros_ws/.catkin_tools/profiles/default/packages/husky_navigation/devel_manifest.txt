@@ -1,0 +1,4 @@
+husky_navigation
+/workspaces/nexzino_beta/ros_ws/devel/.private/husky_navigation/share/husky_navigation/cmake/husky_navigationConfig.cmake /workspaces/nexzino_beta/ros_ws/devel/share/husky_navigation/cmake/husky_navigationConfig.cmake
+/workspaces/nexzino_beta/ros_ws/devel/.private/husky_navigation/share/husky_navigation/cmake/husky_navigationConfig-version.cmake /workspaces/nexzino_beta/ros_ws/devel/share/husky_navigation/cmake/husky_navigationConfig-version.cmake
+/workspaces/nexzino_beta/ros_ws/devel/.private/husky_navigation/lib/pkgconfig/husky_navigation.pc /workspaces/nexzino_beta/ros_ws/devel/lib/pkgconfig/husky_navigation.pc

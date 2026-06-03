@@ -1,0 +1,14 @@
+material floor_room
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture carpet_1.jpg
+	scale 0.1 0.1
+      }
+    }
+  }
+}

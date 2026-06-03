@@ -1,0 +1,4 @@
+name: clu_g
+wp_list:
+   - c1
+---

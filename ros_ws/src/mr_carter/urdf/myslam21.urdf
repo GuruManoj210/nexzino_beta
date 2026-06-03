@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com)
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="myslam21">
+  <link
+    name="base_footprint">
+  </link>
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.074105 -4.3631E-08 0.0097349"
+        rpy="0 0 0" />
+      <mass
+        value="1.4621" />
+    <inertia
+        ixx="0.0049825"
+        ixy="2.9389E-17"
+        ixz="-1.1192E-17"
+        iyy="0.0089868"
+        iyz="4.4695E-17"
+        izz="0.0049825" />
+    </inertial>
+
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.98824 0.73725 0.51765 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0.1"
+      rpy="0 0 0" />
+    <parent
+      link="base_footprint" />
+    <child
+      link="base_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="left_wheel">
+    <inertial>
+      <origin
+        xyz="-2.9346E-10 -0.0015289 7.2164E-16"
+        rpy="0 0 0" />
+      <mass
+        value="1.6988" />
+      <inertia
+        ixx="0.0049825"
+        ixy="2.9389E-17"
+        ixz="-1.1192E-17"
+        iyy="0.0089868"
+        iyz="4.4695E-17"
+        izz="0.0049825" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/left_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/left_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_joint"
+    type="continuous">
+    <origin
+      xyz="8.7574E-05 0.215 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_wheel" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="right_wheel">
+    <inertial>
+      <origin
+        xyz="2.9346E-10 0.001529 1.0547E-15"
+        rpy="0 0 0" />
+      <mass
+        value="1.6988" />
+      <inertia
+        ixx="0.0049825"
+        ixy="4.1381E-17"
+        ixz="-2.1476E-18"
+        iyy="0.0089868"
+        iyz="-2.0305E-17"
+        izz="0.0049825" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/right_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/right_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_joint"
+    type="continuous">
+    <origin
+      xyz="-8.7574E-05 -0.215 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_wheel" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="caster_right_sup_link">
+    <inertial>
+      <origin
+        xyz="-0.0057083 0.00018449 -0.017621"
+        rpy="0 0 0" />
+      <mass
+        value="0.030986" />
+      <inertia
+        ixx="1.4804E-05"
+        ixy="2.2843E-07"
+        ixz="-4.3412E-06"
+        iyy="1.5651E-05"
+        iyz="2.7586E-07"
+        izz="1.4627E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/caster_right_sup_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/caster_right_sup_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="caster_right_sup_joint"
+    type="continuous">
+    <origin
+      xyz="-0.46269 -0.14 -0.0036566"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="caster_right_sup_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="caster_right_wheel_link">
+    <inertial>
+      <origin
+        xyz="3.7102E-07 -2.382E-05 -5.5511E-17"
+        rpy="0 0 0" />
+      <mass
+        value="0.11899" />
+      <inertia
+        ixx="4.7812E-05"
+        ixy="-5.1783E-07"
+        ixz="1.1714E-20"
+        iyy="8.1049E-05"
+        iyz="-3.9851E-19"
+        izz="4.7803E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/caster_right_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.50196 0.50196 0.50196 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/caster_right_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="caster_right_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="-0.034264 -0.00053995 -0.058235"
+      rpy="0 0 0" />
+    <parent
+      link="caster_right_sup_link" />
+    <child
+      link="caster_right_wheel_link" />
+    <axis
+      xyz="-0.015574 0.99988 0" />
+  </joint>
+  <link
+    name="caster_left_sup_link">
+    <inertial>
+      <origin
+        xyz="-0.0057095 0.0001554 -0.017621"
+        rpy="0 0 0" />
+      <mass
+        value="0.030984" />
+      <inertia
+        ixx="1.4801E-05"
+        ixy="2.2409E-07"
+        ixz="-4.3424E-06"
+        iyy="1.5653E-05"
+        iyz="2.5372E-07"
+        izz="1.4626E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/caster_left_sup_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.68627 0.62353 0.56078 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/caster_left_sup_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="caster_left_sup_joint"
+    type="continuous">
+    <origin
+      xyz="-0.46269 0.14 -0.0036566"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="caster_left_sup_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="caster_left_wheel_link">
+    <inertial>
+      <origin
+        xyz="-4.9244E-07 2.3818E-05 6.6613E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.11899" />
+      <inertia
+        ixx="4.7818E-05"
+        ixy="-6.8723E-07"
+        ixz="6.1491E-21"
+        iyy="8.1042E-05"
+        iyz="2.3118E-19"
+        izz="4.7803E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/caster_left_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.50196 0.50196 0.50196 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/caster_left_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="caster_left_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="-0.034261 -0.00070211 -0.058233"
+      rpy="0 0 0" />
+    <parent
+      link="caster_left_sup_link" />
+    <child
+      link="caster_left_wheel_link" />
+    <axis
+      xyz="0.020671 -0.99979 0" />
+  </joint>
+  <link
+    name="hokuyo_link">
+    <inertial>
+      <origin
+        xyz="-2.2204E-16 5.5511E-17 -0.035"
+        rpy="0 0 0" />
+      <mass
+        value="0.021991" />
+      <inertia
+        ixx="9.5295E-06"
+        ixy="6.0993E-25"
+        ixz="-4.1792E-21"
+        iyy="9.5295E-06"
+        iyz="4.6903E-21"
+        izz="1.0996E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/hokuyo_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.56078 0.58431 0.68627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://myslam21/meshes/hokuyo_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hokuyo_joint"
+    type="fixed">
+    <origin
+      xyz="0.17731 0 0.13634"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="hokuyo_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+
+
+
+
+
+
+
+
+  <!-- <transmission name="left_wheel_transmission">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="left_joint">
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="left_wheel_actuator">
+     <mechanicalReduction>1</mechanicalReduction>
+    <hardwareInterface>VelocityJointInterface</hardwareInterface>
+  </actuator>
+</transmission>
+
+<transmission name="right_wheel_transmission">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="right_joint">
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="right_wheel_actuator">
+     <mechanicalReduction>1</mechanicalReduction>
+    <hardwareInterface>VelocityJointInterface</hardwareInterface>
+  </actuator>
+</transmission>
+
+
+   <gazebo>
+
+     <plugin name="SARA_controller manager" filename="libgazebo_ros_control.so">
+     <commandTopic>/cmd_vel</commandTopic>
+      <odometryTopic>/odom</odometryTopic>
+      <odometryFrame>/odom</odometryFrame>
+      <publishWheelTF>true</publishWheelTF>
+      <wheelTorque>10</wheelTorque>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+
+     </plugin>
+
+    </gazebo>   -->
+
+
+
+
+ <gazebo>
+    <plugin name="turtlebot3_waffle_controller" filename="libgazebo_ros_diff_drive.so">
+      <alwaysOn>true</alwaysOn>
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <odometrySource>world</odometrySource>
+      <publishOdomTF>true</publishOdomTF>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+      <publishWheelTF>false</publishWheelTF>
+      <publishTf>true</publishTf>
+      <publishWheelJointState>false</publishWheelJointState>
+      <legacyMode>false</legacyMode>
+      <updateRate>30</updateRate>
+      <leftJoint>left_joint</leftJoint>
+      <rightJoint>right_joint</rightJoint>
+      <wheelSeparation>0.43</wheelSeparation>
+      <wheelDiameter>0.21</wheelDiameter>
+      <wheelAcceleration>1</wheelAcceleration>
+      <wheelTorque>200</wheelTorque>
+      <rosDebugLevel>na</rosDebugLevel>
+    </plugin>
+  </gazebo>
+
+<!--
+
+
+  <gazebo reference="base_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <gazebo reference="left_wheel">
+    <mu1>200</mu1>
+    <mu2>100</mu2>
+    <kp>10000000.0</kp>
+    <kd>10.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>3</maxVel>
+    <fdir1>1 0 0</fdir1>
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+
+
+  <gazebo reference="right_wheel">
+    <mu1>200</mu1>
+    <mu2>100</mu2>
+    <kp>10000000.0</kp>
+    <kd>10.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>3</maxVel>
+    <fdir1>1 0 0</fdir1>
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+
+
+  <gazebo reference="caster_left_sup_link">
+    <mu1>0.00</mu1>
+    <mu2>0.00</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+  <gazebo reference="caster_right_sup_link">
+    <mu1>0.00</mu1>
+    <mu2>0.00</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+
+  <gazebo reference="caster_left_wheel_link">
+    <mu1>200</mu1>
+    <mu2>100</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.4</minDepth>
+    <maxVel>1.0</maxVel>
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+
+  <gazebo reference="caster_right_wheel_link">
+    <mu1>200</mu1>
+    <mu2>100</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>1.0</maxVel>
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+-->
+
+
+
+
+ <gazebo reference="hokuyo_link">
+    <material>Gazebo/FlatBlack</material>
+    <sensor type="ray" name="lds_lfcd_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>5</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>800</samples>
+            <resolution>1</resolution>
+            <min_angle>0</min_angle>
+            <max_angle>6.28319</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.150</min>
+          <max>6</max>
+          <resolution>0.015</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_lds_lfcd_controller" filename="libgazebo_ros_laser.so">
+        <topicName>scan</topicName>
+        <frameName>hokuyo_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
+
+
+
+</robot>
