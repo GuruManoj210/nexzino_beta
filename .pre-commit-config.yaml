@@ -8,3 +8,4 @@ repos:
     rev: 22.10.0
     hooks:
     -   id: black
+        exclude: ^ros_ws/src/arm_v2/src/arm_v2/python/tests/

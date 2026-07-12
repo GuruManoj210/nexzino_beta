@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="paused" default="false"/>
+  <arg name="gazebo_gui" default="true"/>
+  <arg name="initial_joint_positions" doc="Initial joint configuration of the robot"
+       default=" -J lep_j 0.698132 -J ley_j 0 -J lg1_j 0 -J lsp_j 0 -J lsr_j 0 -J lsy_j 0 -J lw_j 0 -J rep_j 0.698132 -J rey_j 0 -J rg1_j 0 -J rsp_j 0 -J rsr_j 0 -J rsy_j 0 -J rw_j 0"/>
+  <arg name="world" default="$(find pal_gazebo_worlds)/worlds/pal_kitchen.world" />
+
+
+  <arg name="extra_gz_model_path" default=""/>
+  <arg name="extra_gz_resource_path" default=""/>
+  <env name="GAZEBO_MODEL_PATH" value="$(arg extra_gz_model_path):$(find pal_gazebo_worlds)/../pal_gazebo_worlds_private/models:$(find pal_gazebo_worlds)/models:$(optenv GAZEBO_MODEL_PATH)"/>
+  <env name="GAZEBO_RESOURCE_PATH" value="$(arg extra_gz_resource_path):$(find pal_gazebo_worlds)/../pal_gazebo_worlds_private:$(find pal_gazebo_worlds):$(optenv GAZEBO_RESOURCE_PATH)"/>
+
+  <!-- startup simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <!-- <arg name="world_name" default="worlds/empty.world"/> -->
+    <arg name="world_name" default="$(arg world)"/>
+    <arg name="paused" value="true"/>
+    <arg name="gui" value="$(arg gazebo_gui)"/>
+  </include>
+
+  <!-- send robot urdf to param server -->
+  <param name="robot_description" command="xacro  '$(find robotics_arm_v7)/urdf/robotics_arm_v7.urdf.xacro'" />
+
+  <!-- unpause only after loading robot model -->
+  <arg name="unpause" value="$(eval '' if arg('paused') else '-unpause')" />
+  <!-- push robot_description to factory and spawn robot in gazebo at the origin, change x,y,z arguments to spawn in a different position -->
+  <arg name="world_pose" value="-x 0 -y 0 -z 0.05" />
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot $(arg unpause) $(arg world_pose) $(arg initial_joint_positions)"
+    respawn="false" output="screen" />
+
+  <!-- Load joint controller parameters for Gazebo -->
+  <rosparam file="$(find arm_v2)/config/gazebo_controllers.yaml" />
+  <!-- Spawn Gazebo ROS controllers -->
+  <node name="gazebo_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller" />
+  <!-- Load ROS controllers -->
+  <include file="$(dirname)/ros_controllers.launch"/>
+
+</launch>

@@ -1,0 +1,110 @@
+r_con:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - rsp_j
+    - rsr_j
+    - rsy_j
+    - rep_j
+    - rey_j
+    - rw_j
+  gains:
+    rsp_j:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rsr_j:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rsy_j:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rep_j:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rey_j:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    rw_j:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+l_con:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - lsp_j
+    - lsr_j
+    - lsy_j
+    - lep_j
+    - ley_j
+    - lw_j
+  gains:
+    lsp_j:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    lsr_j:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    lsy_j:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    lep_j:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    ley_j:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    lw_j:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+s_con:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - realsenseh2_j
+  gains:
+    realsenseh2_j:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+l_ef:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - lg1_j
+  gains:
+    lg1_j:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+r_ef:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - rg1_j
+  gains:
+    rg1_j:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1

@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: robotics_arm_v7
+    relative_path: urdf/robotics_arm_v7.urdf.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/robotics_arm_v7.srdf
+  CONFIG:
+    author_name: manoj
+    author_email: gurumanoj@machanirobotics.com
+    generated_timestamp: 1687414405

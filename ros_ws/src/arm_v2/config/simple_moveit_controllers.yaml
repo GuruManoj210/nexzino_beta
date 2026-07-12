@@ -1,0 +1,41 @@
+controller_list:
+  - name: r_con
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: True
+    joints:
+      - rsp_j
+      - rsr_j
+      - rsy_j
+      - rep_j
+      - rey_j
+      - rw_j
+  - name: l_con
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: True
+    joints:
+      - lsp_j
+      - lsr_j
+      - lsy_j
+      - lep_j
+      - ley_j
+      - lw_j
+  - name: s_con
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: True
+    joints:
+      - realsenseh2_j
+  - name: l_ef
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: True
+    joints:
+      - lg1_j
+  - name: r_ef
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: True
+    joints:
+      - rg1_j

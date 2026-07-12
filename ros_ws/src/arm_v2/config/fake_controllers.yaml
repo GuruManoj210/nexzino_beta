@@ -1,0 +1,47 @@
+controller_list:
+  - name: fake_l_arm_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - lsp_j
+      - lsr_j
+      - lsy_j
+      - lep_j
+      - ley_j
+      - lw_j
+  - name: fake_r_arm_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - rsp_j
+      - rsr_j
+      - rsy_j
+      - rep_j
+      - rey_j
+      - rw_j
+  - name: fake_l_gripper_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - lg1_j
+  - name: fake_r_gripper_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - rg1_j
+  - name: fake_sensor_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - realsenseh2_j
+  - name: fake_base_group_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - caster_left_sup_joint
+      - caster_left_wheel_joint
+      - caster_right_sup_joint
+      - caster_right_wheel_joint
+initial:  # Define initial robot poses per group
+  - group: l_arm
+    pose: init
+  - group: r_arm
+    pose: init
+  - group: l_gripper
+    pose: init
+  - group: r_gripper
+    pose: init

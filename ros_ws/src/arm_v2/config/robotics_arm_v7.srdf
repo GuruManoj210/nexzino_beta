@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This does not replace URDF, and is not an extension of URDF.
+    This is a format for representing semantic information about the robot structure.
+    A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
+-->
+<robot name="robotics_arm_v7">
+    <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
+    <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
+    <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
+    <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
+    <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
+    <group name="l_arm">
+        <link name="lsp_l"/>
+        <link name="lsr_l"/>
+        <link name="lsy_l"/>
+        <link name="ley_l"/>
+        <link name="lep_l"/>
+        <link name="lw_l"/>
+        <link name="lgh_l"/>
+    </group>
+    <group name="r_arm">
+        <link name="rsp_l"/>
+        <link name="rsr_l"/>
+        <link name="rsy_l"/>
+        <link name="rep_l"/>
+        <link name="rey_l"/>
+        <link name="rw_l"/>
+        <link name="rgh_l"/>
+    </group>
+    <group name="l_gripper">
+        <link name="lg1_l"/>
+        <link name="lg2_l"/>
+    </group>
+    <group name="r_gripper">
+        <link name="rg1_l"/>
+        <link name="rg2_l"/>
+    </group>
+    <group name="sensor">
+        <link name="realsenseh1_l"/>
+        <link name="realsenseh2_l"/>
+        <link name="camera_bottom_screw_frame"/>
+        <link name="camera_link"/>
+        <link name="camera_color_frame"/>
+        <link name="camera_color_optical_frame"/>
+        <link name="camera_depth_frame"/>
+        <link name="camera_depth_optical_frame"/>
+        <link name="velodyne_base_link"/>
+        <link name="velodyne"/>
+    </group>
+    <group name="base_group">
+        <link name="caster_left_sup_link"/>
+        <link name="caster_left_wheel_link"/>
+        <link name="caster_right_sup_link"/>
+        <link name="caster_right_wheel_link"/>
+    </group>
+    <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
+    <group_state name="init" group="l_arm">
+        <joint name="lep_j" value="0"/>
+        <joint name="ley_j" value="0"/>
+        <joint name="lsp_j" value="0"/>
+        <joint name="lsr_j" value="0"/>
+        <joint name="lsy_j" value="0"/>
+        <joint name="lw_j" value="0"/>
+    </group_state>
+    <group_state name="init" group="r_arm">
+        <joint name="rep_j" value="0"/>
+        <joint name="rey_j" value="0"/>
+        <joint name="rsp_j" value="0"/>
+        <joint name="rsr_j" value="0"/>
+        <joint name="rsy_j" value="0"/>
+        <joint name="rw_j" value="0"/>
+    </group_state>
+    <group_state name="init" group="l_gripper">
+        <joint name="lg1_j" value="0"/>
+    </group_state>
+    <group_state name="init" group="r_gripper">
+        <joint name="rg1_j" value="0"/>
+    </group_state>
+    <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
+    <end_effector name="l_ef" parent_link="lgh_l" group="l_gripper" parent_group="l_arm"/>
+    <end_effector name="r_ef" parent_link="rgh_l" group="r_gripper" parent_group="r_arm"/>
+    <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <disable_collisions link1="adjustable_l" link2="base_link" reason="Never"/>
+    <disable_collisions link1="adjustable_l" link2="basestand_l" reason="Adjacent"/>
+    <disable_collisions link1="adjustable_l" link2="camera_link" reason="Never"/>
+    <disable_collisions link1="adjustable_l" link2="caster_left_sup_link" reason="Never"/>
+    <disable_collisions link1="adjustable_l" link2="caster_left_wheel_link" reason="Never"/>
+    <disable_collisions link1="adjustable_l" link2="caster_right_sup_link" reason="Never"/>
+    <disable_collisions link1="adjustable_l" link2="caster_right_wheel_link" reason="Never"/>
+    <disable_collisions link1="adjustable_l" link2="left_wheel" reason="Never"/>
+    <disable_collisions link1="adjustable_l" link2="lel_l" reason="Never"/>
+    <disable_collisions link1="adjustable_l" link2="lsp_l" reason="Adjacent"/>
+    <disable_collisions link1="adjustable_l" link2="lsr_l" reason="Never"/>
+    <disable_collisions link1="adjustable_l" link2="lsy_l" reason="Never"/>
+    <disable_collisions link1="adjustable_l" link2="realsenseh1_l" reason="Adjacent"/>
+    <disable_collisions link1="adjustable_l" link2="realsenseh2_l" reason="Never"/>
+    <disable_collisions link1="adjustable_l" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="adjustable_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="adjustable_l" link2="rsp_l" reason="Adjacent"/>
+    <disable_collisions link1="adjustable_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="adjustable_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="adjustable_l" link2="velodyne_base_link" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="basestand_l" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="camera_link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="caster_left_sup_link" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="caster_left_wheel_link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="caster_right_sup_link" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="caster_right_wheel_link" reason="Never"/>
+    <disable_collisions link1="base_link" link2="left_wheel" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="lel_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="lep_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="ley_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="lg1_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="lg2_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="lgh_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="lsp_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="lsr_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="lsy_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="lw_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="realsenseh1_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="realsenseh2_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="rey_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="rg1_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="rg2_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="rgh_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="right_wheel" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="base_link" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="camera_link" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="caster_left_sup_link" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="caster_left_wheel_link" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="caster_right_sup_link" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="caster_right_wheel_link" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="left_wheel" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="lel_l" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="lsp_l" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="lsr_l" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="lsy_l" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="realsenseh1_l" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="realsenseh2_l" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="basestand_l" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="caster_left_sup_link" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="caster_left_wheel_link" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="caster_right_sup_link" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="caster_right_wheel_link" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="left_wheel" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="lel_l" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="lep_l" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="lsp_l" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="lsr_l" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="lsy_l" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="realsenseh1_l" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="realsenseh2_l" reason="Adjacent"/>
+    <disable_collisions link1="camera_link" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="camera_link" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="caster_left_wheel_link" reason="Adjacent"/>
+    <disable_collisions link1="caster_left_sup_link" link2="caster_right_sup_link" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="caster_right_wheel_link" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="left_wheel" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="lel_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="lep_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="ley_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="lg1_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="lg2_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="lgh_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="lsp_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="lsr_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="lsy_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="lw_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="realsenseh1_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="realsenseh2_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="rey_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="rg1_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="rg2_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="rgh_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="caster_left_sup_link" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="caster_right_sup_link" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="caster_right_wheel_link" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="left_wheel" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="lel_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="lep_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="ley_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="lg1_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="lg2_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="lgh_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="lsp_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="lsr_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="lsy_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="lw_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="realsenseh1_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="realsenseh2_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="rey_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="rg1_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="rg2_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="rgh_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="caster_left_wheel_link" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="caster_right_wheel_link" reason="Adjacent"/>
+    <disable_collisions link1="caster_right_sup_link" link2="left_wheel" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="lel_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="lep_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="ley_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="lg1_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="lg2_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="lgh_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="lsp_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="lsr_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="lsy_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="lw_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="realsenseh1_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="realsenseh2_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="rey_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="rg1_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="rg2_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="rgh_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="caster_right_sup_link" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="left_wheel" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="lel_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="lep_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="ley_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="lg1_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="lg2_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="lgh_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="lsp_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="lsr_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="lsy_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="lw_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="realsenseh1_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="realsenseh2_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="rey_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="rg1_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="rg2_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="rgh_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="caster_right_wheel_link" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="lel_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="lep_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="ley_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="lg1_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="lg2_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="lgh_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="lsp_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="lsr_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="lsy_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="lw_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="realsenseh1_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="realsenseh2_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="rey_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="rg1_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="rg2_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="rgh_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="left_wheel" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="ley_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="lg1_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="lg2_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="lgh_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="lsp_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="lsr_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="lsy_l" reason="Adjacent"/>
+    <disable_collisions link1="lel_l" link2="lw_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="realsenseh1_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="realsenseh2_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="rey_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="rg1_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="rgh_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="lel_l" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="lep_l" link2="ley_l" reason="Adjacent"/>
+    <disable_collisions link1="lep_l" link2="lg1_l" reason="Never"/>
+    <disable_collisions link1="lep_l" link2="lg2_l" reason="Never"/>
+    <disable_collisions link1="lep_l" link2="lgh_l" reason="Never"/>
+    <disable_collisions link1="lep_l" link2="lsp_l" reason="Never"/>
+    <disable_collisions link1="lep_l" link2="lsr_l" reason="Never"/>
+    <disable_collisions link1="lep_l" link2="lsy_l" reason="Adjacent"/>
+    <disable_collisions link1="lep_l" link2="lw_l" reason="Never"/>
+    <disable_collisions link1="lep_l" link2="realsenseh1_l" reason="Never"/>
+    <disable_collisions link1="lep_l" link2="realsenseh2_l" reason="Never"/>
+    <disable_collisions link1="lep_l" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="lep_l" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="lep_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="lep_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="lep_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="lep_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="lep_l" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="ley_l" link2="lg1_l" reason="Never"/>
+    <disable_collisions link1="ley_l" link2="lg2_l" reason="Never"/>
+    <disable_collisions link1="ley_l" link2="lgh_l" reason="Never"/>
+    <disable_collisions link1="ley_l" link2="lsp_l" reason="Never"/>
+    <disable_collisions link1="ley_l" link2="lsr_l" reason="Never"/>
+    <disable_collisions link1="ley_l" link2="lsy_l" reason="Never"/>
+    <disable_collisions link1="ley_l" link2="lw_l" reason="Adjacent"/>
+    <disable_collisions link1="ley_l" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="ley_l" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="ley_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="ley_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="ley_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="ley_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="lg1_l" link2="lg2_l" reason="Never"/>
+    <disable_collisions link1="lg1_l" link2="lgh_l" reason="Adjacent"/>
+    <disable_collisions link1="lg1_l" link2="lsp_l" reason="Never"/>
+    <disable_collisions link1="lg1_l" link2="lsr_l" reason="Never"/>
+    <disable_collisions link1="lg1_l" link2="lsy_l" reason="Never"/>
+    <disable_collisions link1="lg1_l" link2="lw_l" reason="Default"/>
+    <disable_collisions link1="lg1_l" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="lg1_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="lg1_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="lg1_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="lg1_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="lg2_l" link2="lgh_l" reason="Adjacent"/>
+    <disable_collisions link1="lg2_l" link2="lsp_l" reason="Never"/>
+    <disable_collisions link1="lg2_l" link2="lsr_l" reason="Never"/>
+    <disable_collisions link1="lg2_l" link2="lsy_l" reason="Never"/>
+    <disable_collisions link1="lg2_l" link2="lw_l" reason="Default"/>
+    <disable_collisions link1="lg2_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="lg2_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="lg2_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="lg2_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="lgh_l" link2="lsp_l" reason="Never"/>
+    <disable_collisions link1="lgh_l" link2="lsr_l" reason="Never"/>
+    <disable_collisions link1="lgh_l" link2="lsy_l" reason="Never"/>
+    <disable_collisions link1="lgh_l" link2="lw_l" reason="Adjacent"/>
+    <disable_collisions link1="lgh_l" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="lgh_l" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="lgh_l" link2="rey_l" reason="Never"/>
+    <disable_collisions link1="lgh_l" link2="rgh_l" reason="Never"/>
+    <disable_collisions link1="lgh_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="lgh_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="lgh_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="lgh_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="lsr_l" reason="Adjacent"/>
+    <disable_collisions link1="lsp_l" link2="lsy_l" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="lw_l" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="realsenseh1_l" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="realsenseh2_l" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="rey_l" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="rg1_l" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="rg2_l" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="rgh_l" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="lsp_l" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="lsr_l" link2="lsy_l" reason="Adjacent"/>
+    <disable_collisions link1="lsr_l" link2="lw_l" reason="Never"/>
+    <disable_collisions link1="lsr_l" link2="realsenseh1_l" reason="Never"/>
+    <disable_collisions link1="lsr_l" link2="realsenseh2_l" reason="Never"/>
+    <disable_collisions link1="lsr_l" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="lsr_l" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="lsr_l" link2="rey_l" reason="Never"/>
+    <disable_collisions link1="lsr_l" link2="rg1_l" reason="Never"/>
+    <disable_collisions link1="lsr_l" link2="rg2_l" reason="Never"/>
+    <disable_collisions link1="lsr_l" link2="rgh_l" reason="Never"/>
+    <disable_collisions link1="lsr_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="lsr_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="lsr_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="lsr_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="lsr_l" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="lsr_l" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="lsy_l" link2="lw_l" reason="Never"/>
+    <disable_collisions link1="lsy_l" link2="realsenseh1_l" reason="Never"/>
+    <disable_collisions link1="lsy_l" link2="realsenseh2_l" reason="Never"/>
+    <disable_collisions link1="lsy_l" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="lsy_l" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="lsy_l" link2="rey_l" reason="Never"/>
+    <disable_collisions link1="lsy_l" link2="rgh_l" reason="Never"/>
+    <disable_collisions link1="lsy_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="lsy_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="lsy_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="lsy_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="lsy_l" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="lsy_l" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="lw_l" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="lw_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="lw_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="lw_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="lw_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="realsenseh1_l" link2="realsenseh2_l" reason="Adjacent"/>
+    <disable_collisions link1="realsenseh1_l" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="realsenseh1_l" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="realsenseh1_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="realsenseh1_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="realsenseh1_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="realsenseh1_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="realsenseh1_l" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="realsenseh2_l" link2="rel_l" reason="Never"/>
+    <disable_collisions link1="realsenseh2_l" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="realsenseh2_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="realsenseh2_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="realsenseh2_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="realsenseh2_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="realsenseh2_l" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="rel_l" link2="rep_l" reason="Never"/>
+    <disable_collisions link1="rel_l" link2="rey_l" reason="Never"/>
+    <disable_collisions link1="rel_l" link2="rg1_l" reason="Never"/>
+    <disable_collisions link1="rel_l" link2="rg2_l" reason="Never"/>
+    <disable_collisions link1="rel_l" link2="rgh_l" reason="Never"/>
+    <disable_collisions link1="rel_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="rel_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="rel_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="rel_l" link2="rsy_l" reason="Adjacent"/>
+    <disable_collisions link1="rel_l" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="rel_l" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="rep_l" link2="rey_l" reason="Adjacent"/>
+    <disable_collisions link1="rep_l" link2="rg1_l" reason="Never"/>
+    <disable_collisions link1="rep_l" link2="rg2_l" reason="Never"/>
+    <disable_collisions link1="rep_l" link2="rgh_l" reason="Never"/>
+    <disable_collisions link1="rep_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="rep_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="rep_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="rep_l" link2="rsy_l" reason="Adjacent"/>
+    <disable_collisions link1="rep_l" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="rey_l" link2="rg1_l" reason="Never"/>
+    <disable_collisions link1="rey_l" link2="rg2_l" reason="Never"/>
+    <disable_collisions link1="rey_l" link2="rgh_l" reason="Never"/>
+    <disable_collisions link1="rey_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="rey_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="rey_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="rey_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="rey_l" link2="rw_l" reason="Adjacent"/>
+    <disable_collisions link1="rg1_l" link2="rg2_l" reason="Never"/>
+    <disable_collisions link1="rg1_l" link2="rgh_l" reason="Adjacent"/>
+    <disable_collisions link1="rg1_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="rg1_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="rg1_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="rg1_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="rg1_l" link2="rw_l" reason="Default"/>
+    <disable_collisions link1="rg2_l" link2="rgh_l" reason="Adjacent"/>
+    <disable_collisions link1="rg2_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="rg2_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="rg2_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="rg2_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="rg2_l" link2="rw_l" reason="Default"/>
+    <disable_collisions link1="rgh_l" link2="right_wheel" reason="Never"/>
+    <disable_collisions link1="rgh_l" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="rgh_l" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="rgh_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="rgh_l" link2="rw_l" reason="Adjacent"/>
+    <disable_collisions link1="right_wheel" link2="rsp_l" reason="Never"/>
+    <disable_collisions link1="right_wheel" link2="rsr_l" reason="Never"/>
+    <disable_collisions link1="right_wheel" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="right_wheel" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="right_wheel" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="rsp_l" link2="rsr_l" reason="Adjacent"/>
+    <disable_collisions link1="rsp_l" link2="rsy_l" reason="Never"/>
+    <disable_collisions link1="rsp_l" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="rsp_l" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="rsr_l" link2="rsy_l" reason="Adjacent"/>
+    <disable_collisions link1="rsr_l" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="rsr_l" link2="velodyne_base_link" reason="Never"/>
+    <disable_collisions link1="rsy_l" link2="rw_l" reason="Never"/>
+    <disable_collisions link1="rsy_l" link2="velodyne_base_link" reason="Never"/>
+</robot>

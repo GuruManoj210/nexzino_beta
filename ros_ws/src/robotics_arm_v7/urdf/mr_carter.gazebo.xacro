@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot name="mr_carter_sim" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- <gazebo reference="map">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo> -->
+
+  <gazebo reference="base_footprint">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <gazebo reference="base_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <gazebo reference="left_wheel">
+    <mu1>200</mu1>
+    <mu2>100</mu2>
+    <kp>10000000.0</kp>
+    <kd>10.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>3</maxVel>
+    <fdir1>1 0 0</fdir1>
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+  <gazebo reference="right_wheel">
+    <mu1>200</mu1>
+    <mu2>100</mu2>
+    <kp>10000000.0</kp>
+    <kd>10.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>3</maxVel>
+    <fdir1>1 0 0</fdir1>
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+  <gazebo reference="caster_left_sup_link">
+    <mu1>0.00</mu1>
+    <mu2>0.00</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+  <gazebo reference="caster_right_sup_link">
+    <mu1>0.00</mu1>
+    <mu2>0.00</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+  <gazebo reference="caster_left_wheel_link">
+    <mu1>200</mu1>
+    <mu2>100</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.4</minDepth>
+    <maxVel>1.0</maxVel>
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+  <gazebo reference="caster_right_wheel_link">
+    <mu1>200</mu1>
+    <mu2>100</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>1.0</maxVel>
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+
+  <gazebo>
+    <plugin name="mr_diff_drive" filename="libgazebo_ros_diff_drive.so">
+      <alwaysOn>true</alwaysOn>
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <odometrySource>world</odometrySource>
+      <!-- True below -->
+      <publishOdomTF>true</publishOdomTF>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+      <publishWheelTF>false</publishWheelTF>
+      <publishTf>true</publishTf>
+      <publishWheelJointState>true</publishWheelJointState>
+      <legacyMode>false</legacyMode>
+      <updateRate>30</updateRate>
+      <leftJoint>left_joint</leftJoint>
+      <rightJoint>right_joint</rightJoint>
+      <wheelSeparation>0.43</wheelSeparation>
+      <wheelDiameter>0.21</wheelDiameter>
+      <wheelAcceleration>1</wheelAcceleration>
+      <wheelTorque>200</wheelTorque>
+      <rosDebugLevel>na</rosDebugLevel>
+    </plugin>
+  </gazebo>
+
+
+  <!-- <gazebo reference="base_scan">
+    <material>Gazebo/FlatBlack</material>
+    <sensor type="ray" name="lds_lfcd_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>5</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>800</samples>
+            <resolution>1</resolution>
+            <min_angle>0</min_angle>
+            <max_angle>6.28319</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.150</min>
+          <max>6</max>
+          <resolution>0.015</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_lds_lfcd_controller" filename="libgazebo_ros_laser.so">
+        <topicName>scan</topicName>
+        <frameName>base_scan</frameName>
+      </plugin>
+    </sensor>
+  </gazebo> -->
+
+
+
+
+  <!-- <transmission name="left_wheel_transmission">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="left_joint">
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="left_wheel_actuator">
+     <mechanicalReduction>1</mechanicalReduction>
+    <hardwareInterface>VelocityJointInterface</hardwareInterface>
+  </actuator>
+  </transmission>
+
+<transmission name="right_wheel_transmission">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="right_joint">
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="right_wheel_actuator">
+     <mechanicalReduction>1</mechanicalReduction>
+    <hardwareInterface>VelocityJointInterface</hardwareInterface>
+  </actuator>
+</transmission>
+
+
+   <gazebo>
+
+     <plugin name="SARA_controller manager" filename="libgazebo_ros_control.so">
+     <commandTopic>/cmd_vel</commandTopic>
+      <odometryTopic>/odom</odometryTopic>
+      <odometryFrame>/odom</odometryFrame>
+      <publishWheelTF>true</publishWheelTF>
+      <wheelTorque>10</wheelTorque>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+
+     </plugin>
+
+    </gazebo>   -->
+
+
+    <transmission name="trans_caster_right_sup_joint">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="caster_right_sup_joint">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="caster_right_sup_joint_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="trans_caster_right_wheel_joint">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="caster_right_wheel_joint">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="caster_right_wheel_joint_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="trans_caster_left_sup_joint">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="caster_left_sup_joint">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="caster_left_sup_joint_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="trans_caster_left_wheel_joint">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="caster_left_wheel_joint">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="caster_left_wheel_joint_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+
+</robot>

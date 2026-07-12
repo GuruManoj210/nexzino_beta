@@ -1,0 +1,1391 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com)
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot xmlns:xacro="http://ros.org/wiki/xacro"
+    name="robotics_arm_v7">
+    <link name="base_link">
+
+        <inertial>
+            <origin xyz="0.0685860536068752 3.24996896727464E-08 -0.0566084488849558" rpy="0 0 0" />
+            <mass value="10.46208018179117" />
+            <inertia ixx="0.0321277711577866" ixy="-1.89510236572257E-05" ixz="0.00256655656961068" iyy="0.0524908195571129" iyz="-1.03584073628694E-09" izz="0.0807823417997845" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/base_link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.686274509803922 0.56078431372549 0.56078431372549 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/base_link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <link name="basestand_l">
+
+<inertial>
+            <origin xyz="2.62813088240766E-05 1.16979828362042E-05 -0.297846297990578" rpy="0 0 0" />
+            <mass value="3.18930683028157" />
+            <inertia ixx="0.204988049565948" ixy="-2.77505341854448E-05" ixz="1.78619110355408E-05" iyy="0.225023025369704" iyz="8.0696571220082E-06" izz="0.0409368656622474" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/basestand_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.686274509803922 0.56078431372549 0.623529411764706 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/basestand_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="basestand_j" type="fixed">
+        <origin xyz="0 0 0.562500000000001" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="basestand_l" />
+        <axis xyz="0 0 0" />
+    </joint>
+    <link name="adjustable_l">
+
+<inertial>
+            <origin xyz="-1.48441065271839E-05 3.64342110244022E-07 0.421821185244988" rpy="0 0 0" />
+            <mass value="2.76700528664102" />
+            <inertia ixx="0.0443516346684835" ixy="4.77152537675687E-08" ixz="1.12218257470024E-06" iyy="0.0382833805063431" iyz="-9.4401296458892E-08" izz="0.00932869645001905" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/adjustable_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.686274509803922 0.56078431372549 0.56078431372549 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/adjustable_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="adjustable_j" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="basestand_l" />
+        <child link="adjustable_l" />
+        <axis xyz="0 0 0" />
+        <limit lower="-0.5" upper="0.5" effort="10" velocity="0.5" />
+    </joint>
+    <link name="lsp_l">
+
+<inertial>
+            <origin xyz="0.0008472892745299 -1.65859278289382E-06 0.0545119605018215" rpy="0 0 0" />
+            <mass value="0.163554711632053" />
+            <inertia ixx="0.000303701327122371" ixy="-3.80886333967666E-09" ixz="-2.55461455337855E-06" iyy="0.000276110044119152" iyz="4.50631087708101E-09" izz="0.00015435291467114" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lsp_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.56078431372549 0.686274509803922 0.686274509803922 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lsp_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="lsp_j" type="revolute">
+        <origin xyz="0 0.13879999999999 0.500000000000004" rpy="-1.57079632679488 0.196913955723574 0" />
+        <parent link="adjustable_l" />
+        <child link="lsp_l" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.142" upper="3.142" effort="10" velocity="3.142" />
+    </joint>
+    <link name="lsr_l">
+
+<inertial>
+            <origin xyz="-0.00350810957841904 -0.0743126538855545 0.0273797873659373" rpy="0 0 0" />
+            <mass value="0.157927176852261" />
+            <inertia ixx="0.000344643257463614" ixy="-5.52369329146358E-06" ixz="8.94627222076643E-07" iyy="0.000224109562566033" iyz="1.4082871810093E-05" izz="0.00032812750917298" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lsr_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.686274509803922 0.56078431372549 0.623529411764706 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lsr_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="lsr_j" type="revolute">
+        <origin xyz="0.029397125601635 0 0.0724657081179809" rpy="3.14159255362977 1.5707963267949 0" />
+        <parent link="lsp_l" />
+        <child link="lsr_l" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.316" upper="0.2618" effort="10" velocity="3.142" />
+    </joint>
+    <link name="lsy_l">
+
+<inertial>
+            <origin xyz="-0.000246998724985903 -1.26444974421769E-05 0.0695078998277578" rpy="0 0 0" />
+            <mass value="0.192129001604532" />
+            <inertia ixx="0.000525454804551651" ixy="-6.46883828984656E-08" ixz="2.27733709644982E-07" iyy="0.000491960354413494" iyz="1.73076489386585E-07" izz="0.000211438383429421" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lsy_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.56078431372549 0.686274509803922 0.56078431372549 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lsy_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="lsy_j" type="revolute">
+        <origin xyz="-0.00503334482929713 -0.108098588890029 0.0284656971171868" rpy="1.57079632678501 -0.103908881940915 -0.0465289418497155" />
+        <parent link="lsr_l" />
+        <child link="lsy_l" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.141" upper="3.141" effort="10" velocity="3.142" />
+    </joint>
+    <link name="lel_l">
+
+<inertial>
+            <origin xyz="-0.0114002435443972 0.0104873878092129 0.00675651006750111" rpy="0 0 0" />
+            <mass value="0.0198133815117097" />
+            <inertia ixx="1.01325714310338E-05" ixy="8.62879615733268E-06" ixz="9.69361050606928E-07" iyy="1.15745798851329E-05" iyz="-8.91734812071478E-07" izz="2.09399517171352E-05" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lel_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.686274509803922 0.56078431372549 0.686274509803922 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lel_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="lel_j" type="revolute">
+        <origin xyz="-0.0255342917352893 0 0.0689657082647096" rpy="1.57079632688968 0.00211475301112716 -1.5707963222304" />
+        <parent link="lsy_l" />
+        <child link="lel_l" />
+        <axis xyz="0 0 1" />
+         <limit lower="-3.141" upper="3.141" effort="10" velocity="3.142" />
+        <mimic joint="lep_j" multiplier="1" offset="0" />
+    </joint>
+    <link name="lep_l">
+
+<inertial>
+            <origin xyz="0.16599536563429 0.381922857068731 -0.224382516734376" rpy="0 0 0" />
+            <mass value="1.1101901577768" />
+            <inertia ixx="3.27099529190478" ixy="-0.478426463704338" ixz="0.016531559255096" iyy="0.561788677501424" iyz="0.034750880764506" izz="3.23614937393567" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lep_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.623529411764706 0.56078431372549 0.686274509803922 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lep_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="lep_j" type="revolute">
+        <origin xyz="0 -0.000179760678019836 0.153965526240841" rpy="1.57079632646137 0.0938833059174607 -1.57079632679489" />
+        <parent link="lsy_l" />
+        <child link="lep_l" />
+        <axis xyz="0 0 1" />
+        <limit lower="-0.35" upper="1.0472" effort="10" velocity="3.142" />
+    </joint>
+    <link name="ley_l">
+
+<inertial>
+            <origin xyz="-0.00136892606456798 -2.85037648595221E-07 0.0560168643698046" rpy="0 0 0" />
+            <mass value="0.203158109952786" />
+            <inertia ixx="0.000152640329329173" ixy="1.3114480727449E-09" ixz="1.05215941434409E-06" iyy="0.000131977479422575" iyz="-3.30070850991813E-10" izz="0.00010402982094729" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/ley_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.56078431372549 0.686274509803922 0.623529411764706 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/ley_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="ley_j" type="revolute">
+        <origin xyz="0.136965708264701 0 0" rpy="0 1.5707963267949 0" />
+        <parent link="lep_l" />
+        <child link="ley_l" />
+        <axis xyz="0 0 -1" />
+        <limit lower="-3.141" upper="3.141" effort="10" velocity="3.142" />
+    </joint>
+    <link name="lw_l">
+
+<inertial>
+            <origin xyz="0.052258899471289 0.0284704451462972 0.024323605508881" rpy="0 0 0" />
+            <mass value="0.118265617272774" />
+            <inertia ixx="8.46716369530091E-05" ixy="-1.9518572747099E-05" ixz="5.31274570037223E-06" iyy="0.000118636381069233" iyz="2.89401933365049E-06" izz="0.000112047371234625" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lw_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.56078431372549 0.686274509803922 0.686274509803922 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lw_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="lw_j" type="revolute">
+        <origin xyz="-0.0248972213837098 0 0.0589657081521795" rpy="0.197028949770318 -1.57079630572147 2.94456369737188" />
+        <parent link="ley_l" />
+        <child link="lw_l" />
+        <axis xyz="0 0 1" />
+        <limit lower="-2.35619" upper="1.309" effort="10" velocity="3.142" />
+    </joint>
+    <link name="lgh_l">
+
+<inertial>
+            <origin xyz="-1.42913830769587E-08 -1.65993929435171E-08 -0.0450599789832126" rpy="0 0 0" />
+            <mass value="0.00142824832539145" />
+            <inertia ixx="5.69543577401328E-08" ixy="-3.86247089189601E-08" ixz="3.68353911790843E-14" iyy="9.46192216503074E-08" iyz="5.06836847719342E-14" izz="1.47764917189299E-07" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lgh_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.623529411764706 0.56078431372549 0.686274509803922 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lgh_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="lgh_j" type="fixed">
+        <origin xyz="0.120768478057872 0.0558753059024569 0.023463453809194" rpy="1.57079728030247 0 2.09443975085166" />
+        <parent link="lw_l" />
+        <child link="lgh_l" />
+        <axis xyz="0 0 0" />
+        <limit lower="-0.035" upper="0.035" effort="10" velocity="3.142" />
+    </joint>
+    <link name="lg1_l">
+
+<inertial>
+            <origin xyz="-1.98223240044371E-08 -0.0256137873204723 -0.012035849534824" rpy="0 0 0" />
+            <mass value="0.0117431244965764" />
+            <inertia ixx="2.44860529150686E-06" ixy="5.85629652798453E-16" ixz="9.4288577372213E-15" iyy="2.75898867298419E-06" iyz="-2.03628151422282E-07" izz="6.42365008370271E-07" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lg1_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.686274509803922 0.56078431372549 0.623529411764706 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lg1_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="lg1_j" type="prismatic">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="lgh_l" />
+        <child link="lg1_l" />
+        <axis xyz="0 -0.999999999999541 0" />
+        <limit lower="-0.005" upper="0.011" effort="10" velocity="3.142" />
+    </joint>
+    <link name="lg2_l">
+
+<inertial>
+            <origin xyz="-7.38866645644265E-09 0.0256137863437295 -0.0120358937684164" rpy="0 0 0" />
+            <mass value="0.0117431765792328" />
+            <inertia ixx="2.44859412812398E-06" ixy="-2.55986913819617E-15" ixz="1.43022449234409E-13" iyy="2.75897708315547E-06" iyz="2.0362556621743E-07" izz="6.42366305305439E-07" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lg2_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.686274509803922 0.56078431372549 0.623529411764706 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lg2_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="lg2_j" type="prismatic">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="lgh_l" />
+        <child link="lg2_l" />
+        <axis xyz="0 -0.999999999999541 0" />
+        <limit lower="-0.011" upper="0.005" effort="10" velocity="3.142" />
+        <mimic joint="lg1_j" multiplier="-1" offset="0" />
+    </joint>
+    <link name="rsp_l">
+
+<inertial>
+            <origin xyz="0.000847328053114799 1.66822174318959E-06 0.0545118845637094" rpy="0 0 0" />
+            <mass value="0.16355428325589" />
+            <inertia ixx="0.00030370094095202" ixy="3.91206347582701E-09" ixz="-2.5547545913104E-06" iyy="0.000276109674876471" iyz="-4.52774066186934E-09" izz="0.000154352652656658" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rsp_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.56078431372549 0.686274509803922 0.686274509803922 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rsp_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rsp_j" type="revolute">
+        <origin xyz="0 -0.138800000000006 0.500000000000006" rpy="1.57079632981871 0.196914054379497 0" />
+        <parent link="adjustable_l" />
+        <child link="rsp_l" />
+        <axis xyz="0 0 -1" />
+        <limit lower="-3.142" upper="3.142" effort="10" velocity="3.142" />
+    </joint>
+    <link name="rsr_l">
+
+<inertial>
+            <origin xyz="-0.00350814345242498 0.0743127205818105 0.0273796901178489" rpy="0 0 0" />
+            <mass value="0.157928153292145" />
+            <inertia ixx="0.00034464317766051" ixy="5.52373098763718E-06" ixz="8.94622093409288E-07" iyy="0.000224110179722364" iyz="-1.40823648203337E-05" izz="0.000328127295269048" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rsr_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.686274509803922 0.56078431372549 0.623529411764706 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rsr_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rsr_j" type="revolute">
+        <origin xyz="0.0293971247941347 0 0.0724657082647111" rpy="3.14159265358979 1.5707963267949 0" />
+        <parent link="rsp_l" />
+        <child link="rsr_l" />
+        <axis xyz="0 0 -1" />
+        <limit lower="-3.316" upper="0.2618" effort="10" velocity="3.142" />
+    </joint>
+    <link name="rsy_l">
+
+<inertial>
+            <origin xyz="-0.000244352520069213 3.8188727552374E-05 0.069507882230415" rpy="0 0 0" />
+            <mass value="0.192129150343206" />
+            <inertia ixx="0.000525107976547104" ixy="-3.39207450617026E-06" ixz="2.08591910465285E-07" iyy="0.000492307507817521" iyz="-1.95740619062457E-07" izz="0.000211438422925958" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rsy_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.56078431372549 0.686274509803922 0.56078431372549 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rsy_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rsy_j" type="revolute">
+        <origin xyz="-0.00503334610936604 0.108098588992529 0.0284657082647115" rpy="-1.5707963267949 0 0.0465289448262237" />
+        <parent link="rsr_l" />
+        <child link="rsy_l" />
+        <axis xyz="0 0 -1" />
+        <limit lower="-3.14159" upper="3.14159" effort="10" velocity="3.142" />
+    </joint>
+    <link name="rel_l">
+
+<inertial>
+            <origin xyz="-0.0114002430716916 -0.0104873884503993 0.00675651017719425" rpy="0 0 0" />
+            <mass value="0.0198133815984573" />
+            <inertia ixx="1.01325723262933E-05" ixy="-8.62879623281325E-06" ixz="9.6936107973986E-07" iyy="1.1574579045261E-05" iyz="8.91734915555488E-07" izz="2.09399517250663E-05" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rel_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.686274509803922 0.56078431372549 0.686274509803922 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rel_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rel_j" type="revolute">
+        <origin xyz="-0.0258938712840666 0.00270032888412561 0.0689657082647099" rpy="-1.57079632679491 0.00211465444426914 1.46688743973895" />
+        <parent link="rsy_l" />
+        <child link="rel_l" />
+        <axis xyz="0 0 -1" />
+         <limit lower="-3.141" upper="3.141" effort="10" velocity="3.142" />
+        <mimic joint="rep_j" multiplier="1" offset="0" />
+    </joint>
+    <link name="rep_l">
+
+<inertial>
+            <origin xyz="0.071093578170502 0.00576297803687875 0.00154985451107661" rpy="0 0 0" />
+            <mass value="0.195275356474873" />
+            <inertia ixx="0.000201924046686431" ixy="-7.51891269487446E-05" ixz="2.40002821473007E-05" iyy="0.000775468803475862" iyz="9.27600184248874E-06" izz="0.000741161460550214" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rep_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.623529411764706 0.56078431372549 0.686274509803922 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rep_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rep_j" type="revolute">
+        <origin xyz="1.86435626352011E-05 0.000178776005417075 0.153965518214835" rpy="-1.5707963267949 0.00211465444426911 1.46688743973896" />
+        <parent link="rsy_l" />
+        <child link="rep_l" />
+        <axis xyz="0 0 -1" />
+        <limit lower="-0.35" upper="1.0472" effort="10" velocity="3.142" />
+    </joint>
+    <link name="rey_l">
+
+<inertial>
+            <origin xyz="-0.00136892720758028 2.86486289469146E-07 0.0560168656011481" rpy="0 0 0" />
+            <mass value="0.203158032670983" />
+            <inertia ixx="0.000152640299239931" ixy="-1.31562211565358E-09" ixz="1.05214907255213E-06" iyy="0.000131977450808796" iyz="3.33198618889875E-10" izz="0.000104029795275727" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rey_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.56078431372549 0.686274509803922 0.623529411764706 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rey_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rey_j" type="revolute">
+        <origin xyz="0.136388824949731 0.0125576139964159 0" rpy="2.42840220157631 1.57079630572147 2.5310541833392" />
+        <parent link="rep_l" />
+        <child link="rey_l" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.14159" upper="3.14159" effort="10" velocity="3.142" />
+    </joint>
+    <link name="rw_l">
+
+<inertial>
+            <origin xyz="-0.0522601687992916 0.0284681082932161 0.024323634809166" rpy="0 0 0" />
+            <mass value="0.118265596627728" />
+            <inertia ixx="8.46697260682097E-05" ixy="1.95170501788083E-05" ixz="-5.3128112504816E-06" iyy="0.000118637953269733" iyz="2.89376311845307E-06" izz="0.000112047357836392" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rw_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.56078431372549 0.686274509803922 0.686274509803922 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rw_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rw_j" type="revolute">
+        <origin xyz="-0.024897221115233 0 0.0589657082655256" rpy="0 1.5707963267949 0" />
+        <parent link="rey_l" />
+        <child link="rw_l" />
+        <axis xyz="0 0 -1" />
+        <limit lower="-2.35619" upper="1.309" effort="10" velocity="3.142" />
+    </joint>
+    <link name="rgh_l">
+
+<inertial>
+            <origin xyz="-8.68064398140689E-10 -1.51980072971014E-08 -0.0450599999999813" rpy="0 0 0" />
+            <mass value="0.00142824832539143" />
+            <inertia ixx="5.69321872617725E-08" ixy="3.86138912762504E-08" ixz="-3.68250759258259E-14" iyy="9.46413921286592E-08" iyz="5.06625427150062E-14" izz="1.4776491718929E-07" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rgh_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.623529411764706 0.56078431372549 0.686274509803922 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rgh_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rgh_j" type="fixed">
+        <origin xyz="-0.120770998464503 0.0558699111080713 0.0234634523875007" rpy="1.57079728046925 0 -2.09439510239489" />
+        <parent link="rw_l" />
+        <child link="rgh_l" />
+        <axis xyz="0 0 0" />
+        <limit lower="-0.035" upper="0.035" effort="10" velocity="3.142" />
+    </joint>
+    <link name="rg1_l">
+
+<inertial>
+            <origin xyz="4.72999261980078E-09 -0.0256091657798483 -0.0120358705559017" rpy="0 0 0" />
+            <mass value="0.0117431244965759" />
+            <inertia ixx="2.4486052915068E-06" ixy="-1.40202631170563E-15" ixz="-8.89361089452729E-15" iyy="2.75898867298407E-06" iyz="-2.03628151422309E-07" izz="6.42365008370185E-07" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rg1_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.686274509803922 0.56078431372549 0.623529411764706 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rg1_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rg1_j" type="prismatic">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="rgh_l" />
+        <child link="rg1_l" />
+        <axis xyz="0 0.999999999999545 0" />
+        <limit lower="-0.005" upper="0.011" effort="10" velocity="3.142" />
+    </joint>
+    <link name="rg2_l">
+
+<inertial>
+            <origin xyz="-7.81382680781206E-09 0.0256091676194598 -0.0120359147351881" rpy="0 0 0" />
+            <mass value="0.0117431765451873" />
+            <inertia ixx="2.44859411870904E-06" ixy="2.78126112408768E-15" ixz="-1.38730464681003E-13" iyy="2.75897707157649E-06" iyz="2.03625568134498E-07" izz="6.42366302275142E-07" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rg2_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.686274509803922 0.56078431372549 0.623529411764706 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rg2_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rg2_j" type="prismatic">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="rgh_l" />
+        <child link="rg2_l" />
+        <axis xyz="0 0.999999999999545 0" />
+        <limit lower="-0.011" upper="0.005" effort="10" velocity="3.142" />
+        <mimic joint="rg1_j" multiplier="-1" offset="0" />
+    </joint>
+    <link name="realsenseh1_l">
+
+<inertial>
+            <origin xyz="-0.0449609466564241 7.25376489096874E-07 0.0151133255220893" rpy="0 0 0" />
+            <mass value="0.203890122946862" />
+            <inertia ixx="0.000423961764732934" ixy="-2.08762193162602E-09" ixz="5.59401786984115E-05" iyy="0.000536333821763381" iyz="6.49193367613833E-09" izz="0.000162710671203973" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/realsenseh1_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.623529411764706 0.686274509803922 0.56078431372549 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/realsenseh1_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="realsenseh1_j" type="fixed">
+        <origin xyz="0.06775 0.0398 0.405" rpy="1.5708 0 0" />
+        <parent link="adjustable_l" />
+        <child link="realsenseh1_l" />
+        <axis xyz="0 0 0" />
+        <limit effort="10" velocity="3.142" />
+    </joint>
+    <link name="realsenseh2_l">
+
+<inertial>
+            <origin xyz="-0.00687615579553851 -0.00679299831589908 0.0418224984964636" rpy="0 0 0" />
+            <mass value="0.0222524994955975" />
+            <inertia ixx="2.31866778392044E-05" ixy="5.81154101506231E-07" ixz="-4.67076723694309E-07" iyy="2.2762290756592E-05" iyz="6.33273497970673E-07" izz="3.31304504553613E-06" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/realsenseh2_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.56078431372549 0.686274509803922 0.56078431372549 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/realsenseh2_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="realsenseh2_j" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="realsenseh1_l" />
+        <child link="realsenseh2_l" />
+        <axis xyz="0 0 -1" />
+        <limit lower="-1.5708" upper="1.5708" effort="10" velocity="3.142" />
+    </joint>
+    <!-- <link name="realsense_l">
+
+<inertial>
+            <origin xyz="0.00151345571552491 0.00138592325712506 0.0124771874730981" rpy="0 0 0" />
+            <mass value="0.0365402881646665" />
+            <inertia ixx="2.34592367443954E-05" ixy="2.14455435114828E-07" ixz="1.02769530900619E-08" iyy="3.50869016386824E-06" iyz="2.56292679997949E-09" izz="2.36680342685349E-05" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/realsense_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.56078431372549 0.686274509803922 0.686274509803922 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/realsense_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="realsense_j" type="fixed">
+        <origin xyz="-0.0069921 -0.01016 0.0489" rpy="-1.5708 0 -0.36956" />
+        <parent link="realsenseh2_l" />
+        <child link="realsense_l" />
+        <axis xyz="0 0 0" />
+        <limit effort="10" velocity="0" />
+    </joint> -->
+    <!-- <link name="lidar_l">
+
+<inertial>
+            <origin xyz="-0.000142822926260363 -2.58164785617445E-06 0.0249081203803518" rpy="0 0 0" />
+            <mass value="0.766457671949004" />
+            <inertia ixx="0.000910859809130455" ixy="5.54436273811402E-07" ixz="-3.18044995671849E-06" iyy="0.000881336804921903" iyz="-3.63739866376581E-08" izz="0.00117656961590839" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lidar_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.623529411764706 0.56078431372549 0.686274509803922 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lidar_l.STL" />
+            </geometry>
+        </collision>
+
+    </link>
+    <joint name="lidar_j" type="fixed">
+        <origin xyz="0 0.000199999999989833 0.579999999999998" rpy="0 0 -0.0161869315321645" />
+        <parent link="adjustable_l" />
+        <child link="lidar_l" />
+        <axis xyz="0 0 0" />
+        <limit effort="10" velocity="3.142" />
+    </joint> -->
+    <link name="lwheel_l">
+
+<inertial>
+            <origin xyz="1.01853930845053E-09 -6.76459778747862E-08 0.0254710528356765" rpy="0 0 0" />
+            <mass value="1.69879942146795" />
+            <inertia ixx="0.00498252293768665" ixy="6.02536211482866E-18" ixz="-3.81459627618635E-18" iyy="0.00498252293768663" iyz="3.66343204291378E-18" izz="0.00898682058516614" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lwheel_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.56078431372549 0.686274509803922 0.623529411764706 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lwheel_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+<!--
+    <joint name="velodyne_j" type="fixed" >
+      <origin xyz="0 0 0.0377" rpy="0 0 0" />
+      <parent link="lidar_l" />
+      <child link="velodyne"/>
+    </joint>
+
+    <link name="velodyne">
+      <inertial>
+        <mass value="0.01"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="1e-7" ixy="0" ixz="0" iyy="1e-7" iyz="0" izz="1e-7"/>
+      </inertial>
+      <visual>
+        <origin xyz="0 0 -0.0377" />
+      </visual>
+    </link> -->
+
+
+    <joint name="lwheel_j" type="continuous">
+        <origin xyz="0.14278 0.188 -0.066343" rpy="-1.5708 0 0" />
+        <parent link="base_link" />
+        <child link="lwheel_l" />
+        <axis xyz="0 0 -1" />
+        <limit effort="10" velocity="3.142" />
+    </joint>
+    <link name="rwheel_l">
+
+<inertial>
+            <origin xyz="-1.01854397138723E-09 6.76459773613081E-08 0.0254710528356775" rpy="0 0 0" />
+            <mass value="1.69879942146791" />
+            <inertia ixx="0.00498252293768652" ixy="-8.80587081161566E-21" ixz="1.09858672895423E-17" iyy="0.00498252293768652" iyz="1.41177864455746E-17" izz="0.00898682058516594" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rwheel_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.56078431372549 0.686274509803922 0.623529411764706 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rwheel_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rwheel_j" type="continuous">
+        <origin xyz="0.1426 -0.188 -0.066343" rpy="1.5708 0 0" />
+        <parent link="base_link" />
+        <child link="rwheel_l" />
+        <axis xyz="0 0 -1" />
+        <limit effort="10" velocity="3.142" />
+    </joint>
+    <link name="lcwh_l">
+
+<inertial>
+            <origin xyz="0.00569397732540156 0.000449630329096701 0.0126207396796225" rpy="0 0 0" />
+            <mass value="0.0309848441775965" />
+            <inertia ixx="1.48262622620214E-05" ixy="-2.66750451315109E-07" ixz="-4.32360581283878E-06" iyy="1.56276983252329E-05" iyz="-4.76969739653243E-07" izz="1.46264348174785E-05" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lcwh_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.56078431372549 0.56078431372549 0.686274509803922 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lcwh_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="lcwh_j" type="continuous">
+        <origin xyz="-0.32 0.14 -0.075" rpy="-3.1416 0 0" />
+        <parent link="base_link" />
+        <child link="lcwh_l" />
+        <axis xyz="0 0 1" />
+        <limit effort="10" velocity="3.142" />
+    </joint>
+    <link name="lcw_l">
+
+<inertial>
+            <origin xyz="-3.27515792264421E-15 6.35602681597902E-15 3.00728394427574E-05" rpy="0 0 0" />
+            <mass value="0.118994666157682" />
+            <inertia ixx="4.78034451283679E-05" ixy="4.35734114964764E-21" ixz="2.23934335430356E-19" iyy="4.78034451283679E-05" iyz="1.30713658641436E-20" izz="8.10565840638532E-05" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lcw_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.686274509803922 0.623529411764706 0.56078431372549 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/lcw_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="lcw_j" type="continuous">
+        <origin xyz="0.0342518731258256 0.00105642477686074 0.0532330819301857" rpy="1.5707963267949 0 -3.1107595958271" />
+        <parent link="lcwh_l" />
+        <child link="lcw_l" />
+        <axis xyz="0 0 1" />
+        <limit effort="10" velocity="3.142" />
+    </joint>
+    <link name="rcwh_l">
+
+<inertial>
+            <origin xyz="-0.00424459293096369 0.00382142011879638 0.0126212000821554" rpy="0 0 0" />
+            <mass value="0.0309867241954345" />
+            <inertia ixx="1.49823428406436E-05" ixy="4.14008179861313E-07" ixz="3.32162893829875E-06" iyy="1.5472974479325E-05" iyz="-2.80856258996986E-06" izz="1.46266319452786E-05" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rcwh_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.56078431372549 0.56078431372549 0.686274509803922 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rcwh_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rcwh_j" type="continuous">
+        <origin xyz="-0.319999999999998 -0.14 -0.0750000000000027" rpy="-3.14159265358977 0 0" />
+        <parent link="base_link" />
+        <child link="rcwh_l" />
+        <axis xyz="0 0 1" />
+        <limit effort="10" velocity="3.142" />
+    </joint>
+    <link name="rcw_l">
+
+<inertial>
+            <origin xyz="-9.99200722162641E-16 -1.38777878078145E-15 -1.75728394292418E-05" rpy="0 0 0" />
+            <mass value="0.118994666157685" />
+            <inertia ixx="4.78034451283695E-05" ixy="4.06588503099517E-22" ixz="6.7762635780344E-21" iyy="4.78034451283694E-05" iyz="-1.03076746621881E-18" izz="8.10565840638558E-05" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rcw_l.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.686274509803922 0.623529411764706 0.56078431372549 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://robotics_arm_v7/meshes/rcw_l.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="rcw_j" type="continuous">
+        <origin xyz="-0.0243390029462296 0.0241230135248261 0.0532347499168875" rpy="-1.57079632679494 0 -0.780941312299621" />
+        <parent link="rcwh_l" />
+        <child link="rcw_l" />
+        <axis xyz="0 0 -1" />
+        <limit effort="10" velocity="3.142" />
+    </joint>
+
+<transmission name="trans_lsp_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="lsp_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="lsp_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_lsr_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="lsr_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="lsr_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_lsy_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="lsy_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="lsy_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_lel_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="lel_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="lel_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_lep_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="lep_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="lep_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_ley_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="ley_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="ley_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_lw_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="lw_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="lw_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_lg1_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="lg1_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="lg1_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_lg2_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="lg2_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="lg2_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_rsp_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rsp_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rsp_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_rsr_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rsr_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rsr_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_rsy_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rsy_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rsy_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_rel_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rel_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rel_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_rep_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rep_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rep_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_rey_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rey_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rey_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_rw_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rw_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rw_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_rg1_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rg1_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rg1_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_rg2_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rg2_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rg2_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_realsenseh2_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="realsenseh2_j">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="realsenseh2_j_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_lwheel_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="lwheel_j">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="lwheel_j_motor">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_rwheel_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rwheel_j">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rwheel_j_motor">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_lcwh_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="lcwh_j">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="lcwh_j_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_lcw_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="lcw_j">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="lcw_j_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_rcwh_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rcwh_j">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rcwh_j_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_rcw_j">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rcw_j">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rcw_j_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+
+
+
+
+<!-- added from here -->
+
+
+
+
+    <xacro:macro name="mimic_joint_plugin_gazebo" params="name_prefix parent_joint mimic_joint has_pid:=false multiplier:=1.0 offset:=0 sensitiveness:=0.0 max_effort:=1.0 robot_namespace:=''">
+    <gazebo>
+      <plugin name="${name_prefix}mimic_joint_plugin" filename="libroboticsgroup_gazebo_mimic_joint_plugin.so">
+        <joint>${parent_joint}</joint>
+        <mimicJoint>${mimic_joint}</mimicJoint>
+        <xacro:if value="${has_pid}">                     <!-- if set to true, PID parameters from "/gazebo_ros_control/pid_gains/${mimic_joint}" are loaded -->
+          <hasPID />
+        </xacro:if>
+        <multiplier>${multiplier}</multiplier>
+        <offset>${offset}</offset>
+        <sensitiveness>${sensitiveness}</sensitiveness>   <!-- if absolute difference between setpoint and process value is below this threshold, do nothing; 0.0 = disable [rad] -->
+        <maxEffort>${max_effort}</maxEffort>              <!-- only taken into account if has_pid:=true [Nm] -->
+        <xacro:unless value="${robot_namespace == ''}">
+          <robotNamespace>${robot_namespace}</robotNamespace>
+        </xacro:unless>
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:macro name="controller_plugin_gazebo" params="robot_namespace:=''">
+    <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <xacro:unless value="${robot_namespace == ''}">
+          <robotNamespace>${robot_namespace}</robotNamespace>
+        </xacro:unless>
+        <controlPeriod>0.001</controlPeriod>
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:controller_plugin_gazebo />
+
+
+    <xacro:mimic_joint_plugin_gazebo name_prefix="lel_j"
+    parent_joint="lep_j" mimic_joint="lel_j"
+    has_pid="false" multiplier="1.0" max_effort="10.0" />
+
+    <xacro:mimic_joint_plugin_gazebo name_prefix="rel_j"
+    parent_joint="rep_j" mimic_joint="rel_j"
+    has_pid="false" multiplier="1.0" max_effort="10.0" />
+
+    <xacro:mimic_joint_plugin_gazebo name_prefix="lg2_j"
+    parent_joint="lg1_j" mimic_joint="lg2_j"
+    has_pid="false" multiplier="-1.0" max_effort="10.0" />
+
+    <xacro:mimic_joint_plugin_gazebo name_prefix="rg2_j"
+    parent_joint="rg1_j" mimic_joint="rg2_j"
+    has_pid="false" multiplier="-1.0" max_effort="10.0" />
+
+    <xacro:include filename="$(find robotics_arm_v7)/urdf/test_d435_camera.urdf.xacro"/>
+
+    <!-- <xacro:include filename="$(find realsense_gazebo_plugin)/urdf/realsense-RS200.macro.xacro"/>
+    <xacro:realsense-rs200 prefix="" parent="realsenseh2_l">
+        <origin xyz="-0.0069921 -0.01016 0.0489" rpy="-1.5708 0 -0.36956"  />
+    </xacro:realsense-rs200> -->
+
+    <xacro:include filename="$(find robotics_arm_v7)/urdf/velodyne.urdf.xacro"/>
+    <xacro:VLP-16 parent="adjustable_l" name="velodyne" topic="/velodyne_points" hz="10" samples="440" gpu="false">
+      <origin xyz="0 0.000199999999989833 0.579999999999998" rpy="0 0 -0.0161869315321645" />
+    </xacro:VLP-16>
+
+    <gazebo>
+    <plugin name="turtlebot3_waffle_controller" filename="libgazebo_ros_diff_drive.so">
+      <alwaysOn>true</alwaysOn>
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <odometrySource>world</odometrySource>
+      <publishOdomTF>true</publishOdomTF>
+      <robotBaseFrame>base_link</robotBaseFrame>
+      <publishWheelTF>true</publishWheelTF>
+      <publishTf>true</publishTf>
+      <publishWheelJointState>true</publishWheelJointState>
+      <legacyMode>false</legacyMode>
+      <updateRate>30</updateRate>
+      <leftJoint>lwheel_j</leftJoint>
+      <rightJoint>rwheel_j</rightJoint>
+      <wheelSeparation>0.43</wheelSeparation>
+      <wheelDiameter>0.21</wheelDiameter>
+      <wheelAcceleration>1</wheelAcceleration>
+      <wheelTorque>1000</wheelTorque>
+      <rosDebugLevel>na</rosDebugLevel>
+    </plugin>
+    </gazebo>
+</robot>

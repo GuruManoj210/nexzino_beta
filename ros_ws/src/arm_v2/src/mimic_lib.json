@@ -1,0 +1,26 @@
+{
+    "rg1_j": {
+        "mimic_links" : ["rg2_j"],
+        "multiplier" : [-1] ,
+        "offset" : [0]
+    },
+
+    "lg1_j": {
+        "mimic_links" : ["lg2_j"],
+        "multiplier" : [-1] ,
+        "offset" : [0]
+    },
+
+    "rep_j":{
+        "mimic_links" : ["rel_j"],
+        "multiplier" : [1] ,
+        "offset" : [0]
+    },
+
+    "lep_j":{
+        "mimic_links" : ["lel_j"],
+        "multiplier" : [1] ,
+        "offset" : [0]
+    }
+
+}

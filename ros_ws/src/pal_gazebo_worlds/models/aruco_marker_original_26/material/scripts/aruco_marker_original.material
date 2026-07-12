@@ -1,0 +1,13 @@
+material Aruco/aruco_marker_original_26
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture Aruco_original_26.png
+			}
+		}
+	}
+}

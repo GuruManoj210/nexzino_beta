@@ -1,0 +1,1 @@
+controller_joint_names: ['', 'lsp_j', 'lsr_j', 'lsy_j', 'lel_j', 'lep_j', 'ley_j', 'lw_j', 'lg1_j', 'lg2_j', 'rsp_j', 'rsr_j', 'rsy_j', 'rel_j', 'rep_j', 'rey_j', 'rw_j', 'rg1_j', 'rg2_j', 'realsenseh2_j', 'lwheel_j', 'rwheel_j', 'lcwh_j', 'lcw_j', 'rcwh_j', 'rcw_j', ]

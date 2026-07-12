@@ -1,0 +1,13 @@
+material Custom/cocacola
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture cocacola.jpg
+			}
+		}
+	}
+}

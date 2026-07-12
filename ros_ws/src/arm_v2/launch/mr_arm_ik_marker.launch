@@ -1,0 +1,4 @@
+<launch>
+  <include file="$(dirname)/demo.launch"/>
+  <node name="mr_arm_ik_marker" pkg="arm_v2" type="ik_marker.py"/>
+</launch>

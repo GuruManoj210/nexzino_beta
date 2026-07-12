@@ -1,0 +1,115 @@
+# joint_limits.yaml allows the dynamics properties specified in the URDF to be overwritten or augmented as needed
+
+# For beginners, we downscale velocity and acceleration limits.
+# You can always specify higher scaling factors (<= 1.0) in your motion requests.  # Increase the values below to 1.0 to always move at maximum speed.
+default_velocity_scaling_factor: 0.1
+default_acceleration_scaling_factor: 0.1
+
+# Specific joint properties can be changed with the keys [max_position, min_position, max_velocity, max_acceleration]
+# Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
+joint_limits:
+  caster_left_sup_joint:
+    has_velocity_limits: false
+    max_velocity: 0
+    has_acceleration_limits: false
+    max_acceleration: 0
+  caster_left_wheel_joint:
+    has_velocity_limits: false
+    max_velocity: 0
+    has_acceleration_limits: false
+    max_acceleration: 0
+  caster_right_sup_joint:
+    has_velocity_limits: false
+    max_velocity: 0
+    has_acceleration_limits: false
+    max_acceleration: 0
+  caster_right_wheel_joint:
+    has_velocity_limits: false
+    max_velocity: 0
+    has_acceleration_limits: false
+    max_acceleration: 0
+  lep_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  ley_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  lg1_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  lg2_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  lsp_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  lsr_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  lsy_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  lw_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  realsenseh2_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  rep_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  rey_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  rg1_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  rg2_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  rsp_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  rsr_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  rsy_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0
+  rw_j:
+    has_velocity_limits: true
+    max_velocity: 3.142
+    has_acceleration_limits: false
+    max_acceleration: 0

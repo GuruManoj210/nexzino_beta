@@ -51,3 +51,12 @@ CATKIN_IGNORE
 .vscode/
 
 *.db*
+
+# ROS / catkin generated workspace metadata
+ros_ws/.catkin_tools/
+
+# Python packaging artifacts
+*.egg-info/
+dist/
+*.egg
+__pycache__/
