@@ -1,0 +1,22 @@
+port: /dev/ttyACM0
+control_rate: 30.0
+cmd_vel_timeout: 0.5
+
+wheel_radius: 0.105
+wheel_separation: 0.33956
+meters_per_rev: 0.655
+ticks_per_rev: 16385.0
+max_rpm: 0.001
+
+left_command_sign: 1.0
+right_command_sign: -1.0
+left_encoder_sign: 1.0
+right_encoder_sign: -1.0
+
+accel_time_ms: 500
+decel_time_ms: 500
+publish_odom_tf: true
+base_frame: base_footprint
+odom_frame: odom
+left_wheel_joint: leftwheel_joint
+right_wheel_joint: rightwheel_joint

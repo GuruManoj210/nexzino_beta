@@ -1,0 +1,22 @@
+<launch>
+  <arg name="database_path" default="$(env HOME)/.ros/nexzino_rtabmap.db" />
+  <arg name="rgb_topic" default="/camera/color/image_raw" />
+  <arg name="depth_topic" default="/camera/aligned_depth_to_color/image_raw" />
+  <arg name="camera_info_topic" default="/camera/color/camera_info" />
+
+  <group ns="rtabmap">
+    <node pkg="rtabmap_slam"
+          type="rtabmap"
+          name="rtabmap"
+          output="screen">
+      <param name="database_path" type="string" value="$(arg database_path)" />
+      <rosparam command="load" file="$(find nexzino_nav)/config/rtabmap_localization.yaml" />
+
+      <remap from="odom" to="/odom" />
+      <remap from="rgb/image" to="$(arg rgb_topic)" />
+      <remap from="depth/image" to="$(arg depth_topic)" />
+      <remap from="rgb/camera_info" to="$(arg camera_info_topic)" />
+      <remap from="grid_map" to="/map" />
+    </node>
+  </group>
+</launch>

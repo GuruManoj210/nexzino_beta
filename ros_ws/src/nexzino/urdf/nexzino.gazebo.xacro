@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="nexzino_gazebo">
+    <gazebo reference="base_footprint">
+      <material>Gazebo/DarkGrey</material>
+    </gazebo>
+
+    <gazebo reference="base_link">
+      <material>Gazebo/DarkGrey</material>
+    </gazebo>
+
+    <gazebo reference="leftwheel_link">
+      <mu1>200</mu1>
+      <mu2>100</mu2>
+      <kp>10000000.0</kp>
+      <kd>10.0</kd>
+      <minDepth>0.001</minDepth>
+      <maxVel>3.0</maxVel>
+      <fdir1>1 0 0</fdir1>
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+
+    <gazebo reference="rightwheel_link">
+      <mu1>200</mu1>
+      <mu2>100</mu2>
+      <kp>10000000.0</kp>
+      <kd>10.0</kd>
+      <minDepth>0.001</minDepth>
+      <maxVel>3.0</maxVel>
+      <fdir1>1 0 0</fdir1>
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+
+    <gazebo reference="casterwheelmount_link">
+      <mu1>0.0</mu1>
+      <mu2>0.0</mu2>
+      <kp>1000000.0</kp>
+      <kd>100.0</kd>
+      <minDepth>0.001</minDepth>
+    </gazebo>
+
+    <gazebo reference="casterwheelmount1_link">
+      <mu1>0.0</mu1>
+      <mu2>0.0</mu2>
+      <kp>1000000.0</kp>
+      <kd>100.0</kd>
+      <minDepth>0.001</minDepth>
+    </gazebo>
+
+    <gazebo reference="casterwheelmount2_link">
+      <mu1>0.0</mu1>
+      <mu2>0.0</mu2>
+      <kp>1000000.0</kp>
+      <kd>100.0</kd>
+      <minDepth>0.001</minDepth>
+    </gazebo>
+
+    <gazebo reference="casterwheelmount3_link">
+      <mu1>0.0</mu1>
+      <mu2>0.0</mu2>
+      <kp>1000000.0</kp>
+      <kd>100.0</kd>
+      <minDepth>0.001</minDepth>
+    </gazebo>
+
+    <gazebo reference="casterwheel_link">
+      <mu1>50.0</mu1>
+      <mu2>30.0</mu2>
+      <kp>1000000.0</kp>
+      <kd>100.0</kd>
+      <minDepth>0.001</minDepth>
+      <maxVel>1.0</maxVel>
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+
+    <gazebo reference="casterwheel1_link">
+      <mu1>50.0</mu1>
+      <mu2>30.0</mu2>
+      <kp>1000000.0</kp>
+      <kd>100.0</kd>
+      <minDepth>0.001</minDepth>
+      <maxVel>1.0</maxVel>
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+
+    <gazebo reference="casterwheel2_link">
+      <mu1>50.0</mu1>
+      <mu2>30.0</mu2>
+      <kp>1000000.0</kp>
+      <kd>100.0</kd>
+      <minDepth>0.001</minDepth>
+      <maxVel>1.0</maxVel>
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+
+    <gazebo reference="casterwheel3_link">
+      <mu1>50.0</mu1>
+      <mu2>30.0</mu2>
+      <kp>1000000.0</kp>
+      <kd>100.0</kd>
+      <minDepth>0.001</minDepth>
+      <maxVel>1.0</maxVel>
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+
+    <gazebo>
+      <plugin name="nexzino_diff_drive" filename="libgazebo_ros_diff_drive.so">
+        <alwaysOn>true</alwaysOn>
+        <commandTopic>cmd_vel</commandTopic>
+        <odometryTopic>odom</odometryTopic>
+        <odometryFrame>odom</odometryFrame>
+        <odometrySource>world</odometrySource>
+        <publishOdomTF>true</publishOdomTF>
+        <robotBaseFrame>base_footprint</robotBaseFrame>
+        <publishWheelTF>false</publishWheelTF>
+        <publishTf>true</publishTf>
+        <publishWheelJointState>true</publishWheelJointState>
+        <legacyMode>false</legacyMode>
+        <updateRate>30</updateRate>
+        <leftJoint>leftwheel_joint</leftJoint>
+        <rightJoint>rightwheel_joint</rightJoint>
+        <wheelSeparation>0.33956</wheelSeparation>
+        <wheelDiameter>0.21</wheelDiameter>
+        <wheelAcceleration>1.0</wheelAcceleration>
+        <wheelTorque>50.0</wheelTorque>
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+</robot>

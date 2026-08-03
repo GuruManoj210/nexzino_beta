@@ -1,0 +1,136 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /RobotModel1
+        - /PointCloud21
+      Splitter Ratio: 0.5
+    Tree Height: 700
+  - Class: rviz/Selection
+    Name: Selection
+  - Class: rviz/Tool Properties
+    Expanded:
+      - /2D Nav Goal1
+      - /2D Pose Estimate1
+    Name: Tool Properties
+    Splitter Ratio: 0.588679
+  - Class: rviz/Views
+    Name: Views
+    Splitter Ratio: 0.5
+  - Class: rviz/Time
+    Name: Time
+    SyncMode: 0
+    SyncSource: PointCloud2
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz/Grid
+      Enabled: true
+      Name: Grid
+      Plane: XY
+      Plane Cell Count: 20
+      Cell Size: 1
+      Color: 160; 160; 164
+      Line Style:
+        Value: Lines
+        Line Width: 0.03
+    - Class: rviz/RobotModel
+      Enabled: true
+      Name: RobotModel
+      Robot Description: robot_description
+      TF Prefix: ""
+      Update Interval: 0
+      Visual Enabled: true
+      Collision Enabled: false
+    - Class: rviz/TF
+      Enabled: false
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: false
+      Marker Scale: 1
+    - Class: rviz/PointCloud2
+      Enabled: true
+      Name: PointCloud2
+      Topic: /camera/depth/color/points
+      Queue Size: 10
+      Style: Flat Squares
+      Size (Pixels): 2
+      Size (m): 0.02
+      Color Transformer: RGB8
+      Position Transformer: XYZ
+      Use Fixed Frame: true
+    - Class: rviz/Map
+      Enabled: true
+      Name: Map
+      Topic: /map
+      Color Scheme: map
+      Alpha: 0.7
+      Use Timestamp: false
+    - Class: rviz/Map
+      Enabled: true
+      Name: Global Costmap
+      Topic: /move_base/global_costmap/costmap
+      Color Scheme: costmap
+      Alpha: 0.6
+      Use Timestamp: false
+    - Class: rviz/Map
+      Enabled: true
+      Name: Local Costmap
+      Topic: /move_base/local_costmap/costmap
+      Color Scheme: costmap
+      Alpha: 0.6
+      Use Timestamp: false
+    - Class: rviz/Path
+      Enabled: true
+      Name: Global Plan
+      Topic: /move_base/NavfnROS/plan
+      Color: 25; 255; 0
+      Line Style: Lines
+      Line Width: 0.03
+    - Class: rviz/Path
+      Enabled: true
+      Name: Local Plan
+      Topic: /move_base/DWAPlannerROS/local_plan
+      Color: 245; 121; 0
+      Line Style: Lines
+      Line Width: 0.03
+    - Class: rviz/Polygon
+      Enabled: true
+      Name: Footprint
+      Topic: /move_base/local_costmap/footprint
+      Color: 255; 0; 0
+  Enabled: true
+  Global Options:
+    Background Color: 48; 48; 48
+    Fixed Frame: map
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz/Interact
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+    - Class: rviz/FocusCamera
+    - Class: rviz/Measure
+    - Class: rviz/SetInitialPose
+      Topic: /initialpose
+      X std deviation: 0.5
+      Y std deviation: 0.5
+      Theta std deviation: 0.261799
+    - Class: rviz/SetGoal
+      Topic: /move_base_simple/goal
+    - Class: rviz/PublishPoint
+      Single click: true
+      Topic: /clicked_point
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 6
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0
+      Pitch: 0.6
+      Yaw: 0.8

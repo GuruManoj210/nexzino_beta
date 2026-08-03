@@ -1,0 +1,18 @@
+<launch>
+  <arg name="use_realsense" default="true" />
+  <arg name="start_motor_driver" default="true" />
+
+  <param name="robot_description"
+         command="$(find xacro)/xacro '$(find nexzino)/urdf/nexzino.urdf.xacro' use_gazebo:=false publish_pointcloud:=true use_nominal_extrinsics:=true" />
+
+  <node pkg="robot_state_publisher"
+        type="robot_state_publisher"
+        name="robot_state_publisher"
+        output="screen" />
+
+  <include if="$(arg start_motor_driver)"
+           file="$(find nexzino_nav)/launch/diff_drive.launch" />
+
+  <include if="$(arg use_realsense)"
+           file="$(find nexzino_nav)/launch/realsense_bringup.launch" />
+</launch>

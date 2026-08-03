@@ -1,0 +1,17 @@
+<launch>
+  <arg name="world" default="$(find nexzino_nav)/worlds/nexzino_navigation.world" />
+  <arg name="paused" default="false" />
+  <arg name="gui" default="true" />
+  <arg name="x" default="0.0" />
+  <arg name="y" default="0.0" />
+  <arg name="z" default="0.18" />
+
+  <include file="$(find nexzino)/launch/gazebo.launch">
+    <arg name="world" value="$(arg world)" />
+    <arg name="paused" value="$(arg paused)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="x" value="$(arg x)" />
+    <arg name="y" value="$(arg y)" />
+    <arg name="z" value="$(arg z)" />
+  </include>
+</launch>

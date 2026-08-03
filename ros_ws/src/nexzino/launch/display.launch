@@ -1,9 +1,7 @@
 <launch>
-  <arg
-    name="model" />
   <param
     name="robot_description"
-    textfile="$(find urdf)/urdf/urdf.urdf" />
+    command="$(find xacro)/xacro '$(find nexzino)/urdf/nexzino.urdf.xacro' use_gazebo:=false publish_pointcloud:=true use_nominal_extrinsics:=true" />
   <node
     name="joint_state_publisher_gui"
     pkg="joint_state_publisher_gui"
@@ -15,6 +13,5 @@
   <node
     name="rviz"
     pkg="rviz"
-    type="rviz"
-    args="-d $(find urdf)/urdf.rviz" />
+    type="rviz" />
 </launch>

@@ -1,0 +1,10 @@
+<launch>
+  <arg name="config_file" default="$(find nexzino_nav)/config/diff_drive.yaml" />
+
+  <node pkg="nexzino_nav"
+        type="diff_drive_controller.py"
+        name="nexzino_diff_drive"
+        output="screen">
+    <rosparam command="load" file="$(arg config_file)" />
+  </node>
+</launch>

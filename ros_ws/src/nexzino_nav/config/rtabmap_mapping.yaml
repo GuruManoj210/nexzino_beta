@@ -1,0 +1,21 @@
+frame_id: base_footprint
+odom_frame_id: odom
+subscribe_depth: true
+subscribe_scan: false
+approx_sync: true
+sync_queue_size: 20
+wait_for_transform_duration: 0.2
+
+use_action_for_goal: true
+Reg/Force3DoF: "true"
+RGBD/OptimizeFromGraphEnd: "false"
+RGBD/ProximityBySpace: "true"
+RGBD/AngularUpdate: "0.05"
+RGBD/LinearUpdate: "0.05"
+Grid/Sensor: "2"
+Grid/3D: "false"
+Grid/RangeMax: "4.0"
+Grid/MinClusterSize: "20"
+Kp/MaxDepth: "4.0"
+Vis/MinInliers: "15"
+Vis/InlierDistance: "0.1"

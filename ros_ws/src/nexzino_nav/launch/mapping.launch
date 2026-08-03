@@ -1,0 +1,42 @@
+<launch>
+  <arg name="simulation" default="false" />
+  <arg name="start_base_bringup" default="true" />
+  <arg name="world" default="$(find nexzino_nav)/worlds/nexzino_navigation.world" />
+  <arg name="open_rviz" default="true" />
+  <arg name="database_path" default="$(env HOME)/.ros/nexzino_rtabmap.db" />
+  <arg name="rtabmap_args" default="--delete_db_on_start" />
+  <arg unless="$(arg simulation)" name="depth_topic" default="/camera/aligned_depth_to_color/image_raw" />
+  <arg if="$(arg simulation)" name="depth_topic" default="/camera/depth/image_raw" />
+  <arg name="rgb_topic" default="/camera/color/image_raw" />
+  <arg name="camera_info_topic" default="/camera/color/camera_info" />
+
+  <include if="$(arg start_base_bringup)"
+           file="$(find nexzino_nav)/launch/bringup.launch">
+    <arg name="simulation" value="$(arg simulation)" />
+    <arg name="world" value="$(arg world)" />
+  </include>
+
+  <group ns="rtabmap">
+    <node pkg="rtabmap_slam"
+          type="rtabmap"
+          name="rtabmap"
+          output="screen"
+          args="$(arg rtabmap_args)">
+      <param name="database_path" type="string" value="$(arg database_path)" />
+      <rosparam command="load" file="$(find nexzino_nav)/config/rtabmap_mapping.yaml" />
+
+      <remap from="odom" to="/odom" />
+      <remap from="rgb/image" to="$(arg rgb_topic)" />
+      <remap from="depth/image" to="$(arg depth_topic)" />
+      <remap from="rgb/camera_info" to="$(arg camera_info_topic)" />
+      <remap from="grid_map" to="/map" />
+    </node>
+  </group>
+
+  <node if="$(arg open_rviz)"
+        pkg="rviz"
+        type="rviz"
+        name="rviz"
+        args="-d $(find nexzino_nav)/config/nexzino_nav.rviz"
+        output="screen" />
+</launch>

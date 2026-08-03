@@ -15,6 +15,10 @@ for nexzino robot</p>
   <depend>rviz</depend>
   <depend>joint_state_publisher_gui</depend>
   <depend>gazebo</depend>
+  <depend>gazebo_ros</depend>
+  <depend>realsense2_description</depend>
+  <depend>realsense_gazebo_plugin</depend>
+  <depend>xacro</depend>
   <export>
     <architecture_independent />
   </export>
