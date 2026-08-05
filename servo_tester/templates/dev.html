@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Servo Tester - Developer Mode</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <main class="layout">
+      <section class="hero">
+        <div class="hero-title">
+          <h1>Developer Mode</h1>
+        </div>
+        <div class="connection-card">
+          <div class="status-item">
+            <span class="status-label">Current State</span>
+            <span id="dev-mode-state">Loading...</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel active">
+        <div class="panel-header">
+          <h2>Animation Recorder &amp; Servo Setup Access</h2>
+        </div>
+        <p class="hint">
+          When developer mode is enabled, the main control page shows the
+          <strong>Animation Recorder</strong> and <strong>Servo Setup</strong> tabs.
+          When disabled, those tabs are hidden and a read-only
+          <strong>Saved Animations</strong> tab is shown instead. This page is not
+          linked from the main site &mdash; bookmark <code>/dev</code> if you need it again.
+        </p>
+        <div class="button-row">
+          <button id="dev-mode-toggle">Loading...</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='dev.js') }}"></script>
+  </body>
+</html>

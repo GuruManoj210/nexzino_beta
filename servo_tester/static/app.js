@@ -11,7 +11,11 @@ const state = {
   profiles: [],
   activeProfile: null,
   availablePorts: [],
+  devMode: false,
 };
+
+const DEV_ONLY_TABS = ["record", "setup"];
+const NON_DEV_ONLY_TABS = ["play"];
 
 const servoUi = new Map();
 const pendingMoves = new Map();
@@ -56,6 +60,23 @@ function showTab(tabName) {
   document.querySelectorAll(".panel").forEach((panel) => {
     panel.classList.toggle("active", panel.id === `tab-${tabName}`);
   });
+}
+
+function setTabVisibility(tabName, visible) {
+  const button = document.querySelector(`.tab-button[data-tab="${tabName}"]`);
+  const panel = document.getElementById(`tab-${tabName}`);
+  if (button) button.classList.toggle("hidden", !visible);
+  if (panel) panel.classList.toggle("hidden", !visible);
+}
+
+function applyDevModeVisibility() {
+  const hiddenTabs = state.devMode ? NON_DEV_ONLY_TABS : DEV_ONLY_TABS;
+  const activeButton = document.querySelector(".tab-button.active");
+  if (activeButton && hiddenTabs.includes(activeButton.dataset.tab)) {
+    showTab("manual");
+  }
+  DEV_ONLY_TABS.forEach((tab) => setTabVisibility(tab, state.devMode));
+  NON_DEV_ONLY_TABS.forEach((tab) => setTabVisibility(tab, !state.devMode));
 }
 
 function currentAnimationMode() {
@@ -212,6 +233,36 @@ function renderAnimations() {
     option.value = animation.name;
     option.textContent = animation.name;
     select.appendChild(option);
+  });
+
+  renderPlayAnimations();
+}
+
+function renderPlayAnimations() {
+  const list = document.getElementById("play-animation-list");
+  if (!list) return;
+  list.innerHTML = "";
+
+  if (state.animations.length === 0) {
+    list.innerHTML = `<div class="list-row muted">No saved animations yet.</div>`;
+    return;
+  }
+
+  state.animations.forEach((animation) => {
+    const row = document.createElement("div");
+    row.className = "list-row";
+    row.innerHTML = `
+      <span>${animation.name}</span>
+      <div class="button-row">
+        <button data-play>Play</button>
+      </div>
+    `;
+    row.querySelector("[data-play]").addEventListener("click", async () => {
+      await api(`/api/animations/play/${animation.name}`, { method: "POST" });
+      await refreshStatus();
+      await refreshLogs();
+    });
+    list.appendChild(row);
   });
 }
 
@@ -432,6 +483,14 @@ async function refreshTimelines() {
   const data = await api("/api/timelines");
   state.timelines = data.timelines;
   renderSavedTimelines();
+}
+
+async function refreshDevMode() {
+  const data = await api("/api/dev-mode");
+  if (data.enabled !== state.devMode) {
+    state.devMode = data.enabled;
+    applyDevModeVisibility();
+  }
 }
 
 async function refreshLogs() {
@@ -782,6 +841,8 @@ function bindEvents() {
 
 async function init() {
   bindEvents();
+  await refreshDevMode();
+  applyDevModeVisibility();
   await refreshConfig();
   await refreshStatus();
   await refreshAnimations();
@@ -791,6 +852,7 @@ async function init() {
   renderTimelineItems();
   renderViaPoints();
   window.setInterval(refreshStatus, 250);
+  window.setInterval(refreshDevMode, 2000);
 }
 
 init().catch((error) => {

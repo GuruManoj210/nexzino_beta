@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -m py_compile app.py)",
+      "Bash(node --check static/app.js)",
+      "Bash(node --check static/dev.js)",
+      "Bash(python3 -c \"import xml.dom.minidom as m\")",
+      "Bash(python3 -)"
+    ]
+  }
+}

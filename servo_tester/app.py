@@ -91,6 +91,7 @@ DATA_DIR = BASE_DIR / "data"
 ANIMATION_DIR = DATA_DIR / "animations"
 TIMELINE_DIR = DATA_DIR / "timelines"
 CONFIG_PATH = DATA_DIR / "servo_config.json"
+DEV_MODE_PATH = DATA_DIR / "dev_mode.json"
 LOGS_DIR = DATA_DIR / "logs"
 LOG_PATH = LOGS_DIR / "actions.log"
 for directory in (DATA_DIR, ANIMATION_DIR, TIMELINE_DIR, LOGS_DIR):
@@ -761,6 +762,21 @@ def update_runtime_specs(specs: list[ServoSpec]) -> None:
     log_action("servo_config_updated", profile=active_name, servo_count=len(specs))
 
 
+def load_dev_mode() -> bool:
+    if not DEV_MODE_PATH.exists():
+        return False
+    try:
+        with DEV_MODE_PATH.open("r", encoding="utf-8") as dev_mode_file:
+            return bool(json.load(dev_mode_file).get("enabled", False))
+    except (json.JSONDecodeError, OSError):
+        return False
+
+
+def save_dev_mode(enabled: bool) -> None:
+    with DEV_MODE_PATH.open("w", encoding="utf-8") as dev_mode_file:
+        json.dump({"enabled": bool(enabled)}, dev_mode_file, indent=2)
+
+
 def read_logs(limit: int = 200) -> list[str]:
     if not LOG_PATH.exists():
         return []
@@ -775,6 +791,25 @@ app = Flask(__name__)
 @app.get("/")
 def index() -> str:
     return render_template("index.html")
+
+
+@app.get("/dev")
+def dev_page() -> str:
+    return render_template("dev.html")
+
+
+@app.get("/api/dev-mode")
+def get_dev_mode():
+    return jsonify({"enabled": load_dev_mode()})
+
+
+@app.post("/api/dev-mode")
+def set_dev_mode():
+    payload = request.get_json(force=True) or {}
+    enabled = bool(payload.get("enabled", False))
+    save_dev_mode(enabled)
+    log_action("dev_mode_changed", enabled=enabled)
+    return jsonify({"ok": True, "enabled": enabled})
 
 
 @app.get("/api/config")
@@ -797,6 +832,7 @@ def get_config():
             "torque_enabled": ui_state["torque_enabled"],
             "active_profile": active_name,
             "profiles": sorted(store["profiles"].keys()),
+            "dev_mode": load_dev_mode(),
         }
     )
 

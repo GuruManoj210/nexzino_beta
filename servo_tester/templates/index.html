@@ -40,9 +40,10 @@
 
       <section class="tabs">
         <button class="tab-button active" data-tab="manual">Manual Control</button>
-        <button class="tab-button" data-tab="record">Animation Recorder</button>
         <button class="tab-button" data-tab="timeline">Timeline</button>
+        <button class="tab-button" data-tab="record">Animation Recorder</button>
         <button class="tab-button" data-tab="setup">Servo Setup</button>
+        <button class="tab-button" data-tab="play">Saved Animations</button>
       </section>
 
       <section class="panel active" id="tab-manual">
@@ -125,6 +126,16 @@
         <div class="list-card">
           <h3>Saved Timelines</h3>
           <div id="saved-timelines" class="list"></div>
+        </div>
+      </section>
+
+      <section class="panel" id="tab-play">
+        <div class="panel-header">
+          <h2>Saved Animations</h2>
+        </div>
+        <div class="list-card">
+          <h3>Play Animation</h3>
+          <div id="play-animation-list" class="list"></div>
         </div>
       </section>
 
