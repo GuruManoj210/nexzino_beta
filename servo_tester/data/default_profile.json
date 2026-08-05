@@ -1,0 +1,39 @@
+{
+  "name": "default",
+  "profile": {
+    "port": null,
+    "baudrate": 1000000,
+    "servos": [
+      {
+        "name": "neck_nod",
+        "id": 51,
+        "min": 1900,
+        "max": 2170,
+        "init": 2050,
+        "speed": 0,
+        "acceleration": 0,
+        "model": "STS3215"
+      },
+      {
+        "name": "neck_rotation",
+        "id": 52,
+        "min": 1650,
+        "max": 2445,
+        "init": 2050,
+        "speed": 0,
+        "acceleration": 0,
+        "model": "STS3215"
+      },
+      {
+        "name": "torso",
+        "id": 53,
+        "min": 1200,
+        "max": 2910,
+        "init": 2050,
+        "speed": 0,
+        "acceleration": 0,
+        "model": "STS3215"
+      }
+    ]
+  }
+}

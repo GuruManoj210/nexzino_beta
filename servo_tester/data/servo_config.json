@@ -1,0 +1,177 @@
+{
+  "active_profile": "Nexzion",
+  "profiles": {
+    "default": {
+      "port": null,
+      "baudrate": 1000000,
+      "servos": [
+        {
+          "name": "neck_nod",
+          "id": 51,
+          "min": 1900,
+          "max": 2170,
+          "init": 2050,
+          "speed": 0,
+          "acceleration": 0,
+          "model": "STS3215"
+        },
+        {
+          "name": "neck_rotation",
+          "id": 52,
+          "min": 1650,
+          "max": 2445,
+          "init": 2050,
+          "speed": 0,
+          "acceleration": 0,
+          "model": "STS3215"
+        },
+        {
+          "name": "torso",
+          "id": 53,
+          "min": 1200,
+          "max": 2910,
+          "init": 2050,
+          "speed": 0,
+          "acceleration": 0,
+          "model": "STS3215"
+        }
+      ]
+    },
+    "Nexzion": {
+      "port": null,
+      "baudrate": 1000000,
+      "servos": [
+        {
+          "name": "Right_Shoulder_Pitch",
+          "id": 11,
+          "min": 1000,
+          "max": 2300,
+          "init": 2050,
+          "speed": 500,
+          "acceleration": 250,
+          "model": "SM105BLHV"
+        },
+        {
+          "name": "Right_Shoulder_Yaw",
+          "id": 12,
+          "min": 400,
+          "max": 3700,
+          "init": 2050,
+          "speed": 50,
+          "acceleration": 50,
+          "model": "SM40BLHV"
+        },
+        {
+          "name": "Right_Elbow_Pitch",
+          "id": 13,
+          "min": 1000,
+          "max": 2050,
+          "init": 2050,
+          "speed": 500,
+          "acceleration": 250,
+          "model": "SM60CL"
+        },
+        {
+          "name": "Right_Elbow_Yaw",
+          "id": 14,
+          "min": 300,
+          "max": 3800,
+          "init": 2050,
+          "speed": 0,
+          "acceleration": 0,
+          "model": "STS3215"
+        },
+        {
+          "name": "Right_Wrist",
+          "id": 15,
+          "min": 1750,
+          "max": 2150,
+          "init": 2048,
+          "speed": 0,
+          "acceleration": 0,
+          "model": "STS3215"
+        },
+        {
+          "name": "Left_Shoulder_Pitch",
+          "id": 21,
+          "min": 1800,
+          "max": 3100,
+          "init": 2050,
+          "speed": 500,
+          "acceleration": 250,
+          "model": "SM105BLHV"
+        },
+        {
+          "name": "Left_Shoulder_Yaw",
+          "id": 22,
+          "min": 400,
+          "max": 3700,
+          "init": 2050,
+          "speed": 50,
+          "acceleration": 50,
+          "model": "SM40BLHV"
+        },
+        {
+          "name": "Left_Elbow_Pitch",
+          "id": 23,
+          "min": 2050,
+          "max": 3100,
+          "init": 2050,
+          "speed": 500,
+          "acceleration": 250,
+          "model": "SM60CL"
+        },
+        {
+          "name": "Left_Elbow_Yaw",
+          "id": 24,
+          "min": 300,
+          "max": 3800,
+          "init": 2050,
+          "speed": 0,
+          "acceleration": 0,
+          "model": "STS3215"
+        },
+        {
+          "name": "Left_Wrist",
+          "id": 25,
+          "min": 1750,
+          "max": 2150,
+          "init": 2050,
+          "speed": 0,
+          "acceleration": 0,
+          "model": "STS3215"
+        },
+        {
+          "name": "Mouth",
+          "id": 31,
+          "min": 2000,
+          "max": 2050,
+          "init": 2050,
+          "speed": 150,
+          "acceleration": 150,
+          "model": "SM40BLHV"
+        },
+        {
+          "name": "Neck_nod",
+          "id": 32,
+          "min": 1950,
+          "max": 2150,
+          "init": 2050,
+          "speed": 50,
+          "acceleration": 50,
+          "model": "SM40BLHV"
+        },
+        {
+          "name": "Neck_rotation",
+          "id": 33,
+          "min": 1800,
+          "max": 2250,
+          "init": 2050,
+          "speed": 50,
+          "acceleration": 50,
+          "model": "SM40BLHV"
+        }
+      ]
+    }
+  }
+}

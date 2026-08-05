@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feetech Servo Tester</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <main class="layout">
+      <section class="hero">
+        <div class="hero-title">
+          <h1>Feetech Servo Tester</h1>
+        </div>
+        <div class="connection-card">
+          <div class="status-item">
+            <span class="status-label">Connection</span>
+            <span id="connection-port">Detecting...</span>
+            <select id="port-select"></select>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Baud Rate</span>
+            <input id="baud-input" type="number" value="1000000" />
+            <button id="apply-connection">Apply Port</button>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Recording</span>
+            <span id="recording-state">Idle</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Timeline</span>
+            <span id="timeline-state">Stopped</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Torque</span>
+            <span id="torque-state">Unknown</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="tabs">
+        <button class="tab-button active" data-tab="manual">Manual Control</button>
+        <button class="tab-button" data-tab="record">Animation Recorder</button>
+        <button class="tab-button" data-tab="timeline">Timeline</button>
+        <button class="tab-button" data-tab="setup">Servo Setup</button>
+      </section>
+
+      <section class="panel active" id="tab-manual">
+        <div class="panel-header">
+          <h2>Manual Servo Control</h2>
+          <div class="button-row">
+            <button id="home-pose">Move To Init Pose</button>
+            <button id="torque-toggle">Toggle Torque</button>
+          </div>
+        </div>
+        <div id="servo-grid" class="servo-grid"></div>
+      </section>
+
+      <section class="panel" id="tab-record">
+        <div class="panel-header">
+          <h2>Animation Recorder</h2>
+        </div>
+        <div class="record-toolbar">
+          <label class="checkbox-row">
+            <input type="radio" name="animation-mode" value="torque-free" checked />
+            Torque Free
+          </label>
+          <label class="checkbox-row">
+            <input type="radio" name="animation-mode" value="via-point" />
+            Via Point
+          </label>
+        </div>
+        <div class="record-toolbar">
+          <input id="animation-name" type="text" placeholder="animation name" />
+          <button id="start-recording">Start Torque Free Recording</button>
+          <button id="stop-recording">Stop And Save</button>
+          <button id="stop-animation-playback">Stop Playback</button>
+        </div>
+        <div id="torque-free-help" class="hint">
+          Torque Free mode turns torque off so you can move the arm by hand while encoder feedback is recorded continuously.
+        </div>
+        <div id="via-point-panel" class="list-card hidden">
+          <h3>Via Point Builder</h3>
+          <div class="record-toolbar">
+            <input id="via-point-duration" type="number" min="0.1" step="0.1" value="1.0" />
+            <button id="capture-via-point">Capture Current Pose</button>
+            <button id="clear-via-points">Clear Points</button>
+            <button id="save-via-points">Save Via Point Animation</button>
+          </div>
+          <p class="hint">
+            Move the servos with the sliders, wait until they reach the pose you want, then capture the point. Repeat for as many points as you need.
+          </p>
+          <div id="via-point-list" class="list"></div>
+        </div>
+        <div class="record-toolbar">
+          <input id="animation-import" type="file" accept=".csv,text/csv" />
+          <button id="import-animation">Import Animation CSV</button>
+        </div>
+        <div class="list-card">
+          <h3>Saved Animations</h3>
+          <div id="animation-list" class="list"></div>
+        </div>
+      </section>
+
+      <section class="panel" id="tab-timeline">
+        <div class="panel-header">
+          <h2>Timeline Builder</h2>
+        </div>
+        <div class="timeline-builder">
+          <input id="timeline-name" type="text" placeholder="timeline name" />
+          <select id="timeline-animation-select"></select>
+          <input id="timeline-repeat" type="number" min="1" value="1" />
+          <button id="add-timeline-item">Add To Timeline</button>
+          <label class="checkbox-row">
+            <input id="timeline-loop" type="checkbox" />
+            Loop playback
+          </label>
+        </div>
+        <div id="timeline-items" class="list"></div>
+        <div class="button-row">
+          <button id="save-timeline">Save Timeline</button>
+          <button id="play-timeline">Play Timeline</button>
+          <button id="stop-timeline">Stop Timeline</button>
+        </div>
+        <div class="list-card">
+          <h3>Saved Timelines</h3>
+          <div id="saved-timelines" class="list"></div>
+        </div>
+      </section>
+
+      <section class="panel" id="tab-setup">
+        <div class="panel-header">
+          <h2>Servo Setup</h2>
+          <div class="button-row">
+            <button id="save-servo-config">Save Servo Config</button>
+            <button id="save-profile-as">Save As Profile</button>
+            <button id="refresh-logs">Refresh Logs</button>
+          </div>
+        </div>
+        <div class="list-card">
+          <h3>Profiles</h3>
+          <div class="record-toolbar">
+            <select id="profile-select"></select>
+            <input id="new-profile-name" placeholder="new profile name" />
+            <button id="switch-profile">Switch Profile</button>
+            <button id="create-profile">Create Profile</button>
+            <button id="delete-profile">Delete Profile</button>
+          </div>
+          <div class="record-toolbar">
+            <input id="profile-import" type="file" accept=".json,application/json" />
+            <button id="import-profile">Import Profile</button>
+            <button id="export-profile">Export Profile</button>
+          </div>
+        </div>
+        <div class="list-card">
+          <h3>Configured Servos</h3>
+          <div class="config-help-row">
+            <span>Name</span>
+            <span>ID</span>
+            <span>Model</span>
+            <span>Min</span>
+            <span>Max</span>
+            <span>Init</span>
+            <span>Speed</span>
+            <span>Acceleration</span>
+          </div>
+          <div id="servo-config-list" class="list"></div>
+        </div>
+        <div class="list-card">
+          <h3>Add Servo</h3>
+          <form id="add-servo-form" class="config-form">
+            <input name="name" placeholder="name" required />
+            <input name="id" type="number" placeholder="id" required />
+            <input name="model" placeholder="model" required />
+            <input name="min" type="number" placeholder="min" required />
+            <input name="max" type="number" placeholder="max" required />
+            <input name="init" type="number" placeholder="mid/init" required />
+            <input name="speed" type="number" placeholder="speed" required />
+            <input name="acceleration" type="number" placeholder="acceleration" required />
+            <button type="submit">Add Servo</button>
+          </form>
+        </div>
+        <div class="list-card">
+          <h3>Action Logs</h3>
+          <pre id="logs-viewer" class="logs-viewer">No logs loaded yet.</pre>
+        </div>
+      </section>
+    </main>
+
+    <template id="servo-card-template">
+      <article class="servo-card">
+        <header>
+          <h3 class="servo-name"></h3>
+          <p class="servo-model"></p>
+        </header>
+        <div class="servo-values">
+          <span>ID: <strong class="servo-id"></strong></span>
+          <span>Min: <strong class="servo-min"></strong></span>
+          <span>Max: <strong class="servo-max"></strong></span>
+        </div>
+        <div class="servo-values">
+          <span>Speed: <strong class="servo-speed"></strong></span>
+          <span>Acc: <strong class="servo-acc"></strong></span>
+        </div>
+        <input class="servo-slider" type="range" />
+        <div class="servo-values">
+          <span>Target: <strong class="servo-target"></strong></span>
+          <span>Feedback: <strong class="servo-feedback"></strong></span>
+        </div>
+        <div class="button-row">
+          <button class="set-init">Set Init Position</button>
+        </div>
+      </article>
+    </template>
+
+    <template id="servo-config-template">
+      <article class="config-card">
+        <div class="config-grid">
+          <input class="cfg-name" aria-label="Name" />
+          <input class="cfg-id" type="number" aria-label="ID" />
+          <input class="cfg-model" aria-label="Model" />
+          <input class="cfg-min" type="number" aria-label="Min" />
+          <input class="cfg-max" type="number" aria-label="Max" />
+          <input class="cfg-init" type="number" aria-label="Init" />
+          <input class="cfg-speed" type="number" aria-label="Speed" />
+          <input class="cfg-acc" type="number" aria-label="Acceleration" />
+        </div>
+        <div class="button-row">
+          <button class="cfg-set-init">Set Init Position</button>
+          <button class="cfg-delete">Delete Servo</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>
