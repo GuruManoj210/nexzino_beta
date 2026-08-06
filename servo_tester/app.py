@@ -4,6 +4,7 @@ import csv
 import glob
 import json
 import logging
+import os
 import sys
 import threading
 import time
@@ -86,6 +87,13 @@ SERIAL_BY_ID_GLOB = "/dev/serial/by-id/usb-1a86_USB_Single_Serial_*"
 USB_VENDOR_ID = 0x1A86
 USB_PRODUCT_ID = 0x55D3
 CALIBRATION_TORQUE_VALUE = 128
+
+# Deploy-time hard override for which serial device to use, e.g. when
+# multiple USB-serial adapters are plugged in and auto-detect/the saved
+# profile port might grab the wrong one. Set via the SERVO_CONTROLLER_PORT
+# env var (see deploy/docker-compose.yml) - when set, it always wins over
+# whatever port is saved in the active profile.
+SERVO_CONTROLLER_PORT_ENV_VAR = "SERVO_CONTROLLER_PORT"
 
 DATA_DIR = BASE_DIR / "data"
 ANIMATION_DIR = DATA_DIR / "animations"
@@ -703,10 +711,11 @@ def get_runtime() -> tuple[ServoController, AnimationRecorder, TimelinePlayer]:
             recorder.stop()
 
         specs = _ensure_servo_specs(active_profile["servos"])
+        port_override = os.environ.get(SERVO_CONTROLLER_PORT_ENV_VAR) or None
         controller = ServoController(
             specs,
             baudrate=int(active_profile.get("baudrate", BAUDRATE)),
-            preferred_port=active_profile.get("port"),
+            preferred_port=port_override or active_profile.get("port"),
         )
         recorder = AnimationRecorder(controller, ANIMATION_DIR)
         timeline_player = TimelinePlayer(controller, ANIMATION_DIR)

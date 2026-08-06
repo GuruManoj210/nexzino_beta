@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Nexzino Web Teleop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <main class="layout">
+      <h1>Web Teleop</h1>
+
+      <div class="status-row">
+        <span class="status-label">Connection</span>
+        <span id="connection-state" class="status-value disconnected">Connecting...</span>
+      </div>
+
+      <div class="enable-row">
+        <button id="enable-toggle" class="enable-button disabled-state" disabled>
+          Loading...
+        </button>
+      </div>
+
+      <div class="readout-row">
+        <div class="readout">
+          <span class="readout-label">Linear (x)</span>
+          <span id="linear-value" class="readout-value">0.00</span>
+        </div>
+        <div class="readout">
+          <span class="readout-label">Angular (z)</span>
+          <span id="angular-value" class="readout-value">0.00</span>
+        </div>
+      </div>
+
+      <div id="joystick-base" class="joystick-base joystick-locked">
+        <div id="joystick-knob" class="joystick-knob"></div>
+      </div>
+
+      <p class="hint">
+        Publishing starts disabled - tap "Enable Publishing" to arm the
+        joystick. Toggling either way always sends zero first, so nothing
+        held from before the switch can leak through. Release, close the
+        tab, disable, or lose connection and the robot stops - velocities
+        are clamped to &plusmn;{{ max_linear }} m/s and
+        &plusmn;{{ max_angular }} rad/s and zeroed automatically if no
+        update arrives for a moment.
+      </p>
+    </main>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>

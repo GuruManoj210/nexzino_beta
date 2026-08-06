@@ -1,0 +1,179 @@
+:root {
+  --bg: #14181c;
+  --panel: #1e252b;
+  --ink: #eef2f5;
+  --muted: #8a97a1;
+  --accent: #3ea6ff;
+  --danger: #e0525f;
+  --ok: #3ecf8e;
+  --line: #2c353c;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+.layout {
+  width: min(420px, calc(100% - 2rem));
+  padding: 1.5rem;
+  border-radius: 24px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  text-align: center;
+}
+
+h1 {
+  margin: 0 0 1rem;
+  font-size: 1.3rem;
+}
+
+.status-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.status-label {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+}
+
+.status-value {
+  font-weight: 600;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+}
+
+.status-value.connected {
+  color: var(--ok);
+  background: rgba(62, 207, 142, 0.12);
+}
+
+.status-value.disconnected {
+  color: var(--danger);
+  background: rgba(224, 82, 95, 0.12);
+}
+
+.enable-row {
+  margin-bottom: 1.25rem;
+}
+
+.enable-button {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 0;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  color: var(--ink);
+  transition: filter 0.15s ease;
+}
+
+.enable-button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.enable-button:not(:disabled):hover {
+  filter: brightness(1.1);
+}
+
+/* Not publishing: calm, neutral - a call to action to arm it. */
+.enable-button.disabled-state {
+  background: var(--line);
+  color: var(--muted);
+}
+
+/* Publishing live: loud on purpose - the robot can move right now. */
+.enable-button.enabled-state {
+  background: var(--danger);
+  color: white;
+}
+
+.readout-row {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.readout {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.readout-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.readout-value {
+  font-size: 1.4rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.joystick-base {
+  position: relative;
+  width: min(280px, 80vw);
+  height: min(280px, 80vw);
+  margin: 0 auto;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, #232d34, #171c20 70%);
+  border: 1px solid var(--line);
+  touch-action: none;
+}
+
+.joystick-knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 34%;
+  height: 34%;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 6px 18px rgba(62, 166, 255, 0.45);
+  transform: translate(-50%, -50%);
+  transition: box-shadow 0.15s ease;
+}
+
+.joystick-knob.active {
+  box-shadow: 0 6px 24px rgba(62, 166, 255, 0.7);
+}
+
+/* Publishing disabled: the pad is inert - no pointer events reach it at
+   all, so a drag simply cannot originate while disabled. */
+.joystick-base.joystick-locked {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.hint {
+  margin: 1.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}

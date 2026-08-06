@@ -1,0 +1,30 @@
+services:
+  nexzino:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: nexzino-deploy:latest
+    container_name: nexzino-deploy
+    # host networking - servo_tester (5000) and web_teleop (8000) are reachable
+    # at the host's IP directly, no "ports:" mapping needed or used here.
+    network_mode: host
+    privileged: true
+    restart: unless-stopped
+    environment:
+      ROS_MASTER_URI: http://localhost:11311
+      ROS_HOSTNAME: localhost
+      # Pin exact serial device paths when multiple USB-serial adapters are
+      # connected, so auto-detection can't grab the wrong one. Leave blank
+      # to keep the existing behavior (yaml default / profile / auto-detect).
+      # Set these in deploy/.env (copy deploy/.env.example) - see README.md
+      # "Pinning serial ports" for how to find the stable /dev/serial/by-id
+      # path for each adapter.
+      WHEEL_CONTROLLER_PORT: "${WHEEL_CONTROLLER_PORT:-}"
+      SERVO_CONTROLLER_PORT: "${SERVO_CONTROLLER_PORT:-}"
+    volumes:
+      - /dev:/dev
+      - /etc/localtime:/etc/localtime:ro
+      - servo-data:/opt/nexzino/servo_tester/data
+
+volumes:
+  servo-data:

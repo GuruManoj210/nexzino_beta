@@ -1,0 +1,38 @@
+# WHITELIST, not a blocklist: line 1 ignores EVERYTHING in the repo, then
+# every "!" line below re-includes one specific path. Nothing named below
+# is excluded - the "!" is what makes it the opposite.
+#
+# Why: the deploy image (deploy/Dockerfile) only COPYs deploy/, servo_tester/,
+# web_teleop/, and two ros_ws/src paths. Without this whitelist, `docker build`
+# would still upload the whole ~2GB repo (gazebo_models_worlds_collection/
+# alone is 1.3GB, .git/ is 438MB) to the daemon before filtering, every build.
+*
+
+# re-include: deploy/ (Dockerfile, entrypoint.sh, docker-compose.yml)
+!deploy/
+!deploy/**
+
+# re-include: servo_tester/ (Flask app run by deploy/entrypoint.sh)
+!servo_tester/
+!servo_tester/**
+
+# re-include: web_teleop/ (Flask + websocket joystick app run by entrypoint.sh)
+!web_teleop/
+!web_teleop/**
+
+# re-include: only the two ros_ws/src packages deploy/entrypoint.sh runs -
+# NOT the rest of ros_ws/src (gazebo/rviz/rtabmap packages etc. stay ignored)
+!ros_ws/
+!ros_ws/src/
+!ros_ws/src/nexzino_nav/
+!ros_ws/src/nexzino_nav/scripts/
+!ros_ws/src/nexzino_nav/scripts/**
+!ros_ws/src/nexzino_nav/config/
+!ros_ws/src/nexzino_nav/config/**
+!ros_ws/src/ZLAC8015D_python/
+!ros_ws/src/ZLAC8015D_python/**
+
+# re-excluded even though the paths above are whitelisted (order matters -
+# these patterns come after the "!" lines, so they win for these matches)
+**/__pycache__
+**/*.pyc

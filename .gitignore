@@ -1,6 +1,7 @@
 devel/
 logs/
 build/
+/deploy/.env
 bin/
 lib/
 msg_gen/
