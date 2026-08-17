@@ -129,7 +129,12 @@ def main() -> None:
     publisher = rospy.Publisher("cmd_vel", Twist, queue_size=10)
     thread = threading.Thread(target=publisher_loop, args=(publisher,), daemon=True)
     thread.start()
-    app.run(host="0.0.0.0", port=8000, debug=False)
+    # threaded=True is required here: flask-sock's websocket handler blocks
+    # on ws.receive() for the connection's whole lifetime, and Flask's dev
+    # server is single-threaded by default - without this, one open
+    # websocket starves every other route (including the enable/disable
+    # poll, and even a fresh page load) until it disconnects.
+    app.run(host="0.0.0.0", port=8000, debug=False, threaded=True)
 
 
 if __name__ == "__main__":

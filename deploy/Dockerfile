@@ -11,6 +11,12 @@
 FROM ros:noetic-ros-base
 
 ENV DEBIAN_FRONTEND=noninteractive
+# Python fully buffers stdout (not line-by-line) when it isn't attached to a
+# real terminal - exactly the case under `docker compose up`/`logs`. Without
+# this, output from background processes (rospy.loginfo, print, etc.) can sit
+# in an unflushed buffer and vanish entirely if the process is killed before
+# it fills or exits cleanly, making "no output" impossible to trust.
+ENV PYTHONUNBUFFERED=1
 
 # ros-noetic-tf pulls in geometry_msgs/nav_msgs/sensor_msgs/tf2 transitively,
 # which is all diff_drive_controller.py needs.

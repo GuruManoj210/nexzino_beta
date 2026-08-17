@@ -110,22 +110,27 @@ class Controller:
         self.cpr = 16385
         self.R_Wheel = 0.105  # meter
 
-    ## Some time if read immediatly after write, it would show ModbusIOException when get data from registers
-    def modbus_fail_read_handler(self, ADDR, WORD):
+    ## Some time if read immediatly after write, it would show ModbusIOException when get data from registers.
+    ## Bounded retries on purpose: an unbounded loop here would freeze the
+    ## caller's whole control loop forever on a persistently failing read
+    ## (no more set_rpm() calls, no cmd_vel_timeout failsafe - the motor
+    ## would be stuck at whatever RPM was last commanded).
+    def modbus_fail_read_handler(self, ADDR, WORD, max_retries=5):
 
-        read_success = False
         reg = [None] * WORD
-        while not read_success:
+        for _ in range(max_retries):
             result = self.client.read_holding_registers(ADDR, WORD, unit=self.ID)
             try:
                 for i in range(WORD):
                     reg[i] = result.registers[i]
-                read_success = True
+                return reg
             except AttributeError as e:
                 print(e)
-                pass
 
-        return reg
+        raise RuntimeError(
+            "modbus_fail_read_handler: failed to read {} register(s) at {} "
+            "after {} attempts".format(WORD, hex(ADDR), max_retries)
+        )
 
     def rpm_to_radPerSec(self, rpm):
         return rpm * 2 * np.pi / 60.0

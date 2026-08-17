@@ -135,6 +135,20 @@ def log_action(action: str, **details: Any) -> None:
     logger.info(json.dumps(payload, sort_keys=True))
 
 
+def _atomic_write_json(path: Path, data: Any) -> None:
+    # Writing straight to `path` in "w" mode truncates it to 0 bytes before
+    # a single byte of new content is written - a kill (SIGKILL, power
+    # loss) mid-write leaves an empty/corrupt file behind, which then
+    # breaks every subsequent read of it. Write to a sibling temp file and
+    # rename it into place instead: the rename is atomic, so `path` is
+    # always either the old complete content or the new complete content,
+    # never a partial write.
+    tmp_path = path.with_suffix(path.suffix + ".tmp")
+    with tmp_path.open("w", encoding="utf-8") as tmp_file:
+        json.dump(data, tmp_file, indent=2)
+    tmp_path.replace(path)
+
+
 def _safe_name(value: str) -> str:
     cleaned = "".join(
         char if char.isalnum() or char in {"-", "_"} else "_" for char in value.strip()
@@ -199,8 +213,17 @@ def load_config_store() -> dict[str, Any]:
         save_config_store(store)
         return store
 
-    with CONFIG_PATH.open("r", encoding="utf-8") as config_file:
-        raw_data = json.load(config_file)
+    try:
+        with CONFIG_PATH.open("r", encoding="utf-8") as config_file:
+            raw_data = json.load(config_file)
+    except (json.JSONDecodeError, OSError) as exc:
+        log_action("config_store_corrupt", path=str(CONFIG_PATH), error=str(exc))
+        store = {
+            "active_profile": DEFAULT_PROFILE_NAME,
+            "profiles": {DEFAULT_PROFILE_NAME: default_profile_data()},
+        }
+        save_config_store(store)
+        return store
 
     if "profiles" not in raw_data:
         migrated = {
@@ -242,12 +265,10 @@ def save_config_store(store: dict[str, Any]) -> None:
     active_profile = store.get("active_profile") or next(iter(normalized_profiles))
     if active_profile not in normalized_profiles:
         active_profile = next(iter(normalized_profiles))
-    with CONFIG_PATH.open("w", encoding="utf-8") as config_file:
-        json.dump(
-            {"active_profile": active_profile, "profiles": normalized_profiles},
-            config_file,
-            indent=2,
-        )
+    _atomic_write_json(
+        CONFIG_PATH,
+        {"active_profile": active_profile, "profiles": normalized_profiles},
+    )
 
 
 def get_active_profile_store() -> tuple[dict[str, Any], str, dict[str, Any]]:
@@ -306,16 +327,20 @@ def save_animation_frames(
 def save_timeline(name: str, items: list[dict[str, Any]]) -> Path:
     safe_name = _safe_name(name)
     path = TIMELINE_DIR / f"{safe_name}.json"
-    with path.open("w", encoding="utf-8") as timeline_file:
-        json.dump({"name": safe_name, "items": items}, timeline_file, indent=2)
+    _atomic_write_json(path, {"name": safe_name, "items": items})
     return path
 
 
 def list_saved_timelines() -> list[dict[str, Any]]:
     timelines: list[dict[str, Any]] = []
     for path in sorted(TIMELINE_DIR.glob("*.json")):
-        with path.open("r", encoding="utf-8") as timeline_file:
-            timelines.append(json.load(timeline_file))
+        try:
+            with path.open("r", encoding="utf-8") as timeline_file:
+                timelines.append(json.load(timeline_file))
+        except (json.JSONDecodeError, OSError) as exc:
+            # One corrupt file (e.g. from a kill mid-write) shouldn't take
+            # down the whole listing - skip it and keep going.
+            log_action("timeline_file_corrupt", path=str(path), error=str(exc))
     return timelines
 
 
@@ -330,6 +355,10 @@ class ServoController:
         self.baudrate = baudrate
         self.preferred_port = preferred_port
         self.lock = threading.RLock()
+        # Populated by read_positions(): name -> last read error message,
+        # for servos that failed to respond on the most recent poll.
+        # Servos not in this dict responded fine last time.
+        self.last_read_errors: dict[str, str] = {}
         self.port_path = self._detect_port()
         self.port_handler = PortHandler(self.port_path)
         self.packet_handler = sms_sts(self.port_handler)
@@ -404,12 +433,22 @@ class ServoController:
         return [asdict(spec) for spec in self._servo_specs]
 
     def read_positions(self) -> dict[str, int]:
+        # One servo not responding (disconnected, powered off, bad wiring)
+        # must not stop the others from being read - isolate failures
+        # per-servo instead of letting the first one abort the whole poll.
+        # The next poll cycle (servo_tester polls every 250ms) naturally
+        # retries every servo, including ones that failed last time.
         positions: dict[str, int] = {}
+        errors: dict[str, str] = {}
         with self.lock:
             for spec in self._servo_specs:
-                position, comm_result, error = self.packet_handler.ReadPos(spec.id)
-                self._check_result(comm_result, error, spec.name)
-                positions[spec.name] = int(position)
+                try:
+                    position, comm_result, error = self.packet_handler.ReadPos(spec.id)
+                    self._check_result(comm_result, error, spec.name)
+                    positions[spec.name] = int(position)
+                except Exception as exc:
+                    errors[spec.name] = str(exc)
+            self.last_read_errors = errors
         return positions
 
     def write_torque_raw(self, name: str, value: int) -> None:
@@ -782,8 +821,7 @@ def load_dev_mode() -> bool:
 
 
 def save_dev_mode(enabled: bool) -> None:
-    with DEV_MODE_PATH.open("w", encoding="utf-8") as dev_mode_file:
-        json.dump({"enabled": bool(enabled)}, dev_mode_file, indent=2)
+    _atomic_write_json(DEV_MODE_PATH, {"enabled": bool(enabled)})
 
 
 def read_logs(limit: int = 200) -> list[str]:
@@ -849,9 +887,11 @@ def get_config():
 @app.get("/api/status")
 def get_status():
     controller, recorder, timeline_player = get_runtime()
+    positions = controller.read_positions()
     return jsonify(
         {
-            "positions": controller.read_positions(),
+            "positions": positions,
+            "servo_errors": controller.last_read_errors,
             "recording": recorder.status(),
             "timeline": timeline_player.status(),
             "torque_enabled": ui_state["torque_enabled"],
@@ -1140,6 +1180,9 @@ def set_servo_init(name: str):
     controller, _, _ = get_runtime()
     controller.enable_calibration_mode(name)
     current_positions = controller.read_positions()
+    if name not in current_positions:
+        detail = controller.last_read_errors.get(name, "no response")
+        raise RuntimeError(f"{name}: failed to read position ({detail})")
     new_mid = int(current_positions[name])
     specs = []
     for spec in controller.servo_specs:
@@ -1353,4 +1396,4 @@ def handle_error(error: Exception):
 
 if __name__ == "__main__":
     log_action("app_started", started_at=datetime.now().isoformat())
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)

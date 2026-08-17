@@ -16,7 +16,13 @@ let socketOpen = false;
 let activePointerId = null;
 let heartbeatTimer = null;
 let command = { linear: 0, angular: 0 };
-let publishEnabled = false;
+// null (not false) on purpose: the button starts in the HTML as a
+// disabled "Loading..." placeholder, and it must be a real fetch response -
+// even one that happens to be false, matching this default - that first
+// paints the actual Enable/Disable button. Starting this at false would
+// make that first response look like "no change" and the button would
+// stay stuck on "Loading..." forever.
+let publishEnabled = null;
 
 function clamp(value, limit) {
   return Math.max(-limit, Math.min(limit, value));

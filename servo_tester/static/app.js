@@ -1,6 +1,7 @@
 const state = {
   servos: [],
   positions: {},
+  servoErrors: {},
   targets: {},
   animations: [],
   timelineItems: [],
@@ -100,6 +101,13 @@ function updateServoTargetsFromConfig() {
   });
 }
 
+function applyServoStatus(servo, ui) {
+  const error = state.servoErrors[servo.name];
+  ui.feedback.textContent = error ? "-" : state.positions[servo.name] ?? "-";
+  ui.status.classList.toggle("hidden", !error);
+  ui.status.title = error || "";
+}
+
 function renderServos() {
   const grid = document.getElementById("servo-grid");
   const template = document.getElementById("servo-card-template");
@@ -112,6 +120,7 @@ function renderServos() {
     const slider = node.querySelector(".servo-slider");
     const target = node.querySelector(".servo-target");
     const feedback = node.querySelector(".servo-feedback");
+    const status = node.querySelector(".servo-status");
 
     card.dataset.name = servo.name;
     node.querySelector(".servo-name").textContent = servo.name;
@@ -126,7 +135,6 @@ function renderServos() {
     slider.max = servo.max;
     slider.value = state.targets[servo.name] ?? servo.init;
     target.textContent = slider.value;
-    feedback.textContent = state.positions[servo.name] ?? "-";
 
     slider.addEventListener("input", () => {
       state.targets[servo.name] = Number(slider.value);
@@ -147,7 +155,9 @@ function renderServos() {
     });
 
     grid.appendChild(node);
-    servoUi.set(servo.name, { slider, target, feedback });
+    const ui = { slider, target, feedback, status };
+    servoUi.set(servo.name, ui);
+    applyServoStatus(servo, ui);
   });
 }
 
@@ -155,7 +165,7 @@ function updateServoFeedbackOnly() {
   state.servos.forEach((servo) => {
     const ui = servoUi.get(servo.name);
     if (!ui) return;
-    ui.feedback.textContent = state.positions[servo.name] ?? "-";
+    applyServoStatus(servo, ui);
     if (state.targets[servo.name] !== undefined) {
       ui.target.textContent = state.targets[servo.name];
       if (document.activeElement !== ui.slider) {
@@ -466,6 +476,7 @@ async function refreshConfig() {
 async function refreshStatus() {
   const data = await api("/api/status");
   state.positions = data.positions;
+  state.servoErrors = data.servo_errors || {};
   state.torqueEnabled = data.torque_enabled;
   setText("recording-state", data.recording.is_recording ? `Recording ${data.recording.name}` : "Idle");
   setText("timeline-state", data.timeline.is_playing ? `Playing ${data.timeline.timeline_name}` : "Stopped");
