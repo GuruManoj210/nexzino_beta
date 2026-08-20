@@ -54,7 +54,16 @@
     </collision>
   </link>
   <joint name="base_footprint_joint" type="fixed">
-    <origin xyz="0 0 0" rpy="0 0 0" />
+    <!-- base_footprint is supposed to sit at true ground level (REP-120) -
+         this was identity, coinciding exactly with base_link, but base_link
+         isn't at ground height: the wheel joints mount at z=-0.014999
+         relative to base_link (see leftwheel_joint/rightwheel_joint below),
+         and diff_drive.yaml's wheel_radius is 0.105, so true wheel-ground
+         contact is at base_link z = -0.014999 - 0.105 =~ -0.12. Offsetting
+         base_link up by 0.12 here puts base_footprint's z=0 back at actual
+         ground level, matching what RTAB-Map/move_base assume "ground"
+         means for a base_footprint-framed grid/costmap. -->
+    <origin xyz="0 0 0.12" rpy="0 0 0" />
     <parent link="base_footprint" />
     <child link="base_link" />
   </joint>

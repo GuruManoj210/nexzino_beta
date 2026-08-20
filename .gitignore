@@ -61,3 +61,6 @@ ros_ws/.catkin_tools/
 dist/
 *.egg
 __pycache__/
+
+
+nexa/
