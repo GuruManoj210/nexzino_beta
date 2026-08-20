@@ -42,6 +42,9 @@ ENV PYTHONUNBUFFERED=1
 # messages there are uncompressed and base64'd over the websocket, which
 # would be a lot of extra load on the same USB3 hub bandwidth we already had
 # to work around for the D435 (see realsense_bringup.launch).
+# ros-noetic-joint-state-publisher-gui: a declared dependency of the `nexa`
+# package (package.xml) - its display.launch uses it for manually posing
+# joints when visually cross-checking the CAD model against the real robot.
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
         ros-noetic-tf \
@@ -54,6 +57,7 @@ RUN apt-get update && \
         ros-noetic-rviz \
         ros-noetic-rosbridge-server \
         ros-noetic-web-video-server \
+        ros-noetic-joint-state-publisher-gui \
         python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
@@ -79,6 +83,10 @@ COPY ros_ws/src/nexzino_nav/package.xml ros_ws/src/nexzino_nav/package.xml
 COPY ros_ws/src/nexzino ros_ws/src/nexzino
 COPY ros_ws/src/realsense-ros-gazebo/realsense-ros/realsense2_description ros_ws/src/realsense2_description
 COPY ros_ws/src/ZLAC8015D_python ros_ws/src/ZLAC8015D_python
+# CAD export used to cross-check nexzino.urdf.xacro against - not part of the
+# running robot stack (nothing launches it automatically), just available for
+# ad hoc `roslaunch nexa ...` checks via `docker exec`.
+COPY ros_ws/src/nexa ros_ws/src/nexa
 COPY servo_tester servo_tester
 COPY web_teleop web_teleop
 COPY nav_console nav_console

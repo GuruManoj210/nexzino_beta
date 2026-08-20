@@ -12,9 +12,12 @@
     name="robot_state_publisher"
     pkg="robot_state_publisher"
     type="robot_state_publisher" />
+  <!-- No -d config here: urdf.rviz referenced by the original export doesn't
+       exist in this package. RViz opens with a blank display list instead -
+       add RobotModel/TF manually (Add button, bottom-left of the Displays
+       panel), then set Fixed Frame to base_link. -->
   <node
     name="rviz"
     pkg="rviz"
-    type="rviz"
-    args="-d $(find nexa)/urdf.rviz" />
+    type="rviz" />
 </launch>

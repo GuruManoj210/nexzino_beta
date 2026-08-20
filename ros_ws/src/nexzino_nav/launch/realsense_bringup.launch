@@ -22,7 +22,16 @@
   <include file="$(find realsense2_camera)/launch/rs_camera.launch">
     <arg name="camera" value="camera" />
     <arg name="tf_prefix" value="camera" />
-    <arg name="publish_tf" value="false" />
+    <!-- true (was false): the depth/color/optical frame chain (camera_link
+         -> camera_depth_frame -> camera_depth_optical_frame etc) now comes
+         from the live driver's own factory-calibrated extrinsics instead of
+         the static hand-typed numbers nexzino.urdf.xacro used to provide
+         (use_nominal_extrinsics is now false by default there for exactly
+         this reason - see nexzino.urdf.xacro's xacro:arg comment). The URDF
+         still owns the RIGID MOUNT transform (base_link -> ... ->
+         realsense_Link -> camera_link) - this only hands off the camera's
+         own internal sensor geometry to the thing that actually measured it. -->
+    <arg name="publish_tf" value="true" />
     <arg name="publish_odom_tf" value="false" />
     <arg name="align_depth" value="true" />
     <arg name="enable_pointcloud" value="true" />

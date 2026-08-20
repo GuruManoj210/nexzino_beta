@@ -2,8 +2,15 @@
   <arg name="use_realsense" default="true" />
   <arg name="start_motor_driver" default="true" />
 
+  <!-- use_nominal_extrinsics:=false (was true): on real hardware the
+       depth/color/optical frame chain now comes from realsense_bringup.launch's
+       live driver (publish_tf:=true) using real calibrated extrinsics, not
+       static numbers here. robot_state_publisher still owns the rigid mount
+       (base_link -> ... -> realsense_Link -> camera_link); the driver owns
+       everything from camera_link onward. No overlap, no dual-publisher
+       conflict - see nexzino.urdf.xacro's xacro:arg comment. -->
   <param name="robot_description"
-         command="$(find xacro)/xacro '$(find nexzino)/urdf/nexzino.urdf.xacro' use_gazebo:=false publish_pointcloud:=true use_nominal_extrinsics:=true" />
+         command="$(find xacro)/xacro '$(find nexzino)/urdf/nexzino.urdf.xacro' use_gazebo:=false publish_pointcloud:=true use_nominal_extrinsics:=false" />
 
   <node pkg="robot_state_publisher"
         type="robot_state_publisher"

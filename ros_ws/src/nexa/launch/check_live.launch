@@ -1,0 +1,10 @@
+<launch>
+  <!-- Drives the nexa CAD model from whatever is already on /joint_states -
+       no joint_state_publisher_gui here on purpose: its sliders publish
+       continuously too and would fight diff_drive_controller.py's real
+       wheel-encoder data on the same topic. Use display.launch instead for
+       manually posing joints with nothing else running. -->
+  <param name="robot_description" textfile="$(find nexa)/urdf/nexa.urdf" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node name="rviz" pkg="rviz" type="rviz" />
+</launch>
