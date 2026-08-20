@@ -4,6 +4,11 @@
   <arg name="world" default="$(find nexzino_nav)/worlds/nexzino_navigation.world" />
   <arg name="open_rviz" default="true" />
   <arg name="start_base_bringup" default="true" />
+  <!-- Set start_motor_driver:=false when diff_drive_controller.py is already
+       running elsewhere (e.g. deploy/'s always-on services) - avoids a second
+       process fighting over the same wheel controller serial port. -->
+  <arg name="start_motor_driver" default="true" />
+  <arg name="use_realsense" default="true" />
   <arg unless="$(arg simulation)" name="depth_topic" default="/camera/aligned_depth_to_color/image_raw" />
   <arg if="$(arg simulation)" name="depth_topic" default="/camera/depth/image_raw" />
   <arg name="rgb_topic" default="/camera/color/image_raw" />
@@ -13,6 +18,8 @@
            file="$(find nexzino_nav)/launch/bringup.launch">
     <arg name="simulation" value="$(arg simulation)" />
     <arg name="world" value="$(arg world)" />
+    <arg name="start_motor_driver" value="$(arg start_motor_driver)" />
+    <arg name="use_realsense" value="$(arg use_realsense)" />
   </include>
 
   <include file="$(find nexzino_nav)/launch/rtabmap_localization.launch">

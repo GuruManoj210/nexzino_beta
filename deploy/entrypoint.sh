@@ -7,6 +7,13 @@
 set -eo pipefail
 
 source /opt/ros/noetic/setup.bash
+# /opt/ros/noetic/setup.bash overwrites ROS_PACKAGE_PATH rather than
+# appending to it, so a Docker-image-level ENV for this gets wiped out the
+# moment this line runs - it has to be set here, after sourcing, instead.
+# nexzino/nexzino_nav are pure Python/resource packages (no messages, no
+# C++ nodes), so being on ROS_PACKAGE_PATH is enough for $(find ...) and
+# `roslaunch nexzino_nav ...` to work - no catkin build/devel space needed.
+export ROS_PACKAGE_PATH="/opt/nexzino/ros_ws/src:${ROS_PACKAGE_PATH}"
 
 APP_ROOT=/opt/nexzino
 NAV_PKG="${APP_ROOT}/ros_ws/src/nexzino_nav"

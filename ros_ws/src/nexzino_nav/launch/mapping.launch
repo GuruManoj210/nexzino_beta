@@ -1,6 +1,11 @@
 <launch>
   <arg name="simulation" default="false" />
   <arg name="start_base_bringup" default="true" />
+  <!-- Set start_motor_driver:=false when diff_drive_controller.py is already
+       running elsewhere (e.g. deploy/'s always-on services) - avoids a second
+       process fighting over the same wheel controller serial port. -->
+  <arg name="start_motor_driver" default="true" />
+  <arg name="use_realsense" default="true" />
   <arg name="world" default="$(find nexzino_nav)/worlds/nexzino_navigation.world" />
   <arg name="open_rviz" default="true" />
   <arg name="database_path" default="$(env HOME)/.ros/nexzino_rtabmap.db" />
@@ -14,6 +19,8 @@
            file="$(find nexzino_nav)/launch/bringup.launch">
     <arg name="simulation" value="$(arg simulation)" />
     <arg name="world" value="$(arg world)" />
+    <arg name="start_motor_driver" value="$(arg start_motor_driver)" />
+    <arg name="use_realsense" value="$(arg use_realsense)" />
   </include>
 
   <group ns="rtabmap">

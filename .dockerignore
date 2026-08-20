@@ -20,8 +20,9 @@
 !web_teleop/
 !web_teleop/**
 
-# re-include: only the two ros_ws/src packages deploy/entrypoint.sh runs -
-# NOT the rest of ros_ws/src (gazebo/rviz/rtabmap packages etc. stay ignored)
+# re-include: the ros_ws/src packages deploy/entrypoint.sh and on-demand
+# mapping/navigation roslaunch invocations need - NOT the rest of ros_ws/src
+# (gazebo worlds, other robot arms, pal_gazebo_worlds etc. stay ignored)
 !ros_ws/
 !ros_ws/src/
 !ros_ws/src/nexzino_nav/
@@ -29,8 +30,25 @@
 !ros_ws/src/nexzino_nav/scripts/**
 !ros_ws/src/nexzino_nav/config/
 !ros_ws/src/nexzino_nav/config/**
+!ros_ws/src/nexzino_nav/launch/
+!ros_ws/src/nexzino_nav/launch/**
+!ros_ws/src/nexzino_nav/maps/
+!ros_ws/src/nexzino_nav/maps/**
+!ros_ws/src/nexzino_nav/package.xml
+!ros_ws/src/nexzino/
+!ros_ws/src/nexzino/**
 !ros_ws/src/ZLAC8015D_python/
 !ros_ws/src/ZLAC8015D_python/**
+
+# re-include: only realsense2_description (pure xacro/URDF, no build needed) -
+# NOT realsense2_camera from this same vendored tree, which stays apt-installed
+# in deploy/Dockerfile instead (a compiled C++ node - avoids a slow catkin
+# build in this image). See deploy/Dockerfile's comment for why the apt
+# realsense2_description package specifically doesn't work here.
+!ros_ws/src/realsense-ros-gazebo/
+!ros_ws/src/realsense-ros-gazebo/realsense-ros/
+!ros_ws/src/realsense-ros-gazebo/realsense-ros/realsense2_description/
+!ros_ws/src/realsense-ros-gazebo/realsense-ros/realsense2_description/**
 
 # re-excluded even though the paths above are whitelisted (order matters -
 # these patterns come after the "!" lines, so they win for these matches)

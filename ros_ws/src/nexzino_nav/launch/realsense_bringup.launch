@@ -1,4 +1,24 @@
 <launch>
+  <!-- Lowered from the D435's default profile (848x480@30 depth, 640x480@30
+       color) on purpose: on this hardware the camera sits behind a USB3 hub
+       built into the carrier board (confirmed via `lsusb -t` - there is no
+       hub-free port to move it to), and that hub has shown isochronous
+       streaming instability (control_transfer errors, uvc watchdog
+       triggers, zero frames reaching RTAB-Map) at the full-bandwidth
+       profile. Lower bandwidth is easier for marginal hub silicon to
+       service reliably. To push it back up once/if stability is confirmed,
+       either edit the defaults below, or test this file standalone with an
+       override - these args aren't threaded through mapping.launch's/
+       navigation.launch's include chain, so overrides only work directly
+       against this file: roslaunch nexzino_nav realsense_bringup.launch
+       depth_fps:=30 color_fps:=30 -->
+  <arg name="depth_width" default="424" />
+  <arg name="depth_height" default="240" />
+  <arg name="depth_fps" default="15" />
+  <arg name="color_width" default="424" />
+  <arg name="color_height" default="240" />
+  <arg name="color_fps" default="15" />
+
   <include file="$(find realsense2_camera)/launch/rs_camera.launch">
     <arg name="camera" value="camera" />
     <arg name="tf_prefix" value="camera" />
@@ -8,5 +28,11 @@
     <arg name="enable_pointcloud" value="true" />
     <arg name="enable_sync" value="true" />
     <arg name="filters" value="pointcloud" />
+    <arg name="depth_width" value="$(arg depth_width)" />
+    <arg name="depth_height" value="$(arg depth_height)" />
+    <arg name="depth_fps" value="$(arg depth_fps)" />
+    <arg name="color_width" value="$(arg color_width)" />
+    <arg name="color_height" value="$(arg color_height)" />
+    <arg name="color_fps" value="$(arg color_fps)" />
   </include>
 </launch>

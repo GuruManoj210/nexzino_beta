@@ -5,6 +5,14 @@ a local `roscore`, the `diff_drive_controller.py` ROS node, the
 `servo_tester` web UI, and the `web_teleop` joystick page. Intended to run
 directly on the robot (e.g. the Jetson), not in the VSCode dev container.
 
+The image also carries the full navigation/SLAM stack
+(`ros-noetic-navigation`, `rtabmap`, `realsense2-camera`, `nexzino`/
+`nexzino_nav`'s launch files) so `mapping.launch`/`navigation.launch` can be
+run **on demand** inside the same running container - see
+[Mapping and navigation](#mapping-and-navigation) below. They are not part
+of the four always-on services; you start them deliberately when you want
+to build a map or navigate.
+
 ## What's running
 
 `deploy/entrypoint.sh` starts these, in order, inside one container:
@@ -44,11 +52,16 @@ That image is `FROM osrf/ros:noetic-desktop-full`, which only publishes an
 amd64 manifest - no arm64 build exists at all (confirmed with `docker buildx
 imagetools inspect osrf/ros:noetic-desktop-full`), so it can't build natively
 on a Jetson. `deploy/Dockerfile` instead uses `ros:noetic-ros-base`, the
-official ROS image, which genuinely publishes amd64/arm64/armv7 builds - and
-it's all this container needs anyway, since `entrypoint.sh` never runs
-gazebo/rviz/rtabmap, only `roscore` plus two plain Python/Flask processes.
-This also means the same `docker compose build` works unchanged on an x86
-dev machine or the Jetson.
+official ROS image, which genuinely publishes amd64/arm64/armv7 builds, and
+installs the navigation/RTAB-Map/RealSense packages it needs directly via
+apt on top of that. This also means the same `docker compose build` works
+unchanged on an x86 dev machine or the Jetson.
+
+`nexzino` and `nexzino_nav` (the URDF/meshes and the launch/config files)
+are copied in as plain source - they're pure Python/resource packages with
+no messages or compiled code, so being on `ROS_PACKAGE_PATH` (set via the
+image's `ENV`) is enough for `$(find ...)` and `roslaunch` to find them; no
+`catkin build` needed inside this image.
 
 ## Run
 
@@ -65,6 +78,61 @@ docker compose down       # stop and remove the container
 The container uses host networking (`network_mode: host`), so both ports
 are reachable directly on the robot's IP - there's no `ports:` mapping to
 edit.
+
+## Mapping and navigation
+
+`diff_drive_controller.py` is already running as one of the four always-on
+services, so **don't** let `mapping.launch`/`navigation.launch` relaunch it
+too - a second process fighting the first over the same serial port will
+break both. Both launch files now accept `start_motor_driver` and
+`use_realsense` args (forwarded through `bringup.launch`) for exactly this:
+pass `start_motor_driver:=false` to skip relaunching the wheel controller
+and reuse the one already running, while `use_realsense:=true` (the
+default) still brings up the camera, since nothing else starts that.
+
+Run these with the stack already up (`docker compose up -d`):
+
+```bash
+docker exec -it nexzino-deploy bash
+source /opt/ros/noetic/setup.bash
+
+# Mapping - drive the robot around, Ctrl+C when you're done. The RTAB-Map
+# database (default ~/.ros/nexzino_rtabmap.db, inside the container) is
+# saved continuously - no separate export step needed.
+roslaunch nexzino_nav mapping.launch start_motor_driver:=false open_rviz:=false
+
+# Navigation - localizes against that same database and brings up move_base.
+roslaunch nexzino_nav navigation.launch start_motor_driver:=false open_rviz:=false
+```
+
+`open_rviz:=false` because the container has no display attached. To
+actually see the map/robot while mapping or navigating, run RViz on a
+**separate machine** on the same network instead of inside the container:
+
+```bash
+# On your dev laptop, NOT the Jetson:
+export ROS_MASTER_URI=http://<jetson-ip>:11311
+rosrun rviz rviz -d <path to>/nexzino_nav/config/nexzino_nav.rviz
+```
+
+This works because the deploy container uses host networking, so its
+`roscore` (port 11311) is directly reachable from other machines on the
+same LAN - standard multi-machine ROS, no extra setup needed. Your laptop
+needs its own ROS Noetic + a checkout of `nexzino_nav` (for the same
+`.rviz` config and, if you want the robot mesh rendered, the `nexzino`
+package) - it doesn't need anything installed inside the Jetson's container.
+
+The RTAB-Map database persists in the same `servo-data`-style location
+inside the container filesystem (default `~/.ros/nexzino_rtabmap.db`,
+i.e. `/root/.ros/...` since this image runs as root) - it is **not** on a
+named volume like `servo_tester`'s data, so it's lost if the container is
+removed (`docker compose down` alone is fine; `down -v` isn't relevant to
+it either way, but a full image rebuild recreating the container from
+scratch will not by itself delete it - only removing the container without
+its filesystem, e.g. `docker rm`, does). If you want the map to survive
+container recreation, back up `/root/.ros/nexzino_rtabmap.db` out of the
+container after mapping, or mount a volume at `/root/.ros` in
+`docker-compose.yml`.
 
 ## Rebuilding after code changes
 
@@ -172,3 +240,16 @@ extra systemd unit needed for this stack specifically.
   the robot's host firewall is blocking those ports (host networking means
   there's no Docker-level port mapping to misconfigure - if the container
   is up and the port isn't reachable, it's a host firewall or wrong IP).
+- **`roslaunch nexzino_nav ...` fails with "package not found"**: confirm
+  `ROS_PACKAGE_PATH` includes `/opt/nexzino/ros_ws/src` (`echo
+  $ROS_PACKAGE_PATH` inside the container after sourcing
+  `/opt/ros/noetic/setup.bash`) - it's set via the image's `ENV`, but a
+  shell that didn't source ROS's own `setup.bash` first won't have it.
+- **`mapping.launch`/`navigation.launch` can't open the wheel controller
+  port**: you forgot `start_motor_driver:=false` - it's trying to open the
+  same serial device `diff_drive_controller.py` already has open.
+- **No RGB/depth topics, camera never comes up**: check
+  `rostopic list | grep camera` and the `realsense2_camera` node's own log
+  output for a hardware-not-found error - confirm the D435i is actually
+  enumerated on the host (`rs-enumerate-devices` if `librealsense2-utils`
+  is available, or `lsusb`).

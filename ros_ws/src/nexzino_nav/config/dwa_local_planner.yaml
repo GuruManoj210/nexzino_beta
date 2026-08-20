@@ -1,12 +1,23 @@
 DWAPlannerROS:
-  max_vel_x: 0.45
-  min_vel_x: -0.20
+  # Capped for the real hardware: wheel_radius=0.105 and max_rpm=50 (see
+  # diff_drive.yaml) give a straight-line ceiling of ~0.55 m/s per wheel,
+  # but DWA can command linear+angular simultaneously, and each wheel's
+  # speed is linear +/- angular*wheel_separation/2. At the old 0.45/1.20
+  # limits, combined motion could ask for ~0.65 m/s per wheel - over the
+  # real ceiling, so diff_drive_controller.py's clamp_rpm() would silently
+  # cut it, meaning DWA's trajectory scoring was working off velocities the
+  # robot could never actually deliver. These limits keep worst-case
+  # combined per-wheel speed (0.3 + 0.5*0.33956/2 ~= 0.38 m/s, ~35 RPM)
+  # comfortably under the real 50 RPM ceiling, and match the 0.3 m/s /
+  # 0.3 rad/s safety ceiling already used for teleop.
+  max_vel_x: 0.3
+  min_vel_x: -0.15
   max_vel_y: 0.0
   min_vel_y: 0.0
 
-  max_vel_trans: 0.45
+  max_vel_trans: 0.3
   min_vel_trans: 0.08
-  max_vel_theta: 1.20
+  max_vel_theta: 0.5
   min_vel_theta: 0.25
 
   acc_lim_x: 1.0

@@ -25,6 +25,12 @@ services:
       - /dev:/dev
       - /etc/localtime:/etc/localtime:ro
       - servo-data:/opt/nexzino/servo_tester/data
+      # RTAB-Map's map database (~/.ros/nexzino_rtabmap.db, i.e. /root/.ros/...
+      # since this image runs as root) lives here by default - without this
+      # volume it's lost whenever the container is removed and recreated,
+      # not just rebuilt. See deploy/README.md "Mapping and navigation".
+      - ros-home:/root/.ros
 
 volumes:
   servo-data:
+  ros-home:

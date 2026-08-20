@@ -5,9 +5,7 @@
 # FROM osrf/ros:noetic-desktop-full, which only publishes an amd64 manifest
 # (verified with `docker buildx imagetools inspect osrf/ros:noetic-desktop-full`
 # - no arm64 variant exists at all, so it can't build natively on a Jetson).
-# ros:noetic-ros-base is the official multi-arch image (amd64 + arm64 + armv7),
-# and it's all this container actually needs - entrypoint.sh never runs
-# gazebo/rviz/rtabmap, only roscore + two plain Python/Flask processes.
+# ros:noetic-ros-base is the official multi-arch image (amd64 + arm64 + armv7).
 FROM ros:noetic-ros-base
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -18,11 +16,34 @@ ENV DEBIAN_FRONTEND=noninteractive
 # it fills or exits cleanly, making "no output" impossible to trust.
 ENV PYTHONUNBUFFERED=1
 
-# ros-noetic-tf pulls in geometry_msgs/nav_msgs/sensor_msgs/tf2 transitively,
-# which is all diff_drive_controller.py needs.
+# ros-noetic-tf: geometry_msgs/nav_msgs/sensor_msgs/tf2, all diff_drive_controller.py
+# needs. ros-noetic-navigation: move_base/navfn/dwa_local_planner/map_server for
+# navigation.launch. ros-noetic-rtabmap(-ros): SLAM for mapping.launch/navigation.launch.
+# ros-noetic-realsense2-camera: the D435i driver, installed as an apt binary (a
+# compiled C++ node - building it from the vendored source under
+# ros_ws/src/realsense-ros-gazebo/ would need a full catkin build in this image,
+# which is the whole thing this minimal image is trying to avoid).
+# realsense2_description is NOT installed via apt here on purpose: the apt
+# package's _d435.urdf.xacro macro signature doesn't match what nexzino's URDF
+# actually calls it with (missing a `topics_ns` param, confirmed by testing -
+# roslaunch fails with "Invalid parameter topics_ns"). nexzino.urdf.xacro was
+# written against the vendored realsense2_description under
+# ros_ws/src/realsense-ros-gazebo/ instead (copied below, pure xacro/URDF, no
+# build needed) - that's the one that actually matches.
+# ros-noetic-robot-state-publisher + ros-noetic-xacro: publish TF from nexzino's
+# URDF. ros-noetic-rviz: optional, only used if you explicitly pass open_rviz:=true
+# with a display attached - see deploy/README.md for the (recommended) remote-RViz
+# alternative for a headless robot.
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
         ros-noetic-tf \
+        ros-noetic-navigation \
+        ros-noetic-rtabmap \
+        ros-noetic-rtabmap-ros \
+        ros-noetic-realsense2-camera \
+        ros-noetic-robot-state-publisher \
+        ros-noetic-xacro \
+        ros-noetic-rviz \
         python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
@@ -40,6 +61,11 @@ WORKDIR /opt/nexzino
 
 COPY ros_ws/src/nexzino_nav/scripts ros_ws/src/nexzino_nav/scripts
 COPY ros_ws/src/nexzino_nav/config ros_ws/src/nexzino_nav/config
+COPY ros_ws/src/nexzino_nav/launch ros_ws/src/nexzino_nav/launch
+COPY ros_ws/src/nexzino_nav/maps ros_ws/src/nexzino_nav/maps
+COPY ros_ws/src/nexzino_nav/package.xml ros_ws/src/nexzino_nav/package.xml
+COPY ros_ws/src/nexzino ros_ws/src/nexzino
+COPY ros_ws/src/realsense-ros-gazebo/realsense-ros/realsense2_description ros_ws/src/realsense2_description
 COPY ros_ws/src/ZLAC8015D_python ros_ws/src/ZLAC8015D_python
 COPY servo_tester servo_tester
 COPY web_teleop web_teleop
@@ -47,5 +73,15 @@ COPY web_teleop web_teleop
 COPY deploy/entrypoint.sh entrypoint.sh
 
 RUN chmod +x entrypoint.sh ros_ws/src/nexzino_nav/scripts/diff_drive_controller.py
+
+# entrypoint.sh's own `export ROS_PACKAGE_PATH=...` only lives in its own
+# process - it does NOT carry over to a fresh `docker exec -it ... bash`
+# session, which starts with just the image's env + .bashrc. Bake it into
+# .bashrc too (this image runs as root) so an interactive shell that sources
+# /opt/ros/noetic/setup.bash itself - e.g. to manually roslaunch
+# mapping.launch/navigation.launch - ends up with the same working
+# ROS_PACKAGE_PATH without the user needing to know about this at all.
+RUN echo "source /opt/ros/noetic/setup.bash" >> /root/.bashrc && \
+    echo 'export ROS_PACKAGE_PATH="/opt/nexzino/ros_ws/src:${ROS_PACKAGE_PATH}"' >> /root/.bashrc
 
 ENTRYPOINT ["/opt/nexzino/entrypoint.sh"]
