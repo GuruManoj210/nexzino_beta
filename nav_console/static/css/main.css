@@ -364,6 +364,39 @@ left: 25%;
   touch-action: none;
 }
 
+/* Live color camera view, so mapping/navigation can be sanity-checked
+   against what the robot's camera actually sees - e.g. whether the depth
+   camera is aimed at open floor that the occupancy grid is (wrongly)
+   painting as an obstacle. Placed top-right: clear of the joystick zone
+   and .controls-mapping/.controls, which both live in the lower band. */
+.camera-feed {
+  position: fixed;
+  top: 3%;
+  right: 3%;
+  width: 22%;
+  max-width: 340px;
+  min-width: 160px;
+  z-index: 15;
+  background: #000;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.camera-feed img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.camera-feed .camera-feed-label {
+  color: #fff;
+  font-size: 11px;
+  text-align: center;
+  padding: 2px 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
 .controls-mapping{
 
     position: absolute;

@@ -36,6 +36,12 @@ ENV PYTHONUNBUFFERED=1
 # alternative for a headless robot. ros-noetic-rosbridge-server: nav_console's
 # frontend (roslibjs) talks to ROS directly from the browser over this -
 # map view, click-to-navigate goals, and its joystick all need it running.
+# ros-noetic-web-video-server: re-serves any sensor_msgs/Image topic (here,
+# /camera/color/image_raw) as a plain MJPEG HTTP stream nav_console's pages
+# embed via <img>. Deliberately NOT sent over rosbridge instead - raw Image
+# messages there are uncompressed and base64'd over the websocket, which
+# would be a lot of extra load on the same USB3 hub bandwidth we already had
+# to work around for the D435 (see realsense_bringup.launch).
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
         ros-noetic-tf \
@@ -47,6 +53,7 @@ RUN apt-get update && \
         ros-noetic-xacro \
         ros-noetic-rviz \
         ros-noetic-rosbridge-server \
+        ros-noetic-web-video-server \
         python3-pip \
     && rm -rf /var/lib/apt/lists/*
 

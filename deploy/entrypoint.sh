@@ -2,10 +2,11 @@
 # Entrypoint for the nexzino deploy image. Starts (1) a local roscore,
 # (2) the diff_drive_controller.py ROS node, (3) the servo_tester Flask app
 # (port 5000), (4) the web_teleop Flask app (port 8000), (5) rosbridge_websocket
-# (port 9090, ROS-over-websocket for nav_console's browser-side roslibjs), and
-# (6) the nav_console Flask app (port 5001), then waits: if any one dies, this
-# script exits so the container's restart policy can bring everything back up
-# cleanly together.
+# (port 9090, ROS-over-websocket for nav_console's browser-side roslibjs),
+# (6) the nav_console Flask app (port 5001), and (7) web_video_server
+# (port 8080, MJPEG re-stream of the camera for nav_console's live view), then
+# waits: if any one dies, this script exits so the container's restart policy
+# can bring everything back up cleanly together.
 set -eo pipefail
 
 source /opt/ros/noetic/setup.bash
@@ -80,6 +81,13 @@ pids+=($!)
 
 echo "==> Starting nav_console app.py (port 5001)"
 python3 "${APP_ROOT}/nav_console/app.py" &
+pids+=($!)
+
+# Harmless to run even when no camera topic exists yet (idle, no mapping/
+# navigation session active) - it just serves an empty response until
+# /camera/color/image_raw shows up.
+echo "==> Starting web_video_server (port 8080)"
+rosrun web_video_server web_video_server &
 pids+=($!)
 
 # Exit as soon as any one of these processes exits, so the whole

@@ -3,8 +3,9 @@
 Runs the Nexzino robot's on-device services in a single Docker container:
 a local `roscore`, the `diff_drive_controller.py` ROS node, the
 `servo_tester` web UI, `web_teleop`'s joystick page, `rosbridge_websocket`,
-and `nav_console` (mapping/navigation web UI). Intended to run directly on
-the robot (e.g. the Jetson), not in the VSCode dev container.
+`nav_console` (mapping/navigation web UI), and `web_video_server` (live
+camera view). Intended to run directly on the robot (e.g. the Jetson), not
+in the VSCode dev container.
 
 The image also carries the full navigation/SLAM stack
 (`ros-noetic-navigation`, `rtabmap`, `realsense2-camera`, `nexzino`/
@@ -29,6 +30,10 @@ Mapping/Start Navigation buttons), inside this same running container - see
    `nav_console`'s frontend talks to ROS directly from the browser over this
 6. `nav_console/app.py` - mapping/navigation web UI + joystick, port **5001**;
    launches/stops `mapping.launch`/`navigation.launch` as subprocesses
+7. `web_video_server` (port **8080**) - re-streams `/camera/color/image_raw`
+   as MJPEG; `nav_console`'s Mapping/Navigation pages embed it directly so
+   you can see what the robot's camera sees while driving. Idle/blank until
+   a mapping or navigation session brings the camera up.
 
 If any one of these exits, the entrypoint tears the rest down and exits
 too, so the container's restart policy brings everything back up together
@@ -78,7 +83,9 @@ docker compose down       # stop and remove the container
 
 - servo_tester: `http://<robot-ip>:5000`
 - web_teleop: `http://<robot-ip>:8000`
-- nav_console (mapping/navigation + joystick): `http://<robot-ip>:5001`
+- nav_console (mapping/navigation + joystick + live camera view): `http://<robot-ip>:5001`
+- web_video_server (raw MJPEG stream, mostly useful for debugging outside
+  `nav_console`): `http://<robot-ip>:8080/stream?topic=/camera/color/image_raw`
 
 The container uses host networking (`network_mode: host`), so all ports
 are reachable directly on the robot's IP - there's no `ports:` mapping to
@@ -289,3 +296,27 @@ extra systemd unit needed for this stack specifically.
   dropdown afterward**: it only works while a mapping session is actually
   running - check that "Start Mapping" was clicked first and the camera
   came up successfully (see the RGB/depth item above).
+- **Camera view on the Mapping/Navigation page stays a broken-image icon**:
+  it only has something to show once a mapping/navigation session has the
+  camera up (same prerequisite as the RGB/depth item above) - it's normal
+  for it to be blank before you click Start Mapping/Start Navigation. If it's
+  still blank after that, confirm `web_video_server` is running (`docker
+  compose logs -f | grep web_video_server`) and that
+  `http://<robot-ip>:8080/stream?topic=/camera/color/image_raw` loads
+  directly in a browser.
+- **Occupancy grid renders solid black, including in open floor space**:
+  this is a classic symptom of the depth camera picking up the floor itself
+  as a close-range "obstacle" - usually either the camera is physically
+  angled slightly downward, or there's a mounting-angle error somewhere in
+  the TF chain feeding RTAB-Map (`camer_joint`/`realsense_mount_joint`/the
+  `sensor_d435` macro origin in `nexzino.urdf.xacro`). Use the camera view
+  above to check: if the color image itself looks tilted toward the floor
+  rather than roughly level/forward, that's the mounting angle, not a
+  software bug in the grid params. If the color image looks level but the
+  map is still solid black, the likelier cause is bad/noisy depth data
+  (worth comparing against the pre-bandwidth-fix 848x480 depth stream if you
+  still have hardware headroom to test it) rather than a `Grid/*` param
+  tuning issue - `rtabmap_mapping.yaml`'s ground-detection params
+  (`Grid/NormalsSegmentation`, `Grid/MaxGroundAngle`, `Grid/GroundIsObstacle`)
+  are all already at RTAB-Map's own defaults, which are the right defaults
+  for a level-mounted camera.

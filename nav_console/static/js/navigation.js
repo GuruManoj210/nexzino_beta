@@ -63,6 +63,10 @@ $(document).ready(function() {
         url: 'ws://' + window.location.hostname + ':9090'
     });
 
+    // web_video_server (port 8080) re-streams /camera/color/image_raw as
+    // MJPEG - same hostname-derivation reasoning as the rosbridge URL above.
+    document.getElementById('camera-stream').src =
+        'http://' + window.location.hostname + ':8080/stream?topic=/camera/color/image_raw';
 
     // Create the main viewer.
     var viewer = new ROS2D.Viewer({
