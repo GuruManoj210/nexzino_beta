@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com)
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="nexa">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.0233629429238116 4.22881594878133E-05 0.0485862192692521"
+        rpy="0 0 0" />
+      <mass
+        value="2.67357451448379" />
+      <inertia
+        ixx="0.0838676214813811"
+        ixy="-4.20361720258225E-06"
+        ixz="0.00129491227389105"
+        iyy="0.0952701211607136"
+        iyz="1.6066275313901E-06"
+        izz="0.0409475340600111" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.509803921568627 0.509803921568627 0.509803921568627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="leftwheel_link">
+    <inertial>
+      <origin
+        xyz="-1.74075753811564E-10 1.74083775172917E-10 0.000381565663131411"
+        rpy="0 0 0" />
+      <mass
+        value="1.44920481477612" />
+      <inertia
+        ixx="0.00347079630181746"
+        ixy="-5.8844939595754E-16"
+        ixz="-1.29155431134988E-09"
+        iyy="0.00347079630181747"
+        iyz="1.29155395907396E-09"
+        izz="0.00630183667634335" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/leftwheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.215686274509804 0.215686274509804 0.215686274509804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/leftwheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="leftwheel_joint"
+    type="continuous">
+    <origin
+      xyz="0.0540389524650898 0.169779999524495 -0.0149989847207889"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="leftwheel_link" />
+    <axis
+      xyz="0 0 0.999999999999792" />
+  </joint>
+  <link
+    name="rightwheel_link">
+    <inertial>
+      <origin
+        xyz="1.74075198700052E-10 -1.74083469861586E-10 -0.000381565663131717"
+        rpy="0 0 0" />
+      <mass
+        value="1.44920481477613" />
+      <inertia
+        ixx="0.00347079630181749"
+        ixy="-5.88843528628314E-16"
+        ixz="-1.29155425553129E-09"
+        iyy="0.00347079630181749"
+        iyz="1.2915540535382E-09"
+        izz="0.00630183667634338" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/rightwheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.215686274509804 0.215686274509804 0.215686274509804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/rightwheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="rightwheel_joint"
+    type="continuous">
+    <origin
+      xyz="0.0540387975537798 -0.169780000237316 -0.0149988298094792"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="rightwheel_link" />
+    <axis
+      xyz="0 0 0.999999999999792" />
+  </joint>
+  <link
+    name="casterwheelmount_link">
+    <inertial>
+      <origin
+        xyz="0.00187352191273216 0.0129405492524937 -0.0103000078506701"
+        rpy="0 0 0" />
+      <mass
+        value="0.0102706017023182" />
+      <inertia
+        ixx="3.93968493623888E-06"
+        ixy="-2.8232800941337E-07"
+        ixz="5.63131676132563E-08"
+        iyy="3.432191688351E-06"
+        iyz="1.42222659679423E-06"
+        izz="3.85767367428349E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheelmount_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.509803921568627 0.509803921568627 0.509803921568627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheelmount_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="casterwheelmount_joint"
+    type="continuous">
+    <origin
+      xyz="0.139639576281008 0.0791060227155972 -0.051842999999996"
+      rpy="-1.5707963267949 0 -1.5707963267949" />
+    <parent
+      link="base_link" />
+    <child
+      link="casterwheelmount_link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <link
+    name="casterwheel_link">
+    <inertial>
+      <origin
+        xyz="1.33226762955019E-15 1.23512311489549E-15 -0.0112773964520611"
+        rpy="0 0 0" />
+      <mass
+        value="0.0399331188999233" />
+      <inertia
+        ixx="7.77541411629872E-06"
+        ixy="-1.01833774330127E-21"
+        ixz="-2.72426971660664E-19"
+        iyy="7.77541411629871E-06"
+        iyz="4.13954478132233E-19"
+        izz="1.27535117768465E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.270588235294118 0.270588235294118 0.270588235294118 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="casterwheel_joint"
+    type="continuous">
+    <origin
+      xyz="0.0151109163570423 0.0349719999999999 -0.0235537261563978"
+      rpy="0 -1.41616610057807 3.14159265358979" />
+    <parent
+      link="casterwheelmount_link" />
+    <child
+      link="casterwheel_link" />
+    <axis
+      xyz="-3.74938274523284E-05 0 -0.999999999297106" />
+  </joint>
+  <link
+    name="casterwheelmount1_link">
+    <inertial>
+      <origin
+        xyz="-0.0101545114856474 0.00254678088783966 0.0129405492213775"
+        rpy="0 0 0" />
+      <mass
+        value="0.0102706060663648" />
+      <inertia
+        ixx="3.86541891392595E-06"
+        ixy="6.12075400190165E-08"
+        ixz="1.40058301400974E-06"
+        iyy="3.93194090481684E-06"
+        iyz="-3.75240720638479E-07"
+        izz="3.43219229056267E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheelmount1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.509803921568627 0.509803921568627 0.509803921568627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheelmount1_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="casterwheelmount1_joint"
+    type="continuous">
+    <origin
+      xyz="0.139639576281007 -0.0808939772844029 -0.051842999999996"
+      rpy="-3.14159265358979 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="casterwheelmount1_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="casterwheel1_link">
+    <inertial>
+      <origin
+        xyz="-0.00246586444429442 -1.09634523681734E-15 -0.0110045074073896"
+        rpy="0 0 0" />
+      <mass
+        value="0.0399331188999234" />
+      <inertia
+        ixx="8.0134180379355E-06"
+        ixy="-6.57097464824199E-20"
+        ixz="1.06214918857322E-06"
+        iyy="7.77541411629872E-06"
+        iyz="-2.92153038680237E-19"
+        izz="1.25155078552097E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheel1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.270588235294118 0.270588235294118 0.270588235294118 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheel1_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="casterwheel1_joint"
+    type="continuous">
+    <origin
+      xyz="-0.0225090715658005 0.0166270714873566 0.0349720000000002"
+      rpy="-1.5707963267949 0 0" />
+    <parent
+      link="casterwheelmount1_link" />
+    <child
+      link="casterwheel1_link" />
+    <axis
+      xyz="0.218655472012234 0 0.975802123670115" />
+  </joint>
+  <link
+    name="casterwheelmount2_link">
+    <inertial>
+      <origin
+        xyz="-0.0104656615937944 0.000264812566949602 0.0129405496800931"
+        rpy="0 0 0" />
+      <mass
+        value="0.0102706060928633" />
+      <inertia
+        ixx="3.84248026188763E-06"
+        ixy="4.11615522049579E-08"
+        ixz="1.44874042580228E-06"
+        iyy="3.95487969647682E-06"
+        iyz="-5.99155602306657E-08"
+        izz="3.43219234854318E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheelmount2_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.509803921568627 0.509803921568627 0.509803921568627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheelmount2_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="casterwheelmount2_joint"
+    type="continuous">
+    <origin
+      xyz="-0.115360423718992 0.0971060227155969 -0.052842999999998"
+      rpy="3.14159265358979 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="casterwheelmount2_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="casterwheel2_link">
+    <inertial>
+      <origin
+        xyz="0 1.11022302462516E-15 -0.0112773964520597"
+        rpy="0 0 0" />
+      <mass
+        value="0.0399331188999233" />
+      <inertia
+        ixx="7.77541411629873E-06"
+        ixy="-2.72948711563285E-22"
+        ixz="-3.84041109193569E-19"
+        iyy="7.77541411629872E-06"
+        iyz="3.01712944588664E-19"
+        izz="1.27535117768465E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheel2_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.270588235294118 0.270588235294118 0.270588235294118 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheel2_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="casterwheel2_joint"
+    type="continuous">
+    <origin
+      xyz="-0.0256000000000002 0.0113030000000002 0.0349719999999999"
+      rpy="-1.5707963267949 0 0" />
+    <parent
+      link="casterwheelmount2_link" />
+    <child
+      link="casterwheel2_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="casterwheelmount3_link">
+    <inertial>
+      <origin
+        xyz="-0.010340494088649 -0.00163533682142492 0.0129405509142809"
+        rpy="0 0 0" />
+      <mass
+        value="0.0102706136475918" />
+      <inertia
+        ixx="3.83150337395354E-06"
+        ixy="1.84372120086148E-08"
+        ixz="1.43562765937134E-06"
+        iyy="3.96585848591721E-06"
+        iyz="2.03502642139208E-07"
+        izz="3.43219311730015E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheelmount3_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.509803921568627 0.509803921568627 0.509803921568627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheelmount3_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="casterwheelmount3_link"
+    type="continuous">
+    <origin
+      xyz="-0.115360423718995 -0.0988939772844037 -0.052842999999996"
+      rpy="3.14159265358979 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="casterwheelmount3_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="casterwheel3_link">
+    <inertial>
+      <origin
+        xyz="0.00204280486025432 7.49400541621981E-16 -0.0110908349117569"
+        rpy="0 0 0" />
+      <mass
+        value="0.0399331188999233" />
+      <inertia
+        ixx="7.93875672263076E-06"
+        ixy="1.9998661676797E-20"
+        ixz="-8.8682277790206E-07"
+        iyy="7.77541411629873E-06"
+        iyz="-7.49859329312308E-20"
+        izz="1.25901691705145E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheel3_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.270588235294118 0.270588235294118 0.270588235294118 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/casterwheel3_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="casterwheel3_joint"
+    type="continuous">
+    <origin
+      xyz="-0.0272239429004355 0.0064787917047735 0.0349719999999999"
+      rpy="-1.5707963267949 0 0" />
+    <parent
+      link="casterwheelmount3_link" />
+    <child
+      link="casterwheel3_link" />
+    <axis
+      xyz="-0.18114153110955 0 0.983457038058749" />
+  </joint>
+  <link
+    name="camer_Link">
+    <inertial>
+      <origin
+        xyz="0.0014858590321436 0.0183400588332211 -7.88564831766259E-08"
+        rpy="0 0 0" />
+      <mass
+        value="0.123421651539353" />
+      <inertia
+        ixx="0.000429899634243806"
+        ixy="-2.33350789116604E-05"
+        ixz="5.60927268320891E-11"
+        iyy="0.000212016762319961"
+        iyz="1.68959859120517E-09"
+        izz="0.000438998679665635" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/camer_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.509803921568627 0.509803921568627 0.509803921568627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/camer_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camer_joint"
+    type="fixed">
+    <origin
+      xyz="0.00431397405279732 0 0.783119999523163"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="camer_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="realsense_Link">
+    <inertial>
+      <origin
+        xyz="0.0102742584795974 0.00711896653540789 0.000871321821130366"
+        rpy="0 0 0" />
+      <mass
+        value="0.0332748943180587" />
+      <inertia
+        ixx="2.57397368671904E-05"
+        ixy="1.19148398558562E-08"
+        ixz="2.83984493526265E-07"
+        iyy="2.57224986374103E-05"
+        iyz="-3.83724140917947E-07"
+        izz="3.2006669857039E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/realsense_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.56078431372549 0.56078431372549 0.686274509803922 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/realsense_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="realsense_joint"
+    type="fixed">
+    <origin
+      xyz="0.083403701772902 0.182836639605286 0"
+      rpy="0 0 0" />
+    <parent
+      link="camer_Link" />
+    <child
+      link="realsense_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="cameratop_Link">
+    <inertial>
+      <origin
+        xyz="-0.00501711981331032 -1.07127451966994 5.50848912026225E-05"
+        rpy="0 0 0" />
+      <mass
+        value="5.9294953875902" />
+      <inertia
+        ixx="0.288388098161001"
+        ixy="0.00413930161226115"
+        ixz="-6.07274589378271E-05"
+        iyy="0.138230832699961"
+        iyz="2.09008782504397E-05"
+        izz="0.226009248166915" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/cameratop_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://nexa/meshes/cameratop_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="cameratop_joint"
+    type="fixed">
+    <origin
+      xyz="0.0379819969671267 0.322068596376853 0"
+      rpy="0 0 0" />
+    <parent
+      link="camer_Link" />
+    <child
+      link="cameratop_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>

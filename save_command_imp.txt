@@ -1,0 +1,2 @@
+roslaunch nexzino_nav mapping.launch start_motor_driver:=false open_rviz:=true \
+    database_path:=/opt/nexzino/nav_console/data/mapping_session.db
