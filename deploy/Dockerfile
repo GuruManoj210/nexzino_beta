@@ -33,7 +33,9 @@ ENV PYTHONUNBUFFERED=1
 # ros-noetic-robot-state-publisher + ros-noetic-xacro: publish TF from nexzino's
 # URDF. ros-noetic-rviz: optional, only used if you explicitly pass open_rviz:=true
 # with a display attached - see deploy/README.md for the (recommended) remote-RViz
-# alternative for a headless robot.
+# alternative for a headless robot. ros-noetic-rosbridge-server: nav_console's
+# frontend (roslibjs) talks to ROS directly from the browser over this -
+# map view, click-to-navigate goals, and its joystick all need it running.
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
         ros-noetic-tf \
@@ -44,18 +46,21 @@ RUN apt-get update && \
         ros-noetic-robot-state-publisher \
         ros-noetic-xacro \
         ros-noetic-rviz \
+        ros-noetic-rosbridge-server \
         python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
 # pymodbus is pinned <3 because zlac8015d/ZLAC8015D.py imports the legacy
 # `pymodbus.client.sync` module path that pymodbus 3.x removed. flask-sock
-# backs the web_teleop websocket.
+# backs the web_teleop websocket. Pillow backs nav_console's pgm->png map
+# thumbnail conversion (avoids adding imagemagick just for that one step).
 RUN pip3 install --no-cache-dir \
         "Flask>=2.2.5" \
         "flask-sock>=0.7.0" \
         "pyserial>=3.5" \
         "pymodbus>=2.5,<3" \
-        "numpy"
+        "numpy" \
+        "Pillow>=9.0.0"
 
 WORKDIR /opt/nexzino
 
@@ -69,6 +74,7 @@ COPY ros_ws/src/realsense-ros-gazebo/realsense-ros/realsense2_description ros_ws
 COPY ros_ws/src/ZLAC8015D_python ros_ws/src/ZLAC8015D_python
 COPY servo_tester servo_tester
 COPY web_teleop web_teleop
+COPY nav_console nav_console
 
 COPY deploy/entrypoint.sh entrypoint.sh
 

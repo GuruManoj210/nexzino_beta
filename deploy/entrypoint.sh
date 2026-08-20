@@ -1,9 +1,11 @@
 #!/bin/bash
 # Entrypoint for the nexzino deploy image. Starts (1) a local roscore,
 # (2) the diff_drive_controller.py ROS node, (3) the servo_tester Flask app
-# (port 5000), and (4) the web_teleop Flask app (port 8000), then waits: if
-# any of the four dies, this script exits so the container's restart policy
-# can bring everything back up cleanly together.
+# (port 5000), (4) the web_teleop Flask app (port 8000), (5) rosbridge_websocket
+# (port 9090, ROS-over-websocket for nav_console's browser-side roslibjs), and
+# (6) the nav_console Flask app (port 5001), then waits: if any one dies, this
+# script exits so the container's restart policy can bring everything back up
+# cleanly together.
 set -eo pipefail
 
 source /opt/ros/noetic/setup.bash
@@ -70,6 +72,14 @@ pids+=($!)
 
 echo "==> Starting web_teleop app.py (port 8000)"
 python3 "${APP_ROOT}/web_teleop/app.py" &
+pids+=($!)
+
+echo "==> Starting rosbridge_websocket (port 9090)"
+roslaunch rosbridge_server rosbridge_websocket.launch &
+pids+=($!)
+
+echo "==> Starting nav_console app.py (port 5001)"
+python3 "${APP_ROOT}/nav_console/app.py" &
 pids+=($!)
 
 # Exit as soon as any one of these processes exits, so the whole

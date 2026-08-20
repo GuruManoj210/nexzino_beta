@@ -30,7 +30,15 @@ services:
       # volume it's lost whenever the container is removed and recreated,
       # not just rebuilt. See deploy/README.md "Mapping and navigation".
       - ros-home:/root/.ros
+      # nav_console's saved maps: maps.json registry + one RTAB-Map .db per
+      # saved map (data/), and the .pgm/.yaml/.png thumbnails the web UI
+      # displays (static/maps/). Without these, saved maps vanish on
+      # container recreation the same way servo_tester's data would.
+      - nav-console-data:/opt/nexzino/nav_console/data
+      - nav-console-maps:/opt/nexzino/nav_console/static/maps
 
 volumes:
   servo-data:
   ros-home:
+  nav-console-data:
+  nav-console-maps:

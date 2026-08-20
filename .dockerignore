@@ -20,6 +20,11 @@
 !web_teleop/
 !web_teleop/**
 
+# re-include: nav_console/ (map management + navigation/joystick web UI,
+# talks to ROS via rosbridge; run by entrypoint.sh)
+!nav_console/
+!nav_console/**
+
 # re-include: the ros_ws/src packages deploy/entrypoint.sh and on-demand
 # mapping/navigation roslaunch invocations need - NOT the rest of ros_ws/src
 # (gazebo worlds, other robot arms, pal_gazebo_worlds etc. stay ignored)

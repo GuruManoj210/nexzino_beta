@@ -2,16 +2,16 @@
 
 Runs the Nexzino robot's on-device services in a single Docker container:
 a local `roscore`, the `diff_drive_controller.py` ROS node, the
-`servo_tester` web UI, and the `web_teleop` joystick page. Intended to run
-directly on the robot (e.g. the Jetson), not in the VSCode dev container.
+`servo_tester` web UI, `web_teleop`'s joystick page, `rosbridge_websocket`,
+and `nav_console` (mapping/navigation web UI). Intended to run directly on
+the robot (e.g. the Jetson), not in the VSCode dev container.
 
 The image also carries the full navigation/SLAM stack
 (`ros-noetic-navigation`, `rtabmap`, `realsense2-camera`, `nexzino`/
-`nexzino_nav`'s launch files) so `mapping.launch`/`navigation.launch` can be
-run **on demand** inside the same running container - see
-[Mapping and navigation](#mapping-and-navigation) below. They are not part
-of the four always-on services; you start them deliberately when you want
-to build a map or navigate.
+`nexzino_nav`'s launch files) - `nav_console` launches `mapping.launch`/
+`navigation.launch` as subprocesses **on demand** (via its Start
+Mapping/Start Navigation buttons), inside this same running container - see
+[Mapping and navigation](#mapping-and-navigation) below.
 
 ## What's running
 
@@ -25,8 +25,12 @@ to build a map or navigate.
 3. `servo_tester/app.py` - arm servo control/animation UI, port **5000**
 4. `web_teleop/app.py` - joystick teleop UI, port **8000**, publishes
    `geometry_msgs/Twist` on `/cmd_vel`
+5. `rosbridge_websocket` (port **9090**) - ROS-over-websocket bridge;
+   `nav_console`'s frontend talks to ROS directly from the browser over this
+6. `nav_console/app.py` - mapping/navigation web UI + joystick, port **5001**;
+   launches/stops `mapping.launch`/`navigation.launch` as subprocesses
 
-If any one of the four exits, the entrypoint tears the rest down and exits
+If any one of these exits, the entrypoint tears the rest down and exits
 too, so the container's restart policy brings everything back up together
 instead of leaving some services running against a half-dead ROS graph.
 
@@ -68,71 +72,80 @@ image's `ENV`) is enough for `$(find ...)` and `roslaunch` to find them; no
 ```bash
 cd deploy
 docker compose up -d      # start in the background
-docker compose logs -f    # follow all four processes' output
+docker compose logs -f    # follow all processes' output
 docker compose down       # stop and remove the container
 ```
 
 - servo_tester: `http://<robot-ip>:5000`
 - web_teleop: `http://<robot-ip>:8000`
+- nav_console (mapping/navigation + joystick): `http://<robot-ip>:5001`
 
-The container uses host networking (`network_mode: host`), so both ports
+The container uses host networking (`network_mode: host`), so all ports
 are reachable directly on the robot's IP - there's no `ports:` mapping to
 edit.
 
 ## Mapping and navigation
 
-`diff_drive_controller.py` is already running as one of the four always-on
-services, so **don't** let `mapping.launch`/`navigation.launch` relaunch it
-too - a second process fighting the first over the same serial port will
-break both. Both launch files now accept `start_motor_driver` and
-`use_realsense` args (forwarded through `bringup.launch`) for exactly this:
-pass `start_motor_driver:=false` to skip relaunching the wheel controller
-and reuse the one already running, while `use_realsense:=true` (the
-default) still brings up the camera, since nothing else starts that.
+The easiest way to do this is **`nav_console`** at `http://<robot-ip>:5001`
+- pick Mapping or Navigation from the home page, drive around with its
+on-screen joystick, click **Save Map** when you're done (prompts for a
+name), and load any saved map later from the Navigation page's map
+dropdown to localize and send goals by clicking on the map.
 
-Run these with the stack already up (`docker compose up -d`):
+`nav_console` handles the one thing you'd otherwise have to remember
+yourself: `diff_drive_controller.py` is already running as one of the
+always-on services, so it always launches `mapping.launch`/
+`navigation.launch` with `start_motor_driver:=false` - a second process
+trying to reopen the same wheel-controller serial port would break both.
+It also always passes `open_rviz:=false` (no display in the container -
+see below for viewing the map).
+
+**Map storage**: "Save Map" copies the just-finished mapping session's live
+RTAB-Map database into `nav_console/data/maps_db/<name>.db` (this is the
+actual map `navigation.launch`'s `database_path` loads back later) and also
+snapshots a `.pgm`/`.yaml`/`.png` thumbnail via `map_saver` for the web UI's
+map preview. Saving **stops the current mapping session** - RTAB-Map's
+database needs to be cleanly closed to copy it safely (copying a sqlite
+file that's still open for writing risks grabbing a corrupt/partial
+snapshot); if you want to keep mapping after saving, just click Start
+Mapping again.
+
+### Manual alternative
+
+You can still drive `mapping.launch`/`navigation.launch` by hand instead of
+through `nav_console` - useful for scripting or debugging:
 
 ```bash
 docker exec -it nexzino-deploy bash
 source /opt/ros/noetic/setup.bash
 
-# Mapping - drive the robot around, Ctrl+C when you're done. The RTAB-Map
-# database (default ~/.ros/nexzino_rtabmap.db, inside the container) is
-# saved continuously - no separate export step needed.
-roslaunch nexzino_nav mapping.launch start_motor_driver:=false open_rviz:=false
+roslaunch nexzino_nav mapping.launch start_motor_driver:=false open_rviz:=false \
+    database_path:=/opt/nexzino/nav_console/data/mapping_session.db
 
-# Navigation - localizes against that same database and brings up move_base.
-roslaunch nexzino_nav navigation.launch start_motor_driver:=false open_rviz:=false
+roslaunch nexzino_nav navigation.launch start_motor_driver:=false open_rviz:=false \
+    database_path:=/opt/nexzino/nav_console/data/maps_db/<name>.db
 ```
 
-`open_rviz:=false` because the container has no display attached. To
-actually see the map/robot while mapping or navigating, run RViz on a
-**separate machine** on the same network instead of inside the container:
+### Viewing the map/robot
 
-```bash
-# On your dev laptop, NOT the Jetson:
-export ROS_MASTER_URI=http://<jetson-ip>:11311
-rosrun rviz rviz -d <path to>/nexzino_nav/config/nexzino_nav.rviz
-```
+`open_rviz:=false` everywhere above because the container has no display
+attached. Two ways to actually see it:
 
-This works because the deploy container uses host networking, so its
-`roscore` (port 11311) is directly reachable from other machines on the
-same LAN - standard multi-machine ROS, no extra setup needed. Your laptop
-needs its own ROS Noetic + a checkout of `nexzino_nav` (for the same
-`.rviz` config and, if you want the robot mesh rendered, the `nexzino`
-package) - it doesn't need anything installed inside the Jetson's container.
-
-The RTAB-Map database persists in the same `servo-data`-style location
-inside the container filesystem (default `~/.ros/nexzino_rtabmap.db`,
-i.e. `/root/.ros/...` since this image runs as root) - it is **not** on a
-named volume like `servo_tester`'s data, so it's lost if the container is
-removed (`docker compose down` alone is fine; `down -v` isn't relevant to
-it either way, but a full image rebuild recreating the container from
-scratch will not by itself delete it - only removing the container without
-its filesystem, e.g. `docker rm`, does). If you want the map to survive
-container recreation, back up `/root/.ros/nexzino_rtabmap.db` out of the
-container after mapping, or mount a volume at `/root/.ros` in
-`docker-compose.yml`.
+- **`nav_console`'s own map view** (the easiest option, works from any
+  browser on the network, no setup) - navigate to the Mapping or Navigation
+  page and the live map/robot pose renders right there via rosbridge.
+- **RViz on a separate machine** on the same network:
+  ```bash
+  # On your dev laptop, NOT the Jetson:
+  export ROS_MASTER_URI=http://<jetson-ip>:11311
+  rosrun rviz rviz -d <path to>/nexzino_nav/config/nexzino_nav.rviz
+  ```
+  This works because the deploy container uses host networking, so its
+  `roscore` (port 11311) is directly reachable from other machines on the
+  same LAN - standard multi-machine ROS, no extra setup needed. Your laptop
+  needs its own ROS Noetic + a checkout of `nexzino_nav` (for the `.rviz`
+  config and, if you want the robot mesh rendered, the `nexzino` package)
+  - nothing extra needs installing inside the Jetson's container.
 
 ## Rebuilding after code changes
 
@@ -144,13 +157,19 @@ docker compose up -d
 
 ## Persistent data
 
-`servo_tester`'s saved animations, timelines, profiles, and dev-mode flag
-live in `/opt/nexzino/servo_tester/data` inside the container, which is
-backed by the `servo-data` named volume. Rebuilding or recreating the
-container does **not** wipe this data. To reset it:
+Named volumes so rebuilding or recreating the container doesn't wipe this:
+
+| Volume | Container path | What's in it |
+| --- | --- | --- |
+| `servo-data` | `/opt/nexzino/servo_tester/data` | Saved animations, timelines, profiles, dev-mode flag |
+| `ros-home` | `/root/.ros` | Manually-run `mapping.launch`/`navigation.launch`'s default RTAB-Map database (only relevant if you skip `nav_console` and don't pass `database_path:=` yourself) |
+| `nav-console-data` | `/opt/nexzino/nav_console/data` | `maps.json` registry + one saved RTAB-Map `.db` per named map |
+| `nav-console-maps` | `/opt/nexzino/nav_console/static/maps` | `.pgm`/`.yaml`/`.png` map thumbnails `nav_console`'s UI displays |
+
+To reset everything (all saved maps, servo profiles/animations, etc.):
 
 ```bash
-docker compose down -v   # removes the servo-data volume too
+docker compose down -v   # removes all of the above volumes too
 ```
 
 ## Hardware access
@@ -232,24 +251,41 @@ extra systemd unit needed for this stack specifically.
 ## Troubleshooting
 
 - **A service keeps restarting in a loop**: `docker compose logs -f` and
-  check which of the four processes is failing. Missing serial hardware is
-  the most common cause - both `diff_drive_controller.py` and
-  `servo_tester`'s servo controller connect to hardware at startup.
-- **Can't reach port 5000/8000 from another machine**: confirm the
+  check which process is failing. Missing serial hardware is the most
+  common cause - both `diff_drive_controller.py` and `servo_tester`'s servo
+  controller connect to hardware at startup.
+- **Can't reach port 5000/8000/5001 from another machine**: confirm the
   container is actually running (`docker compose ps`) and that nothing on
   the robot's host firewall is blocking those ports (host networking means
   there's no Docker-level port mapping to misconfigure - if the container
   is up and the port isn't reachable, it's a host firewall or wrong IP).
-- **`roslaunch nexzino_nav ...` fails with "package not found"**: confirm
-  `ROS_PACKAGE_PATH` includes `/opt/nexzino/ros_ws/src` (`echo
+- **`roslaunch nexzino_nav ...` fails with "package not found"** (only
+  relevant if you're running it by hand, not through `nav_console`):
+  confirm `ROS_PACKAGE_PATH` includes `/opt/nexzino/ros_ws/src` (`echo
   $ROS_PACKAGE_PATH` inside the container after sourcing
-  `/opt/ros/noetic/setup.bash`) - it's set via the image's `ENV`, but a
-  shell that didn't source ROS's own `setup.bash` first won't have it.
+  `/opt/ros/noetic/setup.bash`) - it's appended in `entrypoint.sh` and baked
+  into `/root/.bashrc` for interactive shells, but a shell that sources ROS's
+  own `setup.bash` through some other path won't pick it up (that script
+  overwrites `ROS_PACKAGE_PATH` rather than appending to it).
 - **`mapping.launch`/`navigation.launch` can't open the wheel controller
-  port**: you forgot `start_motor_driver:=false` - it's trying to open the
-  same serial device `diff_drive_controller.py` already has open.
+  port**: you're running it by hand without `start_motor_driver:=false` -
+  it's trying to open the same serial device `diff_drive_controller.py`
+  already has open. `nav_console` always passes this correctly on its own.
 - **No RGB/depth topics, camera never comes up**: check
   `rostopic list | grep camera` and the `realsense2_camera` node's own log
   output for a hardware-not-found error - confirm the D435i is actually
   enumerated on the host (`rs-enumerate-devices` if `librealsense2-utils`
   is available, or `lsusb`).
+- **`nav_console`'s map view/joystick never connects (stays blank, or the
+  joystick doesn't move anything)**: this goes over `rosbridge_websocket`
+  (port 9090), not a plain HTTP call - check `docker compose logs -f` for
+  rosbridge actually being up, and open the browser's console for a
+  websocket connection error. If you're accessing `nav_console` through
+  something other than its direct `http://<robot-ip>:5001` URL (an SSH
+  tunnel, a reverse proxy, etc.), the frontend derives the rosbridge host
+  from `window.location.hostname` - a proxy that changes the hostname the
+  browser sees will break this.
+- **"Save Map" in `nav_console` returns an error / no map appears in the
+  dropdown afterward**: it only works while a mapping session is actually
+  running - check that "Start Mapping" was clicked first and the camera
+  came up successfully (see the RGB/depth item above).
