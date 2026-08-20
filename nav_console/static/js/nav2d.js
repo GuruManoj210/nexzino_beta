@@ -31,13 +31,22 @@ NAV2D.ImageMapClientNav = function(options) {
     });
     client.on('change', function() {
 
-        that.navigator = new NAV2D.Navigator({
-            ros: that.ros,
-            serverName: that.serverName,
-            actionName: that.actionName,
-            rootObject: that.rootObject,
-            withOrientation: that.withOrientation
-        });
+        // 'change' fires on every map update (many times during an active
+        // mapping/navigation session), but Navigator's constructor adds a
+        // NEW robot marker and a NEW set of click/pan listeners to
+        // rootObject every time it's called, with no cleanup of the
+        // previous ones - recreating it here piled up duplicate markers and
+        // duplicate event listeners on every single map update. Only build
+        // it once; every subsequent 'change' just needs the viewer rescaled.
+        if (!that.navigator) {
+            that.navigator = new NAV2D.Navigator({
+                ros: that.ros,
+                serverName: that.serverName,
+                actionName: that.actionName,
+                rootObject: that.rootObject,
+                withOrientation: that.withOrientation
+            });
+        }
 
 
         // scale the viewer to fit the map
@@ -402,13 +411,18 @@ NAV2D.OccupancyGridClientNav = function(options) {
     });
     client.on('change', function() {
 
-        that.navigator = new NAV2D.Navigator({
-            ros: that.ros,
-            serverName: that.serverName,
-            actionName: that.actionName,
-            rootObject: that.rootObject,
-            withOrientation: that.withOrientation
-        });
+        // Same reasoning as ImageMapClientNav above: 'change' fires on
+        // every map update - build the Navigator (and its marker/listeners)
+        // once, not on every single update.
+        if (!that.navigator) {
+            that.navigator = new NAV2D.Navigator({
+                ros: that.ros,
+                serverName: that.serverName,
+                actionName: that.actionName,
+                rootObject: that.rootObject,
+                withOrientation: that.withOrientation
+            });
+        }
 
         // scale the viewer to fit the map
         that.viewer.scaleToDimensions(client.currentGrid.width, client.currentGrid.height);

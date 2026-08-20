@@ -343,6 +343,27 @@ a {
 left: 25%;
 }
 
+/* This class was applied to #zonejoystick in the markup but never actually
+   defined anywhere - without an explicit position/size, that div stays
+   position:static and collapses to ~0x0 in normal document flow, so
+   nipple.js's own `position: {right:'8%', bottom:'20%'}` math (relative to
+   the zone's own bounding box) had nothing meaningful to size against,
+   rendering the joystick tiny and cramped instead of usable. Also stacked
+   above .canvasScreen (which has no z-index of its own, so defaults to 0)
+   so drags on the joystick don't get captured by the map canvas underneath
+   it. */
+.joy-stick {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  /* Kept clear of .controls-mapping's zoom buttons (bottom: 33.46%) so this
+     zone's higher z-index doesn't block clicks on them. */
+  width: 30%;
+  height: 30%;
+  z-index: 20;
+  touch-action: none;
+}
+
 .controls-mapping{
 
     position: absolute;
