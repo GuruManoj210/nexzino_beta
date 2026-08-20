@@ -21,9 +21,25 @@ services:
       # path for each adapter.
       WHEEL_CONTROLLER_PORT: "${WHEEL_CONTROLLER_PORT:-}"
       SERVO_CONTROLLER_PORT: "${SERVO_CONTROLLER_PORT:-}"
+      # Lets rviz/rqt pop up on a monitor plugged into the robot itself,
+      # e.g. `roslaunch nexzino_nav mapping.launch ... open_rviz:=true` run
+      # by hand inside the container (nav_console's Start Mapping always
+      # passes open_rviz:=false - see README "Debugging with RViz on the
+      # robot"). Empty/unset DISPLAY (the normal headless case) makes this a
+      # no-op - nothing tries to use it unless you explicitly launch a GUI
+      # app inside the container.
+      # Falls back to :0 (the near-universal default for a single directly-
+      # attached monitor) if the shell running `docker compose up` didn't
+      # have DISPLAY exported - see README "Debugging with RViz on the
+      # robot" for why that's the actual failure mode if this still doesn't
+      # work (an empty DISPLAY connects to nothing; xhost is a separate,
+      # later step that only matters once a connection succeeds at all).
+      DISPLAY: "${DISPLAY:-:0}"
+      QT_X11_NO_MITSHM: "1"
     volumes:
       - /dev:/dev
       - /etc/localtime:/etc/localtime:ro
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - servo-data:/opt/nexzino/servo_tester/data
       # RTAB-Map's map database (~/.ros/nexzino_rtabmap.db, i.e. /root/.ros/...
       # since this image runs as root) lives here by default - without this

@@ -154,6 +154,58 @@ attached. Two ways to actually see it:
   config and, if you want the robot mesh rendered, the `nexzino` package)
   - nothing extra needs installing inside the Jetson's container.
 
+### Debugging with RViz on the robot itself
+
+For diagnosing SLAM/costmap issues (e.g. the occupancy grid painting solid
+black over open floor) it's often easier to watch the raw point cloud,
+`/map`, and (during navigation) the local/global costmaps live in RViz on a
+monitor plugged straight into the robot, rather than the simplified view
+`nav_console` renders in-browser - `nexzino_nav.rviz` already has all of
+these wired up (`/camera/depth/color/points`, `/map`,
+`/move_base/global_costmap/costmap`, `/move_base/local_costmap/costmap`).
+
+`docker-compose.yml` passes `DISPLAY` through and mounts `/tmp/.X11-unix`
+for exactly this. Steps, run directly on the Jetson (with a monitor
+attached to it, not over SSH from another machine):
+
+1. Allow the container's root user to open windows on your X session (run
+   once per login, on the Jetson's own desktop, before starting the stack):
+   ```bash
+   xhost +si:localuser:root
+   ```
+2. Start the stack in the foreground so you can watch all services' logs:
+   ```bash
+   cd deploy
+   docker compose up
+   ```
+3. In a second terminal on the Jetson, exec into the running container and
+   launch mapping (or navigation) by hand with `open_rviz:=true`:
+   ```bash
+   docker exec -it nexzino-deploy bash
+   source /opt/ros/noetic/setup.bash
+
+   roslaunch nexzino_nav mapping.launch start_motor_driver:=false open_rviz:=true \
+       database_path:=/opt/nexzino/nav_console/data/mapping_session.db
+   ```
+   **Don't also click Start Mapping in `nav_console` while doing this** -
+   that would launch a second `rtabmap` process fighting the first one over
+   the same camera topics. Drive the robot with `web_teleop` (port 8000,
+   already running) instead, and watch RViz for what the point cloud/grid
+   are actually doing as you drive it over floor you know is clear.
+4. `Ctrl+C` the `roslaunch` in the second terminal when done (this closes
+   RViz too); `nav_console`'s own Start Mapping/Start Navigation continue to
+   work normally afterward.
+
+This image is `FROM ros:noetic-ros-base`, not a Jetson L4T base image, so it
+doesn't have the Jetson's proprietary GL/EGL libraries - RViz will very
+likely fall back to software rendering (Mesa llvmpipe) here rather than
+using the GPU. Expect it to feel sluggish; it's still fine for visually
+checking what the point cloud/grid are doing. If it's unusably slow or
+fails to get a GL context at all, fall back to the
+[RViz on a separate machine](#viewing-the-maprobot) option above instead -
+that runs a normal ROS Noetic install on your dev laptop, which has no
+GL-in-container problems to deal with.
+
 ## Rebuilding after code changes
 
 ```bash
