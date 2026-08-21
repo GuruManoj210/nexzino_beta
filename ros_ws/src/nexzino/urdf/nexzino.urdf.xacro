@@ -702,28 +702,47 @@
       xyz="0 0 0" />
   </joint>
 
-  <!-- Camera sensor frames attached directly at realsense_Link's own pose -
-       zero extra rotation, zero extra offset. realsense_Link's mesh (a
-       combined mount-arm + camera unit, confirmed visually against the
-       real robot) IS the ground truth for where/how the camera sits; no
-       hand-derived compensating rotation on top of it. (An earlier attempt
-       to derive that compensating rotation mathematically produced a
-       provably wrong result - the mesh mixes mount-arm and camera geometry,
-       so its own axes can't be read off computationally either. This is
-       the deliberate alternative: trust the CAD pose completely instead of
-       guessing a correction for it.)
-       Depth/color/optical frame orientations still come from the live
-       camera driver's own calibrated extrinsics (realsense_bringup.launch's
-       publish_tf:=true / use_nominal_extrinsics:=false), not static numbers
-       here - use_nominal_extrinsics is kept as a fallback for offline
-       display/Gazebo use where no live driver is publishing those frames. -->
+  <!-- camera_tilt_link re-establishes standard camera-body convention
+       (X=forward, Y=left, Z=up) on top of realsense_Link's own frame - this
+       exact rotation (1.5708, 3.1416, 3.1416) is the one already proven, by
+       explicit rotation-matrix calculation, to make a camera attached here
+       read out exactly forward-level. It is NOT a guess.
+       camera_tilt_pitch below is the one remaining unknown: the physical
+       camera is mounted tilted down by some angle, confirmed by loading the
+       real CAD mesh (nexa package) - a plain screenshot comparison isn't
+       precise enough to read off the exact angle, so this defaults to 0
+       (matches the old, forward-level behavior) rather than guessing a
+       number. To find the real value: watch nav_console's live camera feed
+       (or RViz's point cloud) while adjusting this, positive tilts the
+       camera further DOWN (confirmed: positive pitch about Y in this frame
+       rotates +X toward -Z). Try increments like 0.2-0.5 (≈11-29°) and
+       rebuild until the floor fills the frame the way it does on the real
+       robot.
+       (A direct identity attachment to realsense_Link - trusting its raw
+       CAD pose with no compensating rotation at all - was tried and
+       reported only partially correct, so reverted back to this tunable
+       form.) -->
+  <xacro:property name="camera_tilt_pitch" value="0" />
+  <link name="camera_tilt_link" />
+  <joint name="camera_tilt_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="1.5708 3.1416 3.1416" />
+    <parent link="realsense_Link" />
+    <child link="camera_tilt_link" />
+  </joint>
+
+  <!-- Depth/color/optical frame orientations come from the live camera
+       driver's own calibrated extrinsics (see realsense_bringup.launch's
+       publish_tf:=true / use_nominal_extrinsics:=false), not from static
+       numbers here - use_nominal_extrinsics is kept as a fallback for
+       offline display/Gazebo use where no live driver is publishing those
+       frames. -->
   <xacro:sensor_d435
-    parent="realsense_Link"
+    parent="camera_tilt_link"
     name="camera"
     topics_ns="camera"
     use_nominal_extrinsics="$(arg use_nominal_extrinsics)"
     publish_pointcloud="$(arg publish_pointcloud)">
-    <origin xyz="0 0 0" rpy="0 0 0" />
+    <origin xyz="0 0 0" rpy="0 ${camera_tilt_pitch} 0" />
   </xacro:sensor_d435>
   <link
     name="cameratop_Link">
