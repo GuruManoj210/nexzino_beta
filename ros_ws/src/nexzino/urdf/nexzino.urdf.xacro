@@ -722,7 +722,7 @@
        CAD pose with no compensating rotation at all - was tried and
        reported only partially correct, so reverted back to this tunable
        form.) -->
-  <xacro:property name="camera_tilt_pitch" value="0" />
+  <xacro:property name="camera_tilt_pitch" value="0.959931" />
   <link name="camera_tilt_link" />
   <joint name="camera_tilt_joint" type="fixed">
     <origin xyz="0 0 0" rpy="1.5708 3.1416 3.1416" />

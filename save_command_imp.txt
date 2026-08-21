@@ -1,2 +1,12 @@
 roslaunch nexzino_nav mapping.launch start_motor_driver:=false open_rviz:=true \
     database_path:=/opt/nexzino/nav_console/data/mapping_session.db
+
+
+xhost +si:localuser:root
+
+
+source /opt/ros/noetic/setup.bash
+export ROS_PACKAGE_PATH="/opt/nexzino/ros_ws/src:${ROS_PACKAGE_PATH}"
+
+roslaunch nexzino_nav navigation.launch start_motor_driver:=false open_rviz:=true \
+    database_path:=/opt/nexzino/nav_console/data/maps_db/Success1.db
