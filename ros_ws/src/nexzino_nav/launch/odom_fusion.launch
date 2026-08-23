@@ -11,12 +11,24 @@
        becomes /odom and the sole owner of the odom->base_footprint TF - see
        diff_drive.yaml's publish_odom_tf:=false and rgbd_odometry's
        publish_tf:=false below, both deliberately disabled so exactly one
-       node (the EKF) broadcasts that transform. -->
+       node (the EKF) broadcasts that transform (rgbd_odometry's frame is
+       named visual_odom specifically so it can never collide with the
+       EKF's odom->base_footprint even if this were ever turned on).
+       guess_frame_id:=odom below is the real, documented fix for
+       rgbd_odometry's own "Could not obtain transform from visual_odom to
+       odom" warning (confirmed live on real hardware) - it tells
+       rgbd_odometry to use the EKF's existing odom->base_footprint as a
+       motion prior for its own frame-to-frame tracking, which is both
+       what silences the warning AND a genuine accuracy improvement (a
+       good prior narrows the search for matching features between
+       frames) - not just a workaround. Source: introlab/rtabmap_ros docs
+       on guess_frame_id for exactly this odom/vo_odom naming pattern. -->
 
   <node pkg="rtabmap_odom" type="rgbd_odometry" name="rgbd_odometry" output="screen">
     <param name="frame_id" type="string" value="base_footprint" />
     <param name="odom_frame_id" type="string" value="visual_odom" />
     <param name="publish_tf" type="bool" value="false" />
+    <param name="guess_frame_id" type="string" value="odom" />
     <param name="approx_sync" type="bool" value="true" />
     <param name="Reg/Force3DoF" type="string" value="true" />
 
