@@ -172,29 +172,37 @@ NAV2D.Navigator = function(options) {
 
     var initScaleSet = false;
 
-    // setup a listener for the robot pose
+    // Tracks base_footprint's pose IN THE MAP FRAME, not raw /odom. /odom
+    // alone is dead-reckoning from wherever diff_drive_controller.py started
+    // counting - it never reflects rtabmap's map->odom correction (from loop
+    // closure, or from a manually-set initial pose), so the marker would sit
+    // at a fixed, wrong spot on the map regardless of any localization
+    // update. /robot_pose is published by nexzino_nav's robot_pose_publisher.py
+    // (a plain Python tf2 lookup of map->base_footprint, republished as
+    // PoseStamped) - the same approach mr_carter used (see its
+    // robot_pose_publisher.cpp), just without needing a compiled node.
+    // roslibjs's own TFClient was tried here first, but this bundled version
+    // requires a tf2_web_republisher action/service that isn't part of this
+    // stack - it would have silently never fired.
     var poseListener = new ROSLIB.Topic({
         ros: ros,
-        // name: '/robot_pose',
-        // messageType: 'geometry_msgs/Pose',
-        name: '/odom',
-        messageType: 'nav_msgs/Odometry',
+        name: '/robot_pose',
+        messageType: 'geometry_msgs/PoseStamped',
         throttle_rate: 1
     });
 
     poseListener.subscribe(function(pose) {
         // update the robots position on the map
-        robotMarker.x = pose.pose.pose.position.x;
-        robotMarker.y = -pose.pose.pose.position.y;
+        robotMarker.x = pose.pose.position.x;
+        robotMarker.y = -pose.pose.position.y;
 
         if (!initScaleSet) {
         robotMarker.scaleX = 1.0 / stage.scaleX;
         robotMarker.scaleY = 1.0 / stage.scaleY;
         initScaleSet = true;
         }
-        // console.log(pose)
         // change the angle
-        robotMarker.rotation = stage.rosQuaternionToGlobalTheta(pose.pose.pose.orientation);
+        robotMarker.rotation = stage.rosQuaternionToGlobalTheta(pose.pose.orientation);
 
         robotMarker.visible = true;
     });

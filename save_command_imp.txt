@@ -10,3 +10,16 @@ export ROS_PACKAGE_PATH="/opt/nexzino/ros_ws/src:${ROS_PACKAGE_PATH}"
 
 roslaunch nexzino_nav navigation.launch start_motor_driver:=false open_rviz:=true \
     database_path:=/opt/nexzino/nav_console/data/maps_db/Success1.db
+
+
+install Rpi cam
+cd ~
+wget https://github.com/ArduCAM/MIPI_Camera/releases/download/v0.0.3/install_full.sh
+chmod +x install_full.sh
+./install_full.sh -m imx708
+
+to check cam
+sudo dmesg | grep -i imx708
+sudo i2cdetect -y -r 9      # camera should show up at address 1a
+lsmod | grep imx708
+v4l2-ctl --list-devices

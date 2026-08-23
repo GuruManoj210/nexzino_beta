@@ -93,7 +93,9 @@ COPY nav_console nav_console
 
 COPY deploy/entrypoint.sh entrypoint.sh
 
-RUN chmod +x entrypoint.sh ros_ws/src/nexzino_nav/scripts/diff_drive_controller.py
+RUN chmod +x entrypoint.sh \
+        ros_ws/src/nexzino_nav/scripts/diff_drive_controller.py \
+        ros_ws/src/nexzino_nav/scripts/robot_pose_publisher.py
 
 # entrypoint.sh's own `export ROS_PACKAGE_PATH=...` only lives in its own
 # process - it does NOT carry over to a fresh `docker exec -it ... bash`

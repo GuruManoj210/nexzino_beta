@@ -2,7 +2,16 @@ port: /dev/ttyACM0
 control_rate: 30.0
 cmd_vel_timeout: 0.5
 
-wheel_radius: 0.105
+# wheel_radius derived from meters_per_rev (0.655 / (2*pi) = 0.104246) rather
+# than measured independently - it was previously 0.105, a separate,
+# independently-set number that didn't quite agree with meters_per_rev
+# (0.7% off). meters_per_rev and ticks_per_rev both come directly from the
+# ZLAC8015D SDK's own hardcoded reference constants (self.travel_in_one_rev,
+# self.cpr in ZLAC8015D_python/zlac8015d/ZLAC8015D.py) - keeping
+# wheel_radius derived from the same reference means the command-side
+# (m/s -> RPM, uses wheel_radius) and feedback-side (ticks -> distance, uses
+# meters_per_rev) unit conversions can't drift out of sync with each other.
+wheel_radius: 0.104246
 wheel_separation: 0.33956
 meters_per_rev: 0.655
 ticks_per_rev: 16385.0
