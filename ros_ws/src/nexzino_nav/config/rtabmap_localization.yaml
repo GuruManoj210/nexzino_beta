@@ -26,3 +26,10 @@ Grid/Sensor: "1"
 Grid/3D: "false"
 Grid/RangeMax: "4.0"
 Kp/MaxDepth: "4.0"
+# See rtabmap_mapping.yaml for the reasoning (confirmed via
+# rtabmap-databaseViewer: rejected matches were on the floor's speckle
+# texture, not real landmarks). Matching here too so localization-time
+# feature detection is consistent with how a freshly-built map's keypoints
+# were selected.
+Kp/SSC: "true"
+Kp/NndrRatio: "0.7"
