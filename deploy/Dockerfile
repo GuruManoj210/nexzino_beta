@@ -45,6 +45,9 @@ ENV PYTHONUNBUFFERED=1
 # ros-noetic-joint-state-publisher-gui: a declared dependency of the `nexa`
 # package (package.xml) - its display.launch uses it for manually posing
 # joints when visually cross-checking the CAD model against the real robot.
+# ros-noetic-robot-localization: odom_fusion.launch's EKF, fusing wheel
+# odometry (diff_drive_controller.py) with rgbd_odometry's visual odometry
+# (from ros-noetic-rtabmap-ros, already listed below) into /odom.
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
         ros-noetic-tf \
@@ -58,6 +61,7 @@ RUN apt-get update && \
         ros-noetic-rosbridge-server \
         ros-noetic-web-video-server \
         ros-noetic-joint-state-publisher-gui \
+        ros-noetic-robot-localization \
         python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
