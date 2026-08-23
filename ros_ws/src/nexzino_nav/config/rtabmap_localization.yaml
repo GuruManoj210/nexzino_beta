@@ -10,6 +10,16 @@ use_action_for_goal: true
 Reg/Force3DoF: "true"
 Mem/IncrementalMemory: "false"
 Mem/InitWMWithAllNodes: "true"
+# Default (>0) makes rtabmap withhold a computed localization correction
+# until a SECOND confirming match arrives before publishing/applying it -
+# confirmed directly in the logs: "Localization was good, but waiting for
+# another one to be more accurate (RGBD/MaxOdomCacheSize>0)" fired for both
+# the initial DB-loaded pose and an explicit /initialpose click, and neither
+# ever visibly updated the robot's position. Given how hard it already is to
+# get even one solid match on this floor, waiting for a second one could
+# mean the correction never gets published at all. 0 = trust and publish
+# the first good match immediately.
+RGBD/MaxOdomCacheSize: "0"
 RGBD/AngularUpdate: "0.05"
 RGBD/LinearUpdate: "0.05"
 Grid/Sensor: "1"
