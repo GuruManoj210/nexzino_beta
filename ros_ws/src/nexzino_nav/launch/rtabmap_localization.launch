@@ -17,6 +17,15 @@
       <remap from="depth/image" to="$(arg depth_topic)" />
       <remap from="rgb/camera_info" to="$(arg camera_info_topic)" />
       <remap from="grid_map" to="/map" />
+      <!-- Without this, rtabmap (inside ns="rtabmap") subscribes to
+           /rtabmap/initialpose - neither RViz's "2D Pose Estimate" tool nor
+           nav_console's Initialize button ever reach it, since both publish
+           to the plain global /initialpose (RViz's SetInitialPose tool is
+           configured with Topic: /initialpose in nexzino_nav.rviz; see
+           NAV2D.Navigator's homefunc() in nav2d.js for the web UI side).
+           Every other topic this node needs from outside its namespace
+           already has an explicit remap above - this one was just missed. -->
+      <remap from="initialpose" to="/initialpose" />
     </node>
   </group>
 </launch>
