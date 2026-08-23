@@ -1,5 +1,5 @@
 DWAPlannerROS:
-  # Capped for the real hardware: wheel_radius=0.105 and max_rpm=50 (see
+  # Capped for the real hardware: wheel_radius=0.104246 and max_rpm=50 (see
   # diff_drive.yaml) give a straight-line ceiling of ~0.55 m/s per wheel,
   # but DWA can command linear+angular simultaneously, and each wheel's
   # speed is linear +/- angular*wheel_separation/2. At the old 0.45/1.20
@@ -18,7 +18,12 @@ DWAPlannerROS:
   max_vel_trans: 0.3
   min_vel_trans: 0.08
   max_vel_theta: 0.5
-  min_vel_theta: 0.25
+  # Was 0.25 (~14 deg/s) - that's the SMALLEST angular speed DWA was allowed
+  # to command, so it had no way to make a gentle heading correction: any
+  # turn had to be at least this fast, encouraging overshoot -> correct back
+  # -> overshoot the other way, which is what "oscillating" recovery
+  # failures look like. 0.05 lets it creep-correct.
+  min_vel_theta: 0.05
 
   acc_lim_x: 1.0
   acc_lim_y: 0.0
@@ -42,6 +47,13 @@ DWAPlannerROS:
   scaling_speed: 0.25
   max_scaling_factor: 0.2
 
-  oscillation_reset_dist: 0.05
+  # Was 0.05m - move_base's OWN oscillation check (move_base.yaml's
+  # oscillation_distance) uses 0.2m as its threshold for "has the robot
+  # actually made progress". Having DWA's own reset distance 4x tighter than
+  # that meant DWA could flag a trajectory as oscillating well before
+  # move_base would agree it was actually stuck, escalating recovery
+  # behaviors too eagerly during normal careful maneuvering. Matching them
+  # removes that mismatch.
+  oscillation_reset_dist: 0.2
   publish_traj_pc: true
   publish_cost_grid_pc: true
