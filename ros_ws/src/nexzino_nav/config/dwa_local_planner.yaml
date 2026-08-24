@@ -7,19 +7,19 @@ DWAPlannerROS:
   # real ceiling, so diff_drive_controller.py's clamp_rpm() would silently
   # cut it, meaning DWA's trajectory scoring was working off velocities the
   # robot could never actually deliver. These limits keep worst-case
-  # combined per-wheel speed (0.25 + 0.5*0.33956/2 ~= 0.335 m/s, ~31 RPM)
+  # combined per-wheel speed (0.20 + 0.5*0.33956/2 ~= 0.285 m/s, ~26 RPM)
   # comfortably under the real 50 RPM ceiling.
   # Forward-only: the robot has no rear obstacle coverage. This is also
   # enforced in diff_drive_controller.py as a final safety boundary.
-  max_vel_x: 0.25
+  max_vel_x: 0.20
   min_vel_x: 0.0
   max_vel_y: 0.0
   min_vel_y: 0.0
 
-  max_vel_trans: 0.25
+  max_vel_trans: 0.20
   # The previous 0.08 m/s minimum forced the robot to carry too much speed
   # into the goal. Allow a slow final approach instead.
-  min_vel_trans: 0.03
+  min_vel_trans: 0.02
   max_vel_theta: 0.5
   # Was 0.25 (~14 deg/s) - that's the SMALLEST angular speed DWA was allowed
   # to command, so it had no way to make a gentle heading correction: any
@@ -34,8 +34,11 @@ DWAPlannerROS:
   acc_lim_y: 0.0
   acc_lim_theta: 1.8
 
-  xy_goal_tolerance: 0.10
-  yaw_goal_tolerance: 0.20
+  # Include the real motor stopping distance and residual localization lag.
+  # Latching at 15 cm makes the robot stop translating before it crosses the
+  # target; yaw is then corrected in place.
+  xy_goal_tolerance: 0.15
+  yaw_goal_tolerance: 0.25
   # Once inside the position tolerance, keep it satisfied while aligning
   # yaw. Otherwise small pose/noise changes can make DWA cross the goal and
   # attempt a positional correction in the opposite direction.
@@ -44,7 +47,9 @@ DWAPlannerROS:
   trans_stopped_vel: 0.02
   theta_stopped_vel: 0.03
 
-  sim_time: 1.5
+  # DWA still replans at 10 Hz; this is only its scoring horizon. A shorter
+  # horizon makes the chosen velocity react sooner near the end of the path.
+  sim_time: 1.0
   vx_samples: 20
   vy_samples: 0
   vth_samples: 40
@@ -53,9 +58,11 @@ DWAPlannerROS:
   path_distance_bias: 32.0
   goal_distance_bias: 20.0
   occdist_scale: 0.02
-  forward_point_distance: 0.25
+  # A long forward scoring point encourages a wide arc to align the nose.
+  # Keep it close to the base so final orientation is handled in place.
+  forward_point_distance: 0.10
   stop_time_buffer: 0.2
-  scaling_speed: 0.25
+  scaling_speed: 0.15
   max_scaling_factor: 0.2
 
   # Was 0.05m - move_base's OWN oscillation check (move_base.yaml's

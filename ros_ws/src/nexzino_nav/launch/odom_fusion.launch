@@ -21,6 +21,10 @@
     <param name="odom_frame_id" type="string" value="odom" />
     <param name="publish_tf" type="bool" value="false" />
     <param name="approx_sync" type="bool" value="true" />
+    <!-- Navigation must use the newest pose. If camera/CPU processing falls
+         behind, discard an old synchronized set instead of building latency
+         in a queue (the hardware logs previously exceeded 0.6 s delay). -->
+    <param name="queue_size" type="int" value="1" />
     <param name="Reg/Force3DoF" type="string" value="true" />
 
     <remap from="rgb/image" to="/camera/color/image_raw" />
