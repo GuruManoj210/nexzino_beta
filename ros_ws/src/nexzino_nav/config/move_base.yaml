@@ -9,6 +9,7 @@ conservative_reset_dist: 2.0
 # cannot mistake normal goal alignment for a stuck robot.
 oscillation_timeout: 0.0
 oscillation_distance: 0.2
-# This controls move_base's automatic rotate recovery, not DWA's normal turns
-# or final yaw alignment. Avoid an unexpected recovery spin near the goal.
-clearing_rotation_allowed: false
+# Allow move_base to rotate in place after a genuine planning/controller
+# failure so the front depth sensor can observe and clear a new direction.
+# Reverse chassis translation remains blocked independently.
+clearing_rotation_allowed: true
