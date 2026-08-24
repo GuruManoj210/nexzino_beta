@@ -1,6 +1,9 @@
 port: /dev/ttyACM0
 control_rate: 30.0
 cmd_vel_timeout: 0.5
+# Final safety boundary: reject negative chassis velocity from every source,
+# including teleop or a misconfigured planner, because the rear is unsensed.
+allow_reverse: false
 
 # wheel_radius derived from meters_per_rev (0.655 / (2*pi) = 0.104246) rather
 # than measured independently - it was previously 0.105, a separate,

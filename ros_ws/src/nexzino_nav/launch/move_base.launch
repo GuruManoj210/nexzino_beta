@@ -1,7 +1,9 @@
 <launch>
   <arg name="cmd_vel_topic" default="/cmd_vel" />
   <arg name="odom_topic" default="/odom" />
-  <arg name="move_forward_only" default="false" />
+  <!-- No rear obstacle sensor is fitted, so autonomous navigation must not
+       generate negative chassis velocity. -->
+  <arg name="move_forward_only" default="true" />
   <arg name="base_global_planner" default="navfn/NavfnROS" />
   <arg name="base_local_planner" default="dwa_local_planner/DWAPlannerROS" />
 

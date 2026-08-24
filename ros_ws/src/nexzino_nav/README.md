@@ -123,4 +123,7 @@ roslaunch nexzino_nav navigation.launch simulation:=true database_path:=$HOME/.r
   transforms.
 - The D435 has no IMU. `odom_fusion.launch` therefore fuses wheel velocity
   with RGB-D visual pose and publishes the single `odom -> base_footprint` TF.
+- Autonomous and manual reverse chassis motion is disabled because the robot
+  has no rear obstacle sensor. Set `allow_reverse: true` in `diff_drive.yaml`
+  only after adding suitable rear coverage.
 - In simulation, the RealSense topics come from the Gazebo plugin embedded in the robot xacro.

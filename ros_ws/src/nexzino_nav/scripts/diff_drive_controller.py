@@ -28,6 +28,7 @@ class NexzinoDiffDriveController(object):
         self.port = rospy.get_param("~port", "/dev/ttyACM0")
         self.control_rate = rospy.get_param("~control_rate", 30.0)
         self.cmd_vel_timeout = rospy.get_param("~cmd_vel_timeout", 0.5)
+        self.allow_reverse = rospy.get_param("~allow_reverse", False)
 
         self.wheel_radius = rospy.get_param("~wheel_radius", 0.105)
         self.wheel_separation = rospy.get_param("~wheel_separation", 0.33956)
@@ -93,7 +94,13 @@ class NexzinoDiffDriveController(object):
         self.motor.enable_motor()
 
     def cmd_vel_callback(self, msg):
-        self.target_linear = msg.linear.x
+        if not self.allow_reverse and msg.linear.x < 0.0:
+            rospy.logwarn_throttle(
+                2.0, "Ignoring reverse cmd_vel because allow_reverse is false"
+            )
+            self.target_linear = 0.0
+        else:
+            self.target_linear = msg.linear.x
         self.target_angular = msg.angular.z
         self.last_cmd_time = rospy.Time.now()
 
