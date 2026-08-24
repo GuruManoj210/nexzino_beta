@@ -118,5 +118,9 @@ roslaunch nexzino_nav navigation.launch simulation:=true database_path:=$HOME/.r
 - This stack uses wheel odometry from the ZLTech base driver as the primary odometry source.
 - RealSense is used directly as a 3D obstacle sensor through `/camera/depth/color/points`.
 - RTAB-Map handles both mapping and localization, which fits a RealSense-only robot better than AMCL.
-- In hardware, the RealSense node is configured with `publish_tf:=false` so the URDF/xacro remains the source of truth for the camera TF tree.
+- In hardware, the URDF owns the rigid robot-to-camera mount transform and
+  the RealSense driver publishes its factory-calibrated internal camera-frame
+  transforms.
+- The D435 has no IMU. `odom_fusion.launch` therefore fuses wheel velocity
+  with RGB-D visual pose and publishes the single `odom -> base_footprint` TF.
 - In simulation, the RealSense topics come from the Gazebo plugin embedded in the robot xacro.

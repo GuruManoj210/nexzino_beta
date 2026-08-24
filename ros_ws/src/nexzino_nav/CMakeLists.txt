@@ -13,18 +13,21 @@ find_package(catkin REQUIRED COMPONENTS
   pal_gazebo_worlds
   realsense2_camera
   robot_state_publisher
+  robot_localization
   rospy
   rtabmap_ros
   rviz
   sensor_msgs
   std_msgs
   tf
+  tf2_ros
 )
 
 catkin_package()
 
 catkin_install_python(PROGRAMS
   scripts/diff_drive_controller.py
+  scripts/robot_pose_publisher.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

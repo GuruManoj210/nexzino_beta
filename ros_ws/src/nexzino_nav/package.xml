@@ -19,12 +19,14 @@
   <depend>nexzino</depend>
   <depend>pal_gazebo_worlds</depend>
   <depend>robot_state_publisher</depend>
+  <depend>robot_localization</depend>
   <depend>rospy</depend>
   <depend>rtabmap_ros</depend>
   <depend>rviz</depend>
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
   <depend>tf</depend>
+  <depend>tf2_ros</depend>
   <depend>xacro</depend>
 
   <export />

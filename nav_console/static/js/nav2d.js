@@ -20,6 +20,7 @@ NAV2D.ImageMapClientNav = function(options) {
     this.rootObject = options.rootObject || new createjs.Container();
     this.viewer = options.viewer;
     this.withOrientation = options.withOrientation || true;
+    this.createNavigator = options.createNavigator !== false;
     this.navigator = null;
 
     // setup a client to get the map
@@ -38,7 +39,7 @@ NAV2D.ImageMapClientNav = function(options) {
         // previous ones - recreating it here piled up duplicate markers and
         // duplicate event listeners on every single map update. Only build
         // it once; every subsequent 'change' just needs the viewer rescaled.
-        if (!that.navigator) {
+        if (that.createNavigator && !that.navigator) {
             that.navigator = new NAV2D.Navigator({
                 ros: that.ros,
                 serverName: that.serverName,
@@ -408,6 +409,7 @@ NAV2D.OccupancyGridClientNav = function(options) {
     this.rootObject = options.rootObject || new createjs.Container();
     this.viewer = options.viewer;
     this.withOrientation = options.withOrientation || true;
+    this.createNavigator = options.createNavigator !== false;
     this.navigator = null;
 
     // setup a client to get the map
@@ -422,7 +424,7 @@ NAV2D.OccupancyGridClientNav = function(options) {
         // Same reasoning as ImageMapClientNav above: 'change' fires on
         // every map update - build the Navigator (and its marker/listeners)
         // once, not on every single update.
-        if (!that.navigator) {
+        if (that.createNavigator && !that.navigator) {
             that.navigator = new NAV2D.Navigator({
                 ros: that.ros,
                 serverName: that.serverName,

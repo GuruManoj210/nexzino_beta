@@ -72,19 +72,29 @@ def get_publish_enabled() -> bool:
 
 def publisher_loop(publisher: "rospy.Publisher") -> None:
     rate = rospy.Rate(PUBLISH_RATE_HZ)
+    was_active = False
     while not rospy.is_shutdown():
         with state_lock:
             timed_out = (
                 time.monotonic() - state["last_update"]
             ) > COMMAND_TIMEOUT_SECONDS
             active = state["publish_enabled"] and not timed_out
-            linear = state["linear"] if active else 0.0
-            angular = state["angular"] if active else 0.0
+            linear = state["linear"]
+            angular = state["angular"]
 
-        twist = Twist()
-        twist.linear.x = linear
-        twist.angular.z = angular
-        publisher.publish(twist)
+        if active:
+            twist = Twist()
+            twist.linear.x = linear
+            twist.angular.z = angular
+            publisher.publish(twist)
+        elif was_active:
+            # Stop once when teleop is disabled, times out, or disconnects,
+            # then release /cmd_vel. Publishing zero forever from this
+            # always-on process races with move_base's non-zero commands and
+            # prevents autonomous navigation from reaching the motor driver.
+            publisher.publish(Twist())
+
+        was_active = active
         rate.sleep()
 
 

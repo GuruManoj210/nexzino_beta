@@ -48,6 +48,7 @@ $(document).ready(function() {
             viewer: viewer,
             rootObject: viewer.scene,
             serverName: '/move_base',
+            createNavigator: false,
             image: `/static/maps/${value}.png`
         });
     }
@@ -82,6 +83,10 @@ $(document).ready(function() {
         viewer: viewer,
         rootObject: viewer.scene,
         serverName: '/move_base',
+        // The live OccupancyGrid client below owns the single Navigator.
+        // Creating another one for this background image installs duplicate
+        // mouse handlers and sends every clicked goal twice.
+        createNavigator: false,
         image: `/static/maps/${value}.png`
     });
 

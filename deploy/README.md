@@ -332,7 +332,7 @@ extra systemd unit needed for this stack specifically.
   already has open. `nav_console` always passes this correctly on its own.
 - **No RGB/depth topics, camera never comes up**: check
   `rostopic list | grep camera` and the `realsense2_camera` node's own log
-  output for a hardware-not-found error - confirm the D435i is actually
+  output for a hardware-not-found error - confirm the D435 is actually
   enumerated on the host (`rs-enumerate-devices` if `librealsense2-utils`
   is available, or `lsusb`).
 - **`nav_console`'s map view/joystick never connects (stays blank, or the
