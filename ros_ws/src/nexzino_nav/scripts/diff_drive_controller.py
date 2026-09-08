@@ -69,12 +69,10 @@ class NexzinoDiffDriveController(object):
         self.joint_state_pub = rospy.Publisher(
             "joint_states", JointState, queue_size=10
         )
-        # "wheel_odom", not "odom" - this is wheel-encoder dead-reckoning
-        # only. odom_fusion.launch's EKF fuses this with rgbd_odometry's
-        # visual odometry and publishes the combined result as the real
-        # /odom (and owns the odom->base_footprint TF, see publish_odom_tf
-        # below) - having two nodes both claim to publish "odom" would be a
-        # silent, confusing conflict.
+        # "wheel_odom", not "odom": odom_fusion.launch filters these encoder
+        # velocities into the local /odom and owns odom->base_footprint.
+        # RTAB-Map independently applies global localization through
+        # map->odom; visual corrections must not be injected into local odom.
         self.odom_pub = rospy.Publisher("wheel_odom", Odometry, queue_size=10)
         self.tf_broadcaster = TransformBroadcaster()
 

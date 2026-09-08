@@ -121,8 +121,14 @@ roslaunch nexzino_nav navigation.launch simulation:=true database_path:=$HOME/.r
 - In hardware, the URDF owns the rigid robot-to-camera mount transform and
   the RealSense driver publishes its factory-calibrated internal camera-frame
   transforms.
-- The D435 has no IMU. `odom_fusion.launch` therefore fuses wheel velocity
-  with RGB-D visual pose and publishes the single `odom -> base_footprint` TF.
+- The D435 has no IMU. `odom_fusion.launch` integrates wheel velocity into the
+  low-latency local `/odom` and publishes the single `odom -> base_footprint`
+  TF. RTAB-Map uses the camera to localize globally and publishes `map -> odom`;
+  it is not fused back into the controller's local odometry.
+- After changing camera profiles or RTAB feature parameters, create a fresh
+  database with `mapping.launch` before evaluating localization. Do not lower
+  `Vis/MinInliers` just to accept rejected matches, because that can create a
+  false global pose.
 - Autonomous and manual reverse chassis motion is disabled because the robot
   has no rear obstacle sensor. Set `allow_reverse: true` in `diff_drive.yaml`
   only after adding suitable rear coverage.

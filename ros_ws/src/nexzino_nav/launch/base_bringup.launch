@@ -23,11 +23,9 @@
   <include if="$(arg use_realsense)"
            file="$(find nexzino_nav)/launch/realsense_bringup.launch" />
 
-  <!-- Fuses wheel + visual odometry into the /odom the rest of the stack
-       (rtabmap, move_base) already expects - see odom_fusion.launch. Only
-       makes sense with both the motor driver and the camera actually
-       running, which start_motor_driver:=false deployments (nav_console)
-       already guarantee via the always-on diff_drive_controller.py. -->
-  <include if="$(arg use_realsense)"
-           file="$(find nexzino_nav)/launch/odom_fusion.launch" />
+  <!-- Filters wheel encoder motion into the low-latency /odom expected by
+       RTAB-Map and move_base. This is intentionally independent of the camera:
+       start_motor_driver:=false deployments provide /wheel_odom from their
+       always-on motor service, and base-only bringup must still provide /odom. -->
+  <include file="$(find nexzino_nav)/launch/odom_fusion.launch" />
 </launch>

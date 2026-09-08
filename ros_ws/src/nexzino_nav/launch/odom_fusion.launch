@@ -1,37 +1,10 @@
 <launch>
-  <!-- Fuses diff_drive_controller.py's wheel_odom (velocity, trusted for
-       vx/vy/vyaw - wheel encoders measure instantaneous rotation rate
-       directly, but accumulate drift in absolute x/y/yaw over time from
-       slip/slack) with rgbd_odometry's continuous visual odometry (position,
-       trusted for x/y/yaw - anchored to visual features, doesn't share
-       wheel odom's drift mechanism, but can momentarily lose tracking).
-       Same pattern as mr_carter's fusion_localisation.launch (wheel+IMU),
-       adapted for wheel+visual since this robot's D435 has no IMU
-       (unlike the D435i mr_carter's design assumed). The combined result
-       becomes /odom and the sole owner of the odom->base_footprint TF - see
-       diff_drive.yaml's publish_odom_tf:=false and rgbd_odometry's
-       publish_tf:=false below, both deliberately disabled so exactly one
-       node (the EKF) broadcasts that transform. rgbd_odometry still labels
-       its Odometry message in the common odom coordinate frame, allowing
-       robot_localization to fuse it without requiring a second, nonexistent
-       visual_odom TF tree. -->
-
-  <node pkg="rtabmap_odom" type="rgbd_odometry" name="rgbd_odometry" output="screen">
-    <param name="frame_id" type="string" value="base_footprint" />
-    <param name="odom_frame_id" type="string" value="odom" />
-    <param name="publish_tf" type="bool" value="false" />
-    <param name="approx_sync" type="bool" value="true" />
-    <!-- Navigation must use the newest pose. If camera/CPU processing falls
-         behind, discard an old synchronized set instead of building latency
-         in a queue (the hardware logs previously exceeded 0.6 s delay). -->
-    <param name="queue_size" type="int" value="1" />
-    <param name="Reg/Force3DoF" type="string" value="true" />
-
-    <remap from="rgb/image" to="/camera/color/image_raw" />
-    <remap from="depth/image" to="/camera/aligned_depth_to_color/image_raw" />
-    <remap from="rgb/camera_info" to="/camera/color/camera_info" />
-    <remap from="odom" to="/rgbd_odom" />
-  </node>
+  <!-- Keep local odometry smooth and current for move_base. The EKF integrates
+       the wheel encoder velocities into /odom and is the sole publisher of
+       odom -> base_footprint. RTAB-Map consumes this /odom separately and owns
+       the global map -> odom correction; delayed or temporarily lost visual
+       tracking is therefore never injected back into the local odometry used
+       by the controller. -->
 
   <node pkg="robot_localization" type="ekf_localization_node" name="ekf_odom_node" output="screen">
     <param name="frequency" value="30" />
@@ -46,22 +19,13 @@
     <param name="odom0" value="/wheel_odom" />
     <param name="odom0_differential" value="false" />
     <param name="odom0_relative" value="false" />
-    <param name="odom0_queue_size" value="10" />
+    <param name="odom0_queue_size" value="2" />
+    <param name="odom0_nodelay" value="true" />
     <!-- x,y,z, roll,pitch,yaw, vx,vy,vz, vroll,vpitch,vyaw, ax,ay,az -->
     <rosparam param="odom0_config">[false, false, false,
                                      false, false, false,
                                      true,  true,  false,
                                      false, false, true,
-                                     false, false, false]</rosparam>
-
-    <param name="odom1" value="/rgbd_odom" />
-    <param name="odom1_differential" value="false" />
-    <param name="odom1_relative" value="false" />
-    <param name="odom1_queue_size" value="10" />
-    <rosparam param="odom1_config">[true,  true,  false,
-                                     false, false, true,
-                                     false, false, false,
-                                     false, false, false,
                                      false, false, false]</rosparam>
 
     <remap from="odometry/filtered" to="/odom" />

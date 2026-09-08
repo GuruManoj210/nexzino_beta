@@ -27,11 +27,9 @@ right_encoder_sign: -1.0
 
 accel_time_ms: 500
 decel_time_ms: 500
-# false (was true): odom_fusion.launch's EKF is now the sole publisher of
-# the odom->base_footprint TF, fusing this node's wheel_odom with
-# rgbd_odometry's visual odometry. Two nodes both broadcasting the same
-# transform is a silent conflict (whichever publishes last "wins" each
-# cycle) - only one may own it.
+# odom_fusion.launch's EKF is the sole publisher of odom->base_footprint.
+# RTAB-Map publishes the separate map->odom correction. Two publishers for
+# odom->base_footprint would create a silent TF conflict, so this stays false.
 publish_odom_tf: false
 base_frame: base_footprint
 odom_frame: odom
