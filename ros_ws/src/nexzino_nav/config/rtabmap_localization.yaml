@@ -25,6 +25,7 @@ RGBD/LinearUpdate: "0.05"
 Grid/Sensor: "1"
 Grid/3D: "false"
 Grid/RangeMax: "4.0"
+Kp/DetectorStrategy: "8"
 Kp/MaxDepth: "4.0"
 # See rtabmap_mapping.yaml for the reasoning (confirmed via
 # rtabmap-databaseViewer: rejected matches were on the floor's speckle
@@ -33,3 +34,9 @@ Kp/MaxDepth: "4.0"
 # were selected.
 Kp/SSC: "true"
 Kp/NndrRatio: "0.7"
+Kp/RoiRatios: "0.0 0.0 0.0 0.30"
+Vis/FeatureType: "8"
+Vis/RoiRatios: "0.0 0.0 0.0 0.30"
+Vis/SSC: "true"
+Vis/MaxDepth: "4.0"
+Vis/CorNNDR: "0.7"

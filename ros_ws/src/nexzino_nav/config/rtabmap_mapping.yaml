@@ -16,6 +16,7 @@ Grid/Sensor: "1"
 Grid/3D: "false"
 Grid/RangeMax: "4.0"
 Grid/MinClusterSize: "20"
+Kp/DetectorStrategy: "8"
 Kp/MaxDepth: "4.0"
 Vis/MinInliers: "15"
 Vis/InlierDistance: "0.1"
@@ -26,13 +27,15 @@ Vis/InlierDistance: "0.1"
 # actual distinct objects also visible in frame (a light-colored round
 # object, a door/cabinet edge). The floor's fine texture generates far more
 # candidate keypoints than those real landmarks do, drowning them out.
-# Kp/SSC spreads keypoints evenly across the image instead of letting them
-# cluster wherever there's the most local texture, giving sparser real
-# landmarks a fairer share of the keypoint budget. Kp/NndrRatio tightened
-# from the 0.8 default (lower = stricter nearest-neighbor ratio test -
-# rejects the kind of ambiguous "this speckle sort of looks like a few
-# other speckles" matches a repetitive texture produces). Needs a fresh map
-# to take full effect - existing .db files have keypoints already stored
-# under the old (unfiltered) settings.
+# Ignore the bottom 30% of the image, where the camera sees mostly repetitive
+# floor texture. Apply the same ROI to both place recognition (Kp) and visual
+# transform estimation (Vis); otherwise RTAB-Map can propose a floor-based
+# candidate and then fail its geometric verification with 0 inliers.
+Kp/RoiRatios: "0.0 0.0 0.0 0.30"
 Kp/SSC: "true"
 Kp/NndrRatio: "0.7"
+Vis/FeatureType: "8"
+Vis/RoiRatios: "0.0 0.0 0.0 0.30"
+Vis/SSC: "true"
+Vis/MaxDepth: "4.0"
+Vis/CorNNDR: "0.7"

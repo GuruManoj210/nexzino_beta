@@ -35,6 +35,12 @@
     <arg name="publish_odom_tf" value="false" />
     <arg name="align_depth" value="true" />
     <arg name="enable_pointcloud" value="true" />
+    <!-- The navigation costmaps consume XYZ only. Do not couple obstacle
+         publication to the presence of a matching RGB texture frame: that
+         caused "No stream match ... Color" and discarded otherwise valid
+         depth clouds. An untextured cloud is also smaller to serialize. -->
+    <arg name="pointcloud_texture_stream" value="RS2_STREAM_ANY" />
+    <arg name="allow_no_texture_points" value="true" />
     <arg name="enable_sync" value="true" />
     <arg name="filters" value="pointcloud" />
     <arg name="depth_width" value="$(arg depth_width)" />
