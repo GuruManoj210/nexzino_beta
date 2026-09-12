@@ -35,6 +35,7 @@ class NexzinoDiffDriveController(object):
         self.meters_per_rev = rospy.get_param("~meters_per_rev", 0.655)
         self.ticks_per_rev = rospy.get_param("~ticks_per_rev", 16385.0)
         self.max_rpm = rospy.get_param("~max_rpm", 300.0)
+        self.min_command_rpm = rospy.get_param("~min_command_rpm", 0.0)
 
         self.left_command_sign = rospy.get_param("~left_command_sign", 1.0)
         self.right_command_sign = rospy.get_param("~right_command_sign", -1.0)
@@ -110,6 +111,16 @@ class NexzinoDiffDriveController(object):
     def clamp_rpm(self, rpm):
         return max(-self.max_rpm, min(self.max_rpm, rpm))
 
+    def quantize_rpm(self, rpm):
+        if abs(rpm) < 1e-6:
+            return 0
+
+        quantized = int(round(self.clamp_rpm(rpm)))
+        min_command_rpm = int(math.ceil(abs(self.min_command_rpm)))
+        if min_command_rpm > 0 and abs(quantized) < min_command_rpm:
+            quantized = int(math.copysign(min_command_rpm, rpm))
+        return int(self.clamp_rpm(quantized))
+
     def compute_wheel_commands(self):
         timed_out = (
             rospy.Time.now() - self.last_cmd_time
@@ -120,10 +131,10 @@ class NexzinoDiffDriveController(object):
         left_velocity = linear - (angular * self.wheel_separation / 2.0)
         right_velocity = linear + (angular * self.wheel_separation / 2.0)
 
-        left_rpm = self.clamp_rpm(
+        left_rpm = self.quantize_rpm(
             self.meters_per_second_to_rpm(left_velocity) * self.left_command_sign
         )
-        right_rpm = self.clamp_rpm(
+        right_rpm = self.quantize_rpm(
             self.meters_per_second_to_rpm(right_velocity) * self.right_command_sign
         )
         return left_rpm, right_rpm
@@ -213,7 +224,7 @@ class NexzinoDiffDriveController(object):
             self.last_update_time = now
 
             left_cmd_rpm, right_cmd_rpm = self.compute_wheel_commands()
-            self.motor.set_rpm(int(left_cmd_rpm), int(right_cmd_rpm))
+            self.motor.set_rpm(left_cmd_rpm, right_cmd_rpm)
 
             try:
                 left_tick, right_tick = self.motor.get_wheels_tick()

@@ -17,16 +17,20 @@ DWAPlannerROS:
   min_vel_y: 0.0
 
   max_vel_trans: 0.20
-  # The previous 0.08 m/s minimum forced the robot to carry too much speed
-  # into the goal. Allow a slow final approach instead.
-  min_vel_trans: 0.02
+  # Keep the final approach slow, but not so slow that the motor driver's
+  # integer-RPM command quantization turns it into a much smaller or zero
+  # wheel command than DWA actually scored.
+  min_vel_trans: 0.03
   max_vel_theta: 0.5
-  # Was 0.25 (~14 deg/s) - that's the SMALLEST angular speed DWA was allowed
-  # to command, so it had no way to make a gentle heading correction: any
-  # turn had to be at least this fast, encouraging overshoot -> correct back
-  # -> overshoot the other way, which is what "oscillating" recovery
-  # failures look like. 0.05 lets it creep-correct.
-  min_vel_theta: 0.05
+  # The previous 0.05 rad/s "creep" command is below this base's effective
+  # integer-RPM resolution: with wheel_radius=0.104246 and
+  # wheel_separation=0.33956 it works out to only ~0.78 wheel RPM, which the
+  # driver rounded/truncated away. That leaves DWA thinking it is making a
+  # tiny heading correction while the robot physically barely moves, then the
+  # next cycle chooses the opposite sign and the base twitches left/right in
+  # place. ~0.13 rad/s corresponds to ~2 RPM per wheel in-place, which is
+  # still gentle but actually executable.
+  min_vel_theta: 0.13
 
   # The motor controller ramps over 500 ms. Model that gentler acceleration
   # and braking instead of asking DWA to score unrealistically abrupt stops.

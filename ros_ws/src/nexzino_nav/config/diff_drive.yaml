@@ -19,6 +19,13 @@ wheel_separation: 0.33956
 meters_per_rev: 0.655
 ticks_per_rev: 16385.0
 max_rpm: 50
+# DWA's previous "gentle" end-of-goal corrections could work out to less than
+# 1 wheel RPM, then get truncated to 0 by the motor interface, so the planner
+# believed it was commanding motion that the base never actually executed.
+# 2 RPM is ~0.13 rad/s in-place on this wheelbase: still gentle, but above the
+# controller's integer-RPM command resolution and more likely to overcome
+# drivetrain stiction.
+min_command_rpm: 2.0
 
 left_command_sign: 1.0
 right_command_sign: -1.0
