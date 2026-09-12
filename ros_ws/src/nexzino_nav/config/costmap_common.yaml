@@ -1,10 +1,7 @@
 obstacle_range: 3.0
 raytrace_range: 3.5
 
-# Temporary test: replace the square footprint with the smallest circle that
-# fully contains it. For half-width/half-length 0.22 m, the circumscribed
-# radius is sqrt(0.22^2 + 0.22^2) ~= 0.311 m.
-robot_radius: 0.311
+footprint: [[0.22, 0.22], [-0.22, 0.22], [-0.22, -0.22], [0.22, -0.22]]
 inflation_radius: 0.10
 cost_scaling_factor: 6.0
 
